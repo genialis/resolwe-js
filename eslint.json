@@ -1,0 +1,28 @@
+{
+    "rulesDirectory": "node_modules/tslint-eslint-rules/dist/rules",
+    "rules": {
+        "no-constant-condition": true,
+        "no-control-regex": true,
+        "no-duplicate-case": true,
+        "no-empty-character-class": true,
+        "no-extra-boolean-cast": true,
+        "no-extra-semi": true,
+        "no-inner-declarations": [
+            true,
+            "both"
+        ],
+        "no-invalid-regexp": true,
+        "no-irregular-whitespace": true,
+        "no-regex-spaces": true,
+        "no-sparse-arrays": true,
+        "no-unexpected-multiline": true,
+        "valid-typeof": true,
+        "brace-style": [
+            true,
+            "1tbs",
+            {
+                "allowSingleLine": true
+            }
+        ]
+    }
+}

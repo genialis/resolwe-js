@@ -1,0 +1,87 @@
+{
+    "extends": "./eslint.json",
+    "rules": {
+        "class-name": true,
+        "comment-format": [
+            true,
+            "check-space"
+        ],
+        "indent": [
+            true,
+            "spaces"
+        ],
+        "no-unused-variable": true,
+        "no-duplicate-variable": true,
+        "no-eval": true,
+        "no-internal-module": true,
+        "no-trailing-whitespace": true,
+        "no-var-keyword": true,
+        "one-line": [
+            true,
+            "check-open-brace",
+            "check-whitespace"
+        ],
+        "quotemark": [
+            false,
+            "double"
+        ],
+        "semicolon": true,
+        "triple-equals": [
+            true,
+            "allow-null-check"
+        ],
+        "typedef-whitespace": [
+            true,
+            {
+                "call-signature": "nospace",
+                "index-signature": "nospace",
+                "parameter": "nospace",
+                "property-declaration": "nospace",
+                "variable-declaration": "nospace"
+            }
+        ],
+        "variable-name": [
+            true,
+            "ban-keywords"
+        ],
+        "whitespace": [
+            true,
+            "check-branch",
+            "check-decl",
+            "check-operator",
+            "check-separator",
+            "check-type",
+            "check-typecast"
+        ],
+        "jsdoc-format": true,
+        "eofline": true,
+        "no-shadowed-variable": true,
+        "no-trailing-whitespace": true,
+        "max-line-length": [
+            true,
+            140
+        ],
+        "one-variable-per-declaration": true,
+        "member-access": [
+            true,
+            "check-accessor"
+        ],
+        "no-duplicate-key": true,
+        "no-unreachable": true,
+        "no-conditional-assignment": true,
+        "no-empty": true,
+        "use-isnan": true,
+        "triple-equals": true,
+        "forin": true,
+        "no-arg": true,
+        "no-eval": true,
+        "switch-default": true,
+        "trailing-comma": [
+            true,
+            {
+                "multiline": "always",
+                "singleline": "never"
+            }
+        ]
+    }
+}

@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "declaration": true,
+        "noImplicitAny": false,
+        "noImplicitReturns": false,
+        "noImplicitThis": false,
+        "experimentalDecorators": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "moduleResolution": "node",
+        "target": "es5",
+        "module": "commonjs",
+        "outDir": "dist/",
+        "lib": [
+          "es5",
+          "es2015.iterable",
+          "es2015.collection",
+          "es2015.promise",
+          "dom"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "rx": ["node_modules/rx/ts/rx.all.d.ts"],
+            "resolwe/*": ["src/*"]
+        }
+    },
+    "formatCodeOptions": {
+        "indentSize": 4,
+        "tabSize": 4
+    },
+    "files": [
+        "src/index.ts"
+    ]
+}
