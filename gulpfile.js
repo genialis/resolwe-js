@@ -40,8 +40,11 @@ gulp.task('prepare:production', (callback) => {
 // TypeScript lint.
 gulp.task('tslint', [], require('./tasks/tslint')(gulp, config));
 
+// API typecheck.
+gulp.task('api-typecheck', [], require('./tasks/api_typecheck')(gulp, config));
+
 // All source code checks.
-gulp.task('check', ['tslint']);
+gulp.task('check', ['tslint', 'api-typecheck']);
 
 // TypeScript documentation.
 gulp.task('typedoc', [], require('./tasks/typedoc')(gulp, config));
