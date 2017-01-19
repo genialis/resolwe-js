@@ -456,20 +456,26 @@ export interface Storage {
     slug: string;
     name: string;
     data: number;
-    json: Clustering | PCA | any; // Just so we know of different types that go here
+    json: any;
     contributor: Contributor;
     created: string;
     modified: string;
 }
 
-export interface ClusteringSampleName {
-    id: number;
-}
-
-export interface Clustering { // api-typecheck:sample_custer_data.json.gz
-    samples_names: _.Dictionary<ClusteringSampleName>;
+export interface SampleClustering { // api-typecheck:sample_cluster_data.json.gz
+    sample_ids: _.Dictionary<{ id: number }>;
     order: number[];
     linkage: number[][]; // [[node1, node2, distance, number of samples]]
+    zero_sample_ids: number[]; // sample ids with no expressions
+    zero_gene_symbols: string[]; // gene symbols with no expressions
+}
+
+export interface GeneClustering { // api-typecheck:gene_cluster_data.json.gz
+    gene_symbols: _.Dictionary<{ gene: string }>;
+    order: number[];
+    linkage: number[][]; // [[node1, node2, distance, number of genes]]
+    zero_sample_ids: number[]; // sample ids with no expressions
+    zero_gene_symbols: string[]; // gene symbols with no expressions
 }
 
 export interface PCA {

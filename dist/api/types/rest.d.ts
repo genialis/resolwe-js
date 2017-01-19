@@ -346,18 +346,28 @@ export interface Storage {
     slug: string;
     name: string;
     data: number;
-    json: Clustering | PCA | any;
+    json: any;
     contributor: Contributor;
     created: string;
     modified: string;
 }
-export interface ClusteringSampleName {
-    id: number;
-}
-export interface Clustering {
-    samples_names: _.Dictionary<ClusteringSampleName>;
+export interface SampleClustering {
+    sample_ids: _.Dictionary<{
+        id: number;
+    }>;
     order: number[];
     linkage: number[][];
+    zero_sample_ids: number[];
+    zero_gene_symbols: string[];
+}
+export interface GeneClustering {
+    gene_symbols: _.Dictionary<{
+        gene: string;
+    }>;
+    order: number[];
+    linkage: number[][];
+    zero_sample_ids: number[];
+    zero_gene_symbols: string[];
 }
 export interface PCA {
     explained_variance_ratios: number[];
