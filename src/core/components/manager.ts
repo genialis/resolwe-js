@@ -95,9 +95,9 @@ export class StateManager {
     }
 }
 
-const module: angular.IModule = angular.module('resolwe.services.state_manager', [
+const angularModule: angular.IModule = angular.module('resolwe.services.state_manager', [
     'resolwe.services.shared_store',
 ]);
 
 // Register the state manager as a service, so it can be used by components.
-module.service('stateManager', StateManager);
+angularModule.service('stateManager', StateManager);

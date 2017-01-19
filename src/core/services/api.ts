@@ -8,7 +8,7 @@ import {FileUploadResponse} from '../../api/types/modules';
 import {compose} from '../utils/lang';
 import * as random from '../utils/random';
 
-const module: angular.IModule = angular.module('resolwe.services.api', [
+const angularModule: angular.IModule = angular.module('resolwe.services.api', [
     'ngFileUpload',
 ]);
 
@@ -160,4 +160,4 @@ export class APIServiceProvider {
     }
 }
 
-module.provider('api', APIServiceProvider);
+angularModule.provider('api', APIServiceProvider);

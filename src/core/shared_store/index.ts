@@ -515,8 +515,8 @@ function actionsIdToServiceId(actionsId: string): string {
     return _.camelCase(`${actionsId}-actions`);
 }
 
-const module: angular.IModule = angular.module('resolwe.services.shared_store', []);
+const angularModule: angular.IModule = angular.module('resolwe.services.shared_store', []);
 
 // Register injectable services.
-module.provider('sharedStoreManager', SharedStoreProvider);
-module.service('dispatcher', Dispatcher);
+angularModule.provider('sharedStoreManager', SharedStoreProvider);
+angularModule.service('dispatcher', Dispatcher);
