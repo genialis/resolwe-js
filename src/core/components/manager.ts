@@ -9,7 +9,7 @@ import {SharedStoreManager} from '../shared_store/index';
  */
 export class StateManager {
     private _sharedStoreManager: SharedStoreManager;
-    private _topLevelComponent: StatefulComponentBase = null;
+    private _topLevelComponents: StatefulComponentBase[] = [];
 
     private _nextState: any = {};
 
@@ -26,19 +26,28 @@ export class StateManager {
     }
 
     /**
-     * Sets the top-level component.
+     * Adds a top-level component.
      *
      * @param component Top-level component instance
      */
-    public setTopLevelComponent(component: StatefulComponentBase) {
-        this._topLevelComponent = component;
+    public addTopLevelComponent(component: StatefulComponentBase): void {
+        this._topLevelComponents.push(component);
+    }
+
+    /**
+     * Removes a top-level component.
+     *
+     * @param component Top-level component instance
+     */
+    public removeTopLevelComponent(component: StatefulComponentBase): void {
+        _.remove(this._topLevelComponents, component);
     }
 
     /**
      * Returns the current top-level component.
      */
-    public topLevelComponent(): StatefulComponentBase {
-        return this._topLevelComponent;
+    public topLevelComponents(): StatefulComponentBase[] {
+        return this._topLevelComponents;
     }
 
     /**
@@ -72,9 +81,11 @@ export class StateManager {
      * @return Application state
      */
     public save(): any {
-        if (!this._topLevelComponent) return null;
+        if (_.isEmpty(this._topLevelComponents)) return null;
 
-        const state = this._topLevelComponent.saveState();
+        const states = _.map(this._topLevelComponents, (component) => component.saveState());
+        const state = _.merge({}, ...states);
+
         state['_stores'] = this._sharedStoreManager.saveState();
         return state;
     }
@@ -89,9 +100,7 @@ export class StateManager {
         delete state['_stores'];
         this._nextState = state;
 
-        if (this._topLevelComponent) {
-            this._topLevelComponent.loadState(this._nextState);
-        }
+        _.each(this._topLevelComponents, (component) => component.loadState(this._nextState));
     }
 }
 

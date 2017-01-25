@@ -5,7 +5,7 @@ import { SharedStoreManager } from '../shared_store/index';
  */
 export declare class StateManager {
     private _sharedStoreManager;
-    private _topLevelComponent;
+    private _topLevelComponents;
     private _nextState;
     constructor(sharedStoreManager: SharedStoreManager);
     /**
@@ -13,15 +13,21 @@ export declare class StateManager {
      */
     readonly sharedStoreManager: SharedStoreManager;
     /**
-     * Sets the top-level component.
+     * Adds a top-level component.
      *
      * @param component Top-level component instance
      */
-    setTopLevelComponent(component: StatefulComponentBase): void;
+    addTopLevelComponent(component: StatefulComponentBase): void;
+    /**
+     * Removes a top-level component.
+     *
+     * @param component Top-level component instance
+     */
+    removeTopLevelComponent(component: StatefulComponentBase): void;
     /**
      * Returns the current top-level component.
      */
-    topLevelComponent(): StatefulComponentBase;
+    topLevelComponents(): StatefulComponentBase[];
     /**
      * Saves a component's current state so it will be reloaded when the component
      * is next constructed.

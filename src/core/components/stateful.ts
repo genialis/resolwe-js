@@ -123,7 +123,7 @@ export abstract class StatefulComponentBase extends ComponentBase {
             this._parent._registerChild(this);
             this.globalStateId = this._parent.globalStateId + '-' + this.stateId;
         } else {
-            this._stateManager.setTopLevelComponent(this);
+            this._stateManager.addTopLevelComponent(this);
             this.globalStateId = this.stateId;
         }
     }
@@ -175,8 +175,8 @@ export abstract class StatefulComponentBase extends ComponentBase {
 
         if (this._parent) {
             this._parent._unregisterChild(this);
-        } else if (this._stateManager.topLevelComponent() === this) {
-            this._stateManager.setTopLevelComponent(null);
+        } else {
+            this._stateManager.removeTopLevelComponent(this);
         }
 
         super.onComponentDestroyed();

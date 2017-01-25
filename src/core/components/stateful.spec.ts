@@ -1,7 +1,7 @@
 import * as angular from 'angular';
 import 'angular-mocks';
 
-import {component} from './base';
+import {ComponentBase, component} from './base';
 import {StatefulComponentBase, state, sharedState} from './stateful';
 import {StateManager} from './manager';
 import {Actions, SimpleSharedStore} from '../shared_store/index';
@@ -47,6 +47,20 @@ describeComponent('stateful component', [
         `,
     })
     class ParentStatefulComponent extends StatefulComponentBase {
+    }
+
+    @component({
+        module: tester.module,
+        directive: 'gen-multiple-top-component',
+        template: `
+            <div>
+                <gen-parent-stateful-component state-id="top-1"></gen-parent-stateful-component>
+                <gen-parent-stateful-component state-id="top-2"></gen-parent-stateful-component>
+            </div>
+        `,
+    })
+    class MultipleTopComponent extends ComponentBase {
+        // This is not a stateful component on purpose.
     }
 
     @component({
@@ -135,6 +149,27 @@ describeComponent('stateful component', [
         expect(state['gen-parent-stateful-component-dummy-1']).toEqual({foo: 'hello world', bar: 42});
         expect(state['gen-parent-stateful-component-dummy-2']).toEqual({foo: 'hello world', bar: 42});
         expect(state['gen-parent-stateful-component-dummy-3']).toEqual({foo: 'hello world', bar: 42});
+    });
+
+    it('handles multiple top-level components', () => {
+        tester.createComponent<MultipleTopComponent>(
+            MultipleTopComponent.asView().template
+        );
+
+        const topLevel = stateManager.topLevelComponents();
+        expect(topLevel.length).toBe(2);
+        expect(topLevel[0].stateId).toBe('top-1');
+        expect(topLevel[1].stateId).toBe('top-2');
+
+        const state = stateManager.save();
+        expect(state['top-1']).toEqual({});
+        expect(state['top-1-dummy-1']).toEqual({foo: 'hello world', bar: 42});
+        expect(state['top-1-dummy-2']).toEqual({foo: 'hello world', bar: 42});
+        expect(state['top-1-dummy-3']).toEqual({foo: 'hello world', bar: 42});
+        expect(state['top-2']).toEqual({});
+        expect(state['top-2-dummy-1']).toEqual({foo: 'hello world', bar: 42});
+        expect(state['top-2-dummy-2']).toEqual({foo: 'hello world', bar: 42});
+        expect(state['top-2-dummy-3']).toEqual({foo: 'hello world', bar: 42});
     });
 
     it('loads state', () => {
