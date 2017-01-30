@@ -390,6 +390,14 @@ export interface DataGOEnrichmentAnalysisStorage extends Storage {
     json: GOEnrichmentJson;
 }
 
+export interface DataGOEnrichmentAnalysisInput {
+    pval_threshold: number;
+    genes: string[];
+    source: string;
+    ontology: number;
+    gaf: number;
+}
+
 // ------------------------------------------------------------------
 // data:gaf: GAF annotation
 

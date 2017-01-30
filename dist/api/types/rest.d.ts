@@ -295,6 +295,13 @@ export interface GOEnrichmentNode {
 export interface DataGOEnrichmentAnalysisStorage extends Storage {
     json: GOEnrichmentJson;
 }
+export interface DataGOEnrichmentAnalysisInput {
+    pval_threshold: number;
+    genes: string[];
+    source: string;
+    ontology: number;
+    gaf: number;
+}
 export interface DataGafAnnotation extends Data {
     output: {
         source: string;
