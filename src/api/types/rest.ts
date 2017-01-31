@@ -486,7 +486,7 @@ export interface GeneClustering { // api-typecheck:gene_cluster_data.json.gz
     zero_gene_symbols: string[]; // gene symbols with no expressions
 }
 
-export interface PCA {
+export interface PCA { // api-typecheck:pca_plot.json.gz
     explained_variance_ratios: number[];
     all_explained_variance_ratios: number[];
     all_components: (string|number)[][][];
