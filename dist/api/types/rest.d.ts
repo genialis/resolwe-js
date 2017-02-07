@@ -337,16 +337,18 @@ export interface CollectionHydrateData extends CollectionBase {
     data: DataBase[];
 }
 export interface SampleBase extends CollectionBase {
+    descriptor_completed: boolean;
 }
-export interface Sample extends Collection {
+export interface Sample extends Collection, SampleBase {
+    descriptor_completed: true;
 }
-export interface SampleHydrateData extends CollectionHydrateData {
+export interface SampleHydrateData extends CollectionHydrateData, SampleBase {
 }
-export interface Presample extends Collection {
-    presample: boolean;
+export interface Presample extends Collection, SampleBase {
+    descriptor_completed: false;
 }
-export interface PresampleHydrateData extends CollectionHydrateData {
-    presample: boolean;
+export interface PresampleHydrateData extends CollectionHydrateData, SampleBase {
+    descriptor_completed: false;
 }
 export interface Storage {
     id: number;

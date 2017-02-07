@@ -6,7 +6,6 @@ import { CollectionResource } from './resources/rest/collection';
 import { SampleResource } from './resources/rest/sample';
 import { DataResource } from './resources/rest/data';
 import { DescriptorSchemaResource } from './resources/rest/descriptor_schema';
-import { PresampleResource } from './resources/rest/presample';
 import { UserResource } from './resources/rest/user';
 import { FileResource } from './resources/rest/file';
 import { StorageResource } from './resources/rest/storage';
@@ -22,7 +21,6 @@ export declare class ResolweApi {
     Process: RESTResource<types.Process>;
     DescriptorSchema: DescriptorSchemaResource;
     Sample: SampleResource;
-    Presample: PresampleResource;
     File: FileResource;
     Storage: StorageResource;
     KnowledgeBase: {

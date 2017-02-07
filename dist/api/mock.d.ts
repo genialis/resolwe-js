@@ -2,7 +2,7 @@ import * as Rx from 'rx';
 import { Connection, Message } from './connection';
 import { QueryObserverManager } from './queryobserver';
 import { APIError } from './errors';
-import { Query } from './types/rest';
+import { Query, SampleBase, CollectionBase, DataBase } from './types/rest';
 import { ResolweApi } from './index';
 /**
  * Mock request handler function. It receives any query arguments and data that
@@ -318,3 +318,11 @@ export declare function paginateQuery<T>(query: any, items: T[]): T[];
  * Helper function for supporting ordering.
  */
 export declare function orderingQuery<T>(query: Query, items: T[]): T[];
+/**
+ * Helper function for supporting filtering by descriptor_completed, which can be used as a [[MockQueryEvaluator]].
+ */
+export declare function annotatedQuery<T extends SampleBase>(query: any, items: T[]): T[];
+/**
+ * Helper function for supporting filtering by slug, which can be used as a [[MockQueryEvaluator]].
+ */
+export declare function slugQuery<T extends CollectionBase | DataBase>(query: any, items: T[]): T[];

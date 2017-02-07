@@ -7,7 +7,6 @@ import {CollectionResource} from './resources/rest/collection';
 import {SampleResource} from './resources/rest/sample';
 import {DataResource} from './resources/rest/data';
 import {DescriptorSchemaResource} from './resources/rest/descriptor_schema';
-import {PresampleResource} from './resources/rest/presample';
 import {UserResource} from './resources/rest/user';
 import {FileResource} from './resources/rest/file';
 import {StorageResource} from './resources/rest/storage';
@@ -26,7 +25,6 @@ export class ResolweApi {
     public Process: RESTResource<types.Process> = new RESTResource<types.Process>('process', this.connection);
     public DescriptorSchema: DescriptorSchemaResource = new DescriptorSchemaResource(this.connection);
     public Sample: SampleResource = new SampleResource(this.connection);
-    public Presample: PresampleResource = new PresampleResource(this.connection);
     public File: FileResource = new FileResource(this.connection);
     public Storage: StorageResource = new StorageResource(this.connection);
 

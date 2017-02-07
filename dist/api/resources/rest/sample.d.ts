@@ -6,7 +6,7 @@ import * as types from '../../types/rest';
 /**
  * Sample resource class for dealing with sample endpoint.
  */
-export declare class SampleResource extends RESTResource<types.Sample> implements Permissionable {
+export declare class SampleResource extends RESTResource<types.Sample | types.Presample> implements Permissionable {
     constructor(connection: Connection);
     /**
      * Checks if sample slug already exists.
@@ -15,10 +15,16 @@ export declare class SampleResource extends RESTResource<types.Sample> implement
      * @return An observable that emits the response
      */
     slugExists(slug: string): Rx.Observable<boolean>;
-    query(query?: types.QueryObject): Rx.Observable<types.Sample[]>;
-    query(query: types.QueryObjectHydrateData): Rx.Observable<types.SampleHydrateData[]>;
-    queryOne(query?: types.QueryObject): Rx.Observable<types.Sample>;
-    queryOne(query: types.QueryObjectHydrateData): Rx.Observable<types.SampleHydrateData>;
+    /**
+     * This method should not be used.
+     */
+    query(query: types.Query): Rx.Observable<any>;
+    queryOne(query?: types.QueryObject): Rx.Observable<types.Sample | types.Presample>;
+    queryOne(query: types.QueryObjectHydrateData): Rx.Observable<types.SampleHydrateData | types.PresampleHydrateData>;
+    queryUnannotated(query?: types.QueryObject): Rx.Observable<types.Presample[]>;
+    queryUnannotated(query: types.QueryObjectHydrateData): Rx.Observable<types.PresampleHydrateData[]>;
+    queryAnnotated(query?: types.QueryObject): Rx.Observable<types.Sample[]>;
+    queryAnnotated(query: types.QueryObjectHydrateData): Rx.Observable<types.SampleHydrateData[]>;
     /**
      * Adds sample to collections.
      *
