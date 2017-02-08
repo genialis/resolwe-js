@@ -52,6 +52,6 @@ export class FeatureResource extends KnowledgeBaseResource {
      */
     public autocomplete(query: types.FeatureAutocompleteQuery): Rx.Observable<types.Feature[]> {
         const path = this.getModuleMethodPath('autocomplete');
-        return transformFeatures(this.connection.get<types.Feature[]>(path, query));
+        return transformFeatures(this.connection.post<types.Feature[]>(path, query));
     }
 }
