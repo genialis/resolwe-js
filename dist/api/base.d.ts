@@ -1,3 +1,4 @@
+import * as Rx from 'rx';
 import { Connection } from "./connection";
 export declare class Base {
     private _connection;

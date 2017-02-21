@@ -381,8 +381,9 @@ export interface GeneClustering {
 export interface PCA {
     explained_variance_ratios: number[];
     all_explained_variance_ratios: number[];
-    all_components: (string | number)[][][];
-    components: (string | number)[][][];
+    all_components: [string, number][][];
+    components: [string, number][][];
+    zero_gene_symbols: string[];
     flot: {
         xlabel: string;
         ylabel: string;

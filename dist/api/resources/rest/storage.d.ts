@@ -1,3 +1,4 @@
+import * as Rx from 'rx';
 import { RESTResource } from './rest_resource';
 import { Connection } from '../../connection';
 import * as types from '../../types/rest';
