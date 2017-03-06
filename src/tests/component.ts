@@ -7,6 +7,8 @@ import {MockBase, MockApi} from '../api/mock';
 import {ngEqualMatcher} from './matchers';
 import {SharedStoreFactory, SharedStoreProvider} from '../core/shared_store/index';
 import {GenError} from '../core/errors/error';
+import {compose} from '../core/utils/lang';
+import {MockApiService} from './mock';
 import './matchers';
 
 // Service modules that should be loaded.
@@ -103,7 +105,7 @@ export interface ComponentTester {
      * when testing components. The mock API is automatically injected into components
      * and replaces the usual API.
      */
-    api(): ResolweApi & MockBase;
+    api(): ResolweApi & MockBase & MockApiService;
 
     /**
      * Returns the scope.
@@ -150,7 +152,7 @@ export function describeComponent(description: string,
     describe(description, () => {
         let $compile: angular.ICompileService;
         let $scope: angular.IScope;
-        let mockApi: ResolweApi & MockBase;
+        let mockApi: ResolweApi & MockBase & MockApiService;
 
         const moduleName = 'resolwe.tests.' + description.replace(/ /g, '.');
         const module: angular.IModule = angular.module(moduleName, []);
@@ -162,7 +164,7 @@ export function describeComponent(description: string,
 
         beforeEach(angular.mock.module(($provide: angular.auto.IProvideService) => {
             // Replace usual API service with mock API.
-            $provide.service('api', apiClass);
+            $provide.service('api', compose([apiClass, MockApiService]));
         }));
         beforeEach(angular.mock.module(moduleName));
 
@@ -234,7 +236,7 @@ export function describeComponent(description: string,
                 $scope.$digest();
             },
 
-            api: function(): ResolweApi & MockBase {
+            api: function(): ResolweApi & MockBase & MockApiService {
                 return mockApi;
             },
 

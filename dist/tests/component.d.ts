@@ -4,6 +4,7 @@ import 'angular-mocks';
 import { ResolweApi } from '../api/index';
 import { MockBase } from '../api/mock';
 import { SharedStoreFactory } from '../core/shared_store/index';
+import { MockApiService } from './mock';
 import './matchers';
 import '../core/shared_store/index';
 import '../core/components/manager';
@@ -58,7 +59,7 @@ export interface ComponentTester {
      * when testing components. The mock API is automatically injected into components
      * and replaces the usual API.
      */
-    api(): ResolweApi & MockBase;
+    api(): ResolweApi & MockBase & MockApiService;
     /**
      * Returns the scope.
      */
