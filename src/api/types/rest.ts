@@ -527,6 +527,25 @@ export interface LoginResponse {
 export interface LogoutResponse {
 }
 
+export interface CreateAccountInformation {
+    username: string;
+    password: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    job_title?: string;
+    company?: string;
+    department?: string;
+    location?: string;
+    lab?: string;
+    phone_number?: string;
+    community?: string;
+}
+
+export interface ActivateAccountResponse {
+    username: string;
+}
+
 
 // ------------------------------------------------------------------
 // File

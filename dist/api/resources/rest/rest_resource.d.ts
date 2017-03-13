@@ -49,6 +49,14 @@ export declare class RESTResource<T> extends Resource {
      */
     callMethod<U>(primaryKey: number | string, method: string, data?: any): Rx.Observable<U>;
     /**
+     * Calls a method on the given resource.
+     *
+     * @param method Method name
+     * @param data Method data object
+     * @return An observable that emits the response
+     */
+    callListMethod<U>(method: string, data?: any): Rx.Observable<U>;
+    /**
      * Creates an instance of the given resource.
      *
      * @param data Object attributes

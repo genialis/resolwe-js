@@ -78,6 +78,17 @@ export class RESTResource<T> extends Resource {
     }
 
     /**
+     * Calls a method on the given resource.
+     *
+     * @param method Method name
+     * @param data Method data object
+     * @return An observable that emits the response
+     */
+    public callListMethod<U>(method: string, data: any = {}): Rx.Observable<U> {
+        return this.connection.post<U>(this.getListMethodPath(method), data, {});
+    }
+
+    /**
      * Creates an instance of the given resource.
      *
      * @param data Object attributes
