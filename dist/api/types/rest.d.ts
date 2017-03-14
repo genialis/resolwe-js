@@ -421,6 +421,7 @@ export interface CreateAccountInformation {
     location?: string;
     lab?: string;
     phone_number?: string;
+    newsletter?: boolean;
     community?: string;
 }
 export interface ActivateAccountResponse {
