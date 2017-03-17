@@ -19,14 +19,19 @@ export class Auth {
     /**
      * Performs user login.
      *
-     * @param username username
-     * @param password password
+     * @param username Username or e-mail address
+     * @param password Password
      */
     public login(username: string, password: string): Rx.Observable<types.LoginResponse> {
         const authData = {
             username: username,
             password: password,
         };
+
+        // Allow login with an e-mail address as username.
+        if (_.contains(username, '@')) {
+            authData['email'] = username;
+        }
 
         const response = this._connection.post<types.LoginResponse>('/rest-auth/login/', authData).publish().refCount();
         response.subscribe(() => {

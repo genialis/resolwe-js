@@ -12,8 +12,8 @@ export declare class Auth {
     /**
      * Performs user login.
      *
-     * @param username username
-     * @param password password
+     * @param username Username or e-mail address
+     * @param password Password
      */
     login(username: string, password: string): Rx.Observable<types.LoginResponse>;
     /**
