@@ -498,7 +498,7 @@ export interface PCA { // api-typecheck:pca_plot_ncbi.json.gz
         xlabel: string;
         ylabel: string;
         data: number[][];
-        samples: string[];
+        sample_ids: string[];
     };
 }
 

@@ -388,7 +388,7 @@ export interface PCA {
         xlabel: string;
         ylabel: string;
         data: number[][];
-        samples: string[];
+        sample_ids: string[];
     };
 }
 export interface User {
