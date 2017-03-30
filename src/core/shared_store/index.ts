@@ -118,7 +118,7 @@ export abstract class SharedStore<T, U> {
         switch (action.type) {
             case Actions.SET: {
                 const nextState = action['value'];
-                return this.onStateLoad(nextState);
+                return this.onStateLoad(state, nextState);
             }
             default: {
                 // Do nothing.
@@ -152,11 +152,12 @@ export abstract class SharedStore<T, U> {
      * It is called before the new state has been set. The default implementation
      * does nothing.
      *
-     * @param state New state
+     * @param state Old state
+     * @param nextState New state
      * @return Possibly modified state that should be used instead
      */
-    protected onStateLoad(state: T): T {
-        return state;
+    protected onStateLoad(state: T, nextState: T): T {
+        return nextState;
     }
 
     /**

@@ -97,10 +97,11 @@ export declare abstract class SharedStore<T, U> {
      * It is called before the new state has been set. The default implementation
      * does nothing.
      *
-     * @param state New state
+     * @param state Old state
+     * @param nextState New state
      * @return Possibly modified state that should be used instead
      */
-    protected onStateLoad(state: T): T;
+    protected onStateLoad(state: T, nextState: T): T;
     /**
      * A helper method for defining shared store queries. If the query is already
      * defined, the existing observable is returned.
