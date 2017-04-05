@@ -65,10 +65,11 @@ export abstract class Resource {
         // We assume that the same query object on the same resource will always result in the same
         // underlying queryset (and therefore query observer).
         let serializedQuery = JSON.stringify([path, query]);
-        let queryObserverId = this._queryObserverIdCache[serializedQuery];
-        let pendingQueries = this._pendingQueries[serializedQuery];
 
         return Rx.Observable.create<T[]>((observer) => {
+            let queryObserverId = this._queryObserverIdCache[serializedQuery];
+            let pendingQueries = this._pendingQueries[serializedQuery];
+
             // Perform a REST query to get the observer identifier and to subscribe to new updates.
             let subscriptions: Rx.Disposable[] = [];
 
