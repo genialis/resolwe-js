@@ -49,6 +49,11 @@ export interface MockBase {
     reset(): void;
 
     /**
+     * Enables or disables delay simulation.
+     */
+    simulateDelay(value: boolean): void;
+
+    /**
      * Creates a new mock resource that will handle reactive queries. A resource
      * must be created before it can be used in [[addItem]], [[updateItem]] and
      * [[removeItem]].
@@ -205,6 +210,7 @@ export class MockConnection implements Connection, MockBase {
     private _isConnected: Rx.BehaviorSubject<boolean>;
     private _queryObserverManager: QueryObserverManager;
     private _errors: Rx.Subject<APIError>;
+    private _simulateDelay: boolean = false;
 
     constructor() {
         this._messages = new Rx.Subject<Message>();
@@ -274,6 +280,13 @@ export class MockConnection implements Connection, MockBase {
     /**
      * @inheritdoc
      */
+    public simulateDelay(value: boolean): void {
+        this._simulateDelay = value;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public get<T>(path: string, parameters?: Object): Rx.Observable<T> {
         if (!_.startsWith(path, '/api/')) return this._handleMockResponse('get', path, parameters, {});
         if (!_.has(parameters, 'observe')) return this._handleMockResponse('get', path, parameters, {});
@@ -291,10 +304,11 @@ export class MockConnection implements Connection, MockBase {
         };
         items.observers.push(observer);
 
-        return Rx.Observable.just<any>({
+        const observable = Rx.Observable.just<any>({
             observer: observer.observerId,
             items: this._updateMockObserver(observer, items, false),
         });
+        return this._simulateDelay ? observable.delay(100) : observable;
     }
 
     /**
@@ -556,6 +570,13 @@ export class MockApiMixin implements MockBase {
      */
     public reset(): void {
         this.connection.reset();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public simulateDelay(value: boolean): void {
+        this.connection.simulateDelay(value);
     }
 
     /**

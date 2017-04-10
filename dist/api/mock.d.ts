@@ -40,6 +40,10 @@ export interface MockBase {
      */
     reset(): void;
     /**
+     * Enables or disables delay simulation.
+     */
+    simulateDelay(value: boolean): void;
+    /**
      * Creates a new mock resource that will handle reactive queries. A resource
      * must be created before it can be used in [[addItem]], [[updateItem]] and
      * [[removeItem]].
@@ -136,6 +140,7 @@ export declare class MockConnection implements Connection, MockBase {
     private _isConnected;
     private _queryObserverManager;
     private _errors;
+    private _simulateDelay;
     constructor();
     /**
      * @inheritdoc
@@ -151,6 +156,10 @@ export declare class MockConnection implements Connection, MockBase {
     isConnected(): Rx.Observable<boolean>;
     private _registerMockRequestHandler<T>(method, path, handler);
     private _handleMockResponse(method, responsePath, parameters, data);
+    /**
+     * @inheritdoc
+     */
+    simulateDelay(value: boolean): void;
     /**
      * @inheritdoc
      */
@@ -256,6 +265,10 @@ export declare class MockApiMixin implements MockBase {
      * @inheritdoc
      */
     reset(): void;
+    /**
+     * @inheritdoc
+     */
+    simulateDelay(value: boolean): void;
     /**
      * @inheritdoc
      */

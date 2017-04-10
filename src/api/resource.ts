@@ -14,7 +14,10 @@ interface QueryObserverIdCache {
 }
 
 interface PendingQueries {
-    [index: string]: Rx.Observer<any>[];
+    [index: string]: {
+        subscriptions: Rx.Disposable[];
+        observer: Rx.Observer<any>;
+    }[];
 }
 
 /**
@@ -92,9 +95,9 @@ export abstract class Resource {
             if (_.isEmpty(subscriptions)) {
                 if (pendingQueries) {
                     // A request for the same query is already in progress.
-                    pendingQueries.push(observer);
+                    pendingQueries.push({observer, subscriptions});
                 } else {
-                    this._pendingQueries[serializedQuery] = [observer];
+                    this._pendingQueries[serializedQuery] = [{observer, subscriptions}];
 
                     query = _.assign(this.transformQuery(query), {observe: this.connection.sessionId()});
                     this.connection.queryObserverManager().chainAfterUnsubscribe(() => this.connection.get(path, query)).subscribe(
@@ -110,12 +113,12 @@ export abstract class Resource {
                                 return this.connection.get(path, query);
                             });
 
-                            for (const pendingObserver of this._pendingQueries[serializedQuery]) {
-                                subscriptions.push(queryObserver.observable().subscribe(pendingObserver));
+                            for (const pending of this._pendingQueries[serializedQuery]) {
+                                pending.subscriptions.push(queryObserver.observable().subscribe(pending.observer));
 
                                 if (queryObserver.status === QueryObserverStatus.INITIALIZED) {
                                     // If the query observer is already initialized, emit the current items immediately.
-                                    pendingObserver.onNext(queryObserver.items);
+                                    pending.observer.onNext(queryObserver.items);
                                 }
                             }
 

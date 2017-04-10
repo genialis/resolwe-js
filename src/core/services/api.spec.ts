@@ -150,3 +150,22 @@ describeComponent('angular mock api', [], (tester) => {
         });
     });
 });
+
+describe('resource', () => {
+    it('correctly caches queries', (done) => {
+        let called = 0;
+        const mockApi = new MockApi();
+        const subscriber = () => {
+            if (++called === 3) { // tslint:disable-line:no-constant-condition
+                done();
+            }
+        };
+
+        mockApi.createResource('process');
+        mockApi.simulateDelay(true);
+
+        mockApi.Process.query().take(1).subscribe(subscriber);
+        mockApi.Process.query().take(1).subscribe(subscriber);
+        mockApi.Process.query().take(1).subscribe(subscriber);
+    });
+});
