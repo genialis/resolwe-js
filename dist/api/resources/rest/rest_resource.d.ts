@@ -1,6 +1,6 @@
 import * as Rx from 'rx';
 import { Connection } from '../../connection';
-import { Resource } from '../../resource';
+import { Resource, QueryOptions } from '../../resource';
 import * as types from '../../types/rest';
 /**
  * A resource class backed by a genesis platform model.
@@ -100,8 +100,9 @@ export declare class RESTResource<T> extends Resource {
      * given query.
      *
      * @param query Query
+     * @param options Query options
      */
-    query(query?: types.Query): Rx.Observable<T[]>;
+    query(query?: types.Query, options?: QueryOptions): Rx.Observable<T[]>;
     /**
      * Performs a live query against this resource. Subscribing to the returned
      * observable will track any changes made to the resources returned by the
@@ -113,6 +114,7 @@ export declare class RESTResource<T> extends Resource {
      * DON'T FORGET TO HANDLE THE ERRORS!
      *
      * @param query Query
+     * @param options Query options
      */
-    queryOne(query?: types.Query): Rx.Observable<T>;
+    queryOne(query?: types.Query, options?: QueryOptions): Rx.Observable<T>;
 }

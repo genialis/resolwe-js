@@ -21,6 +21,13 @@ interface PendingQueries {
 }
 
 /**
+ * Per-query configuration options.
+ */
+export interface QueryOptions {
+    reactive?: boolean;
+}
+
+/**
  * An abstract resource class.
  */
 export abstract class Resource {
@@ -64,12 +71,28 @@ export abstract class Resource {
     /**
      * Performs a query against this resource and subscribes to subsequent updates.
      */
-    protected reactiveRequest<T>(query: types.Query, path: string): Rx.Observable<T[]> {
+    protected reactiveRequest<T>(query: types.Query, path: string, options?: QueryOptions): Rx.Observable<T[]> {
         // We assume that the same query object on the same resource will always result in the same
         // underlying queryset (and therefore query observer).
         let serializedQuery = JSON.stringify([path, query]);
+        options = _.defaults({}, options || {}, {
+            reactive: false,
+        });
 
         return Rx.Observable.create<T[]>((observer) => {
+            if (!options.reactive) {
+                // Reactivity is disabled for this query.
+                query = this.transformQuery(query);
+                const subscription = this.connection.get(path, query).map((response: any) => {
+                    // Correctly handle paginated results.
+                    if (_.has(response, 'results')) return response.results;
+                    return response;
+                }).subscribe(observer);
+
+                return () => subscription.dispose();
+            }
+
+            // Reactivity is enabled.
             let queryObserverId = this._queryObserverIdCache[serializedQuery];
             let pendingQueries = this._pendingQueries[serializedQuery];
 

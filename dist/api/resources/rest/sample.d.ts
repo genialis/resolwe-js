@@ -1,5 +1,6 @@
 import * as Rx from 'rx';
 import { RESTResource } from './rest_resource';
+import { QueryOptions } from '../../resource';
 import { Connection } from '../../connection';
 import { Permissionable } from '../addons/permissions';
 import * as types from '../../types/rest';
@@ -18,13 +19,13 @@ export declare class SampleResource extends RESTResource<types.Sample | types.Pr
     /**
      * This method should not be used.
      */
-    query(query: types.Query): Rx.Observable<any>;
-    queryOne(query?: types.QueryObject): Rx.Observable<types.Sample | types.Presample>;
-    queryOne(query: types.QueryObjectHydrateData): Rx.Observable<types.SampleHydrateData | types.PresampleHydrateData>;
-    queryUnannotated(query?: types.QueryObject): Rx.Observable<types.Presample[]>;
-    queryUnannotated(query: types.QueryObjectHydrateData): Rx.Observable<types.PresampleHydrateData[]>;
-    queryAnnotated(query?: types.QueryObject): Rx.Observable<types.Sample[]>;
-    queryAnnotated(query: types.QueryObjectHydrateData): Rx.Observable<types.SampleHydrateData[]>;
+    query(query: types.Query, options?: QueryOptions): Rx.Observable<any>;
+    queryOne(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Sample | types.Presample>;
+    queryOne(query: types.QueryObjectHydrateData, options?: QueryOptions): Rx.Observable<types.SampleHydrateData | types.PresampleHydrateData>;
+    queryUnannotated(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Presample[]>;
+    queryUnannotated(query: types.QueryObjectHydrateData, options?: QueryOptions): Rx.Observable<types.PresampleHydrateData[]>;
+    queryAnnotated(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Sample[]>;
+    queryAnnotated(query: types.QueryObjectHydrateData, options?: QueryOptions): Rx.Observable<types.SampleHydrateData[]>;
     /**
      * Adds sample to collections.
      *

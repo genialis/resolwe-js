@@ -2,6 +2,12 @@ import * as Rx from 'rx';
 import { Connection } from './connection';
 import * as types from './types/rest';
 /**
+ * Per-query configuration options.
+ */
+export interface QueryOptions {
+    reactive?: boolean;
+}
+/**
  * An abstract resource class.
  */
 export declare abstract class Resource {
@@ -33,5 +39,5 @@ export declare abstract class Resource {
     /**
      * Performs a query against this resource and subscribes to subsequent updates.
      */
-    protected reactiveRequest<T>(query: types.Query, path: string): Rx.Observable<T[]>;
+    protected reactiveRequest<T>(query: types.Query, path: string, options?: QueryOptions): Rx.Observable<T[]>;
 }

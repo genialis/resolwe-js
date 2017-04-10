@@ -18,7 +18,7 @@ export class UserResource extends RESTResource<types.User> {
      * Returns the current user's authentication status.
      */
     public isAuthenticated(): Rx.Observable<boolean> {
-        return this.query({current_only: 1}).map((users: any[]): boolean => {
+        return this.query({current_only: 1}, {reactive: true}).map((users: any[]): boolean => {
             return !!users.length;
         });
     }
@@ -27,7 +27,7 @@ export class UserResource extends RESTResource<types.User> {
      * Returns the current user's profile.
      */
     public profile(): Rx.Observable<types.User> {
-        return this.query({current_only: 1}).map((users: types.User[]): types.User => {
+        return this.query({current_only: 1}, {reactive: true}).map((users: types.User[]): types.User => {
             if (users.length > 1) {
                 errorLog('Query should not return more than one user');
             }

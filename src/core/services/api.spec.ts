@@ -12,13 +12,34 @@ export interface APIService extends APIServiceBase, ResolweApi {
 }
 
 describe('mock api', () => {
-    it('mocks basic queries', () => {
+    it('mocks basic non-reactive queries', () => {
         const mockApi = new MockApi();
         const subscriber = jasmine.createSpy('subscriber');
 
         mockApi.createResource('collection');
 
+        // Queries are not reactive by default.
         mockApi.Collection.query().subscribe(subscriber);
+        expect(subscriber).toHaveBeenCalledTimes(1);
+        expect(subscriber.calls.mostRecent().args[0]).toEqual([]);
+
+        // Add an item.
+        mockApi.addItem('collection', {id: 1, name: 'Hello world'});
+        expect(subscriber).toHaveBeenCalledTimes(1);
+
+        // Since it is a non-reactive query, we need to repeat the query.
+        mockApi.Collection.query().subscribe(subscriber);
+        expect(subscriber).toHaveBeenCalledTimes(2);
+        expect(subscriber.calls.mostRecent().args[0]).toEqual([{id: 1, name: 'Hello world'}]);
+    });
+
+    it('mocks basic reactive queries', () => {
+        const mockApi = new MockApi();
+        const subscriber = jasmine.createSpy('subscriber');
+
+        mockApi.createResource('collection');
+
+        mockApi.Collection.query({}, {reactive: true}).subscribe(subscriber);
         expect(subscriber).toHaveBeenCalledTimes(1);
         expect(subscriber.calls.mostRecent().args[0]).toEqual([]);
 
@@ -38,7 +59,7 @@ describe('mock api', () => {
         expect(subscriber.calls.mostRecent().args[0]).toEqual([]);
     });
 
-    it('mocks complex queries', () => {
+    it('mocks complex reactive queries', () => {
         const mockApi = new MockApi();
         const subscriberPlain = jasmine.createSpy('subscriberPlain');
         const subscriberWithFilter = jasmine.createSpy('subscriberWithFilter');
@@ -49,8 +70,8 @@ describe('mock api', () => {
             return _.filter(items, (item: any) => item.name === query.name);
         });
 
-        mockApi.Collection.query().subscribe(subscriberPlain);
-        mockApi.Collection.query({name: 'Hello'}).subscribe(subscriberWithFilter);
+        mockApi.Collection.query({}, {reactive: true}).subscribe(subscriberPlain);
+        mockApi.Collection.query({name: 'Hello'}, {reactive: true}).subscribe(subscriberWithFilter);
 
         mockApi.addItem('collection', {id: 1, name: 'Collection A'});
         mockApi.addItem('collection', {id: 2, name: 'Another one'});
@@ -152,7 +173,7 @@ describeComponent('angular mock api', [], (tester) => {
 });
 
 describe('resource', () => {
-    it('correctly caches queries', (done) => {
+    it('correctly caches reactive queries', (done) => {
         let called = 0;
         const mockApi = new MockApi();
         const subscriber = () => {
@@ -164,8 +185,11 @@ describe('resource', () => {
         mockApi.createResource('process');
         mockApi.simulateDelay(true);
 
-        mockApi.Process.query().take(1).subscribe(subscriber);
-        mockApi.Process.query().take(1).subscribe(subscriber);
-        mockApi.Process.query().take(1).subscribe(subscriber);
+        mockApi.Process.query({}, {reactive: true}).take(1).subscribe(subscriber);
+        mockApi.Process.query({}, {reactive: true}).take(1).subscribe(subscriber);
+        mockApi.Process.query({}, {reactive: true}).take(1).subscribe(subscriber);
+
+        // Ensure these queries have been delayed.
+        expect(called).toEqual(0);
     });
 });

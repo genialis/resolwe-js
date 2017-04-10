@@ -1,4 +1,5 @@
 import * as Rx from 'rx';
+import { QueryOptions } from '../../resource';
 import { RESTResource } from './rest_resource';
 import { Connection } from '../../connection';
 import { Permissionable } from '../addons/permissions';
@@ -23,10 +24,10 @@ export declare class CollectionResource extends RESTResource<types.Collection> i
      * @returns {Rx.Observable<void>}
      */
     addData(collectionId: number, dataIds: number[]): Rx.Observable<void>;
-    query(query?: types.QueryObject): Rx.Observable<types.Collection[]>;
-    query(query: types.QueryObjectHydrateData): Rx.Observable<types.CollectionHydrateData[]>;
-    queryOne(query?: types.QueryObject): Rx.Observable<types.Collection>;
-    queryOne(query: types.QueryObjectHydrateData): Rx.Observable<types.CollectionHydrateData>;
+    query(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Collection[]>;
+    query(query: types.QueryObjectHydrateData, options?: QueryOptions): Rx.Observable<types.CollectionHydrateData[]>;
+    queryOne(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Collection>;
+    queryOne(query: types.QueryObjectHydrateData, options?: QueryOptions): Rx.Observable<types.CollectionHydrateData>;
     getPermissions(id: number): Rx.Observable<types.ItemPermissions[]>;
     setPermissions(id: number, permissions: types.SetPermissionsRequest): Rx.Observable<types.ItemPermissions[]>;
 }

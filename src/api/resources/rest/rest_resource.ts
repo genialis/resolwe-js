@@ -1,7 +1,7 @@
 import * as Rx from 'rx';
 
 import {Connection} from '../../connection';
-import {Resource} from '../../resource';
+import {Resource, QueryOptions} from '../../resource';
 import {QueryOneError} from '../../errors';
 import * as types from '../../types/rest';
 
@@ -147,9 +147,10 @@ export class RESTResource<T> extends Resource {
      * given query.
      *
      * @param query Query
+     * @param options Query options
      */
-    public query(query: types.Query = {}): Rx.Observable<T[]> {
-        return super.reactiveRequest<T>(query, this.getQueryPath(query));
+    public query(query: types.Query = {}, options?: QueryOptions): Rx.Observable<T[]> {
+        return super.reactiveRequest<T>(query, this.getQueryPath(query), options);
     }
 
     /**
@@ -163,9 +164,10 @@ export class RESTResource<T> extends Resource {
      * DON'T FORGET TO HANDLE THE ERRORS!
      *
      * @param query Query
+     * @param options Query options
      */
-    public queryOne(query: types.Query = {}): Rx.Observable<T> {
-        return this.query(query).map((items) => {
+    public queryOne(query: types.Query = {}, options?: QueryOptions): Rx.Observable<T> {
+        return this.query(query, options).map((items) => {
             if (!items.length) {
                 throw new QueryOneError('The query returned no items.');
             }

@@ -1,5 +1,6 @@
 import * as Rx from 'rx';
 
+import {QueryOptions} from '../../resource';
 import {RESTResource} from './rest_resource';
 import {Connection} from '../../connection';
 import {Permissionable, getPermissions, setPermissions} from '../addons/permissions';
@@ -35,16 +36,16 @@ export class CollectionResource extends RESTResource<types.Collection> implement
         return this.connection.post<void>('/api/' + this.name + '/' + collectionId + '/add_data', { ids: dataIds });
     }
 
-    public query(query?: types.QueryObject): Rx.Observable<types.Collection[]>;
-    public query(query: types.QueryObjectHydrateData): Rx.Observable<types.CollectionHydrateData[]>;
-    public query(query: types.Query = {}): Rx.Observable<any> {
-        return super.query(query);
+    public query(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Collection[]>;
+    public query(query: types.QueryObjectHydrateData, options?: QueryOptions): Rx.Observable<types.CollectionHydrateData[]>;
+    public query(query: types.Query = {}, options?: QueryOptions): Rx.Observable<any> {
+        return super.query(query, options);
     }
 
-    public queryOne(query?: types.QueryObject): Rx.Observable<types.Collection>;
-    public queryOne(query: types.QueryObjectHydrateData): Rx.Observable<types.CollectionHydrateData>;
-    public queryOne(query: types.Query = {}): Rx.Observable<any> {
-        return super.queryOne(query);
+    public queryOne(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Collection>;
+    public queryOne(query: types.QueryObjectHydrateData, options?: QueryOptions): Rx.Observable<types.CollectionHydrateData>;
+    public queryOne(query: types.Query = {}, options?: QueryOptions): Rx.Observable<any> {
+        return super.queryOne(query, options);
     }
 
     public getPermissions(id: number): Rx.Observable<types.ItemPermissions[]> {

@@ -289,25 +289,37 @@ export class MockConnection implements Connection, MockBase {
      */
     public get<T>(path: string, parameters?: Object): Rx.Observable<T> {
         if (!_.startsWith(path, '/api/')) return this._handleMockResponse('get', path, parameters, {});
-        if (!_.has(parameters, 'observe')) return this._handleMockResponse('get', path, parameters, {});
 
+        const reactive = _.has(parameters, 'observe');
         const atoms = path.split('/');
         const resource = atoms.slice(2).join('/');
+
+        if (!reactive && !_.has(this._mockItems, resource)) {
+            return this._handleMockResponse('get', path, parameters, {});
+        }
 
         let items = this._getMockItemsFor(resource);
         if (items.blackhole) return Rx.Observable.never<T>();
 
-        const observer = {
-            observerId: random.randomUuid(),
-            query: _.omit(parameters, 'observe'),
-            items: {},
-        };
-        items.observers.push(observer);
+        let observable: Rx.Observable<any>;
+        if (!reactive) {
+            // Non-reactive query.
+            observable = Rx.Observable.just<any>(items.queryEvaluator(parameters, items.items));
+        } else {
+            // Reactive query.
+            const observer = {
+                observerId: random.randomUuid(),
+                query: _.omit(parameters, 'observe'),
+                items: {},
+            };
+            items.observers.push(observer);
 
-        const observable = Rx.Observable.just<any>({
-            observer: observer.observerId,
-            items: this._updateMockObserver(observer, items, false),
-        });
+            observable = Rx.Observable.just<any>({
+                observer: observer.observerId,
+                items: this._updateMockObserver(observer, items, false),
+            });
+        }
+
         return this._simulateDelay ? observable.delay(100) : observable;
     }
 
