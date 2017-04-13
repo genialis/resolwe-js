@@ -1,10 +1,22 @@
-# Resolwe frontend
+# Resolwe SDK for TypeScript
 
 [![Build Status](https://travis-ci.org/genialis/resolwe-js.svg?branch=master)](https://travis-ci.org/genialis/resolwe-js)
 
 ## Development
 
-To update the compiled version of the package under `dist/`, run:
+Install dependencies:
 ```
-$ gulp build
+$ npm install
 ```
+
+Update the compiled version under `dist/`:
+```
+$ ./node_modules/.bin/gulp build
+```
+
+Build documentation:
+```
+$ ./node_modules/.bin/gulp typedoc
+```
+
+Open `docs/index.html` to view the documentation.
