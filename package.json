@@ -6,6 +6,9 @@
     "type": "git",
     "url": "git@github.com:genialis/resolwe-js.git"
   },
+  "scripts": {
+    "build": "gulp build"
+  },
   "main": "dist/index.js",
   "typings": "dist/index",
   "devDependencies": {

@@ -6,5 +6,5 @@
 
 To update the compiled version of the package under `dist/`, run:
 ```
-$ gulp build
+$ npm run build
 ```
