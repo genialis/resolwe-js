@@ -7,6 +7,7 @@ export interface Query {
     limit?: number;
     offset?: number;
     ordering?: string;
+    fields?: string;
     [propertyName: string]: any;
 }
 export interface QueryObject extends Query {

@@ -1,5 +1,5 @@
 import * as Rx from 'rx';
-import { PaginatedResponse } from './rest';
+import { Query, PaginatedResponse } from './rest';
 import { Feature } from './modules';
 /**
  * Transforms features returned from the API into one with some
@@ -11,3 +11,7 @@ export declare function transformFeatures(features: Rx.Observable<Feature[]>): R
  * augmented attributes.
  */
 export declare function transformFeaturesPaginated(features: Rx.Observable<PaginatedResponse<Feature>>): Rx.Observable<PaginatedResponse<Feature>>;
+/**
+ * Transforms query to return response with limited set of fields.
+ */
+export declare function limitFieldsQuery(query: Query, fields: string[]): Query;

@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import * as Rx from 'rx';
 
-import {PaginatedResponse} from './rest';
+import {Query, PaginatedResponse} from './rest';
 import {Feature} from './modules';
 
 /**
@@ -35,4 +35,11 @@ export function transformFeaturesPaginated(features: Rx.Observable<PaginatedResp
             {}, response, { results: mappedResults }
         );
     });
+}
+
+/**
+ * Transforms query to return response with limited set of fields.
+ */
+export function limitFieldsQuery(query: Query, fields: string[]): Query {
+    return {...query, fields: fields.join(',')};
 }

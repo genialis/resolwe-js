@@ -18,6 +18,7 @@ export interface Query {
     limit?: number;
     offset?: number;
     ordering?: string; // '-field1,-field2,field3'
+    fields?: string;
     [propertyName: string]: any;
 }
 
