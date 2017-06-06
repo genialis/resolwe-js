@@ -412,6 +412,37 @@ export interface DataGafAnnotation extends Data {
 }
 
 // ------------------------------------------------------------------
+// data:varianttable:
+
+export interface DataVariantTable extends Data {
+    output: {
+        variant_table: number; // => DataVariantTableStorage
+    };
+}
+
+export type DataVariantTableJsonValueColumn = string; // Example: MSH6_exon5_F1/2
+export type DataVariantTableJsonDelimitedColumn = string; // Example: DP4=46,41,11,16;SB=4
+export type DataVariantTableJsonUrlsColumn = [string, string][]; // Example: [['Gene', 'http://www.ncbi.nlm.nih.gov/gene/?term=gene']]
+export type DataVariantTableJsonColumn = DataVariantTableJsonValueColumn |
+                                         DataVariantTableJsonDelimitedColumn |
+                                         DataVariantTableJsonUrlsColumn;
+export interface DataVariantTableRow {
+    columns: DataVariantTableJsonColumn[];
+    pos: string;
+}
+
+export interface DataVariantTableJson { // api-typecheck:amplicon_table_output.json.gz
+    column_types: Array<'value' | 'delimited' | 'urls'>;
+    headers: string[];
+    labels: string[];
+    data: DataVariantTableRow[];
+}
+
+export interface DataVariantTableStorage extends Storage {
+    json: DataVariantTableJson;
+}
+
+// ------------------------------------------------------------------
 // Collection
 
 export type CollectionPermissions = ViewPermission | EditPermission | SharePermission |

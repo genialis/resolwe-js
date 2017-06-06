@@ -317,6 +317,28 @@ export interface DataGafAnnotation extends Data {
         };
     };
 }
+export interface DataVariantTable extends Data {
+    output: {
+        variant_table: number;
+    };
+}
+export declare type DataVariantTableJsonValueColumn = string;
+export declare type DataVariantTableJsonDelimitedColumn = string;
+export declare type DataVariantTableJsonUrlsColumn = [string, string][];
+export declare type DataVariantTableJsonColumn = DataVariantTableJsonValueColumn | DataVariantTableJsonDelimitedColumn | DataVariantTableJsonUrlsColumn;
+export interface DataVariantTableRow {
+    columns: DataVariantTableJsonColumn[];
+    pos: string;
+}
+export interface DataVariantTableJson {
+    column_types: Array<'value' | 'delimited' | 'urls'>;
+    headers: string[];
+    labels: string[];
+    data: DataVariantTableRow[];
+}
+export interface DataVariantTableStorage extends Storage {
+    json: DataVariantTableJson;
+}
 export declare type CollectionPermissions = ViewPermission | EditPermission | SharePermission | DownloadPermission | AddPermission;
 export interface CollectionBase {
     id: number;
