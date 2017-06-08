@@ -1,3 +1,5 @@
+import * as Rx from 'rx';
+
 import {RESTResource} from './rest_resource';
 import {Connection} from '../../connection';
 import {Permissionable, getPermissions, setPermissions} from '../addons/permissions';
@@ -10,6 +12,16 @@ export class DataResource extends RESTResource<types.Data> implements Permission
 
     constructor(connection: Connection) {
         super('data', connection);
+    }
+
+    /**
+     * Checks if data slug already exists.
+     *
+     * @param {string} Slug to check
+     * @return {Rx.Observable<boolean>} An observable that emits the response
+     */
+    public slugExists(slug: string): Rx.Observable<boolean> {
+        return <Rx.Observable<boolean>> this.connection.get(this.getListMethodPath('slug_exists'), { name: slug });
     }
 
     /**

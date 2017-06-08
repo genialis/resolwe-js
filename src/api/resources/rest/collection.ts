@@ -22,7 +22,7 @@ export class CollectionResource extends RESTResource<types.Collection> implement
      * @return {Rx.Observable<boolean>} An observable that emits the response
      */
     public slugExists(slug: string): Rx.Observable<boolean> {
-        return <Rx.Observable<boolean>> this.connection.get('/api/' + this.name + '/slug_exists', { name: slug });
+        return <Rx.Observable<boolean>> this.connection.get(this.getListMethodPath('slug_exists'), { name: slug });
     }
 
     /**
@@ -33,7 +33,7 @@ export class CollectionResource extends RESTResource<types.Collection> implement
      * @returns {Rx.Observable<void>}
      */
     public addData(collectionId: number, dataIds: number[]): Rx.Observable<void> {
-        return this.connection.post<void>('/api/' + this.name + '/' + collectionId + '/add_data', { ids: dataIds });
+        return this.connection.post<void>(this.getDetailMethodPath(collectionId, 'add_data'), { ids: dataIds });
     }
 
     public query(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Collection[]>;
