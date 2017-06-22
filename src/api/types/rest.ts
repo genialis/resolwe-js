@@ -534,6 +534,13 @@ export interface PCA { // api-typecheck:pca_plot_ncbi.json.gz
     };
 }
 
+export interface QCStorage extends Storage {
+    json: {
+        status: 'PASS' | 'FAIL' | 'WARNING',
+        message: string,
+    };
+}
+
 
 // ------------------------------------------------------------------
 // User

@@ -414,6 +414,12 @@ export interface PCA {
         sample_ids: string[];
     };
 }
+export interface QCStorage extends Storage {
+    json: {
+        status: 'PASS' | 'FAIL' | 'WARNING';
+        message: string;
+    };
+}
 export interface User {
     id: number;
     username: string;
