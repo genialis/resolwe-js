@@ -139,7 +139,9 @@ describeComponent('angular mock api', [], (tester) => {
         constructor($scope: angular.IScope, api: APIService) {
             super($scope);
 
-            this.subscribe('collection', api.Collection.queryOne());
+            this.subscribe((collection) => {
+                this.collection = collection;
+            }, api.Collection.queryOne());
         }
     }
 

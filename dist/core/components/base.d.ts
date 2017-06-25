@@ -74,7 +74,7 @@ export declare class Computation {
      * @param observable Observable or promise to subscribe to
      * @return Underlying subscription disposable
      */
-    subscribe<T>(target: string | ((data: T) => any), observable: Rx.Observable<T> | Promise<any>, options?: SubscribeComponentOptions): Rx.IDisposable;
+    subscribe<T>(callback: (data: T) => any, observable: Rx.Observable<T> | Promise<any>, options?: SubscribeComponentOptions): Rx.IDisposable;
     /**
      * Returns true if all subscriptions created by calling `subscribe` are ready.
      * A subscription is ready when it has received its first batch of data after
@@ -207,7 +207,7 @@ export declare abstract class ComponentBase {
      * @param observable Observable to subscribe to
      * @return Underlying subscription
      */
-    subscribe<T>(target: string | ((data: T) => any), observable: Rx.Observable<T> | Promise<any>, options?: SubscribeComponentOptions): Subscription;
+    subscribe<T>(callback: (data: T) => any, observable: Rx.Observable<T> | Promise<any>, options?: SubscribeComponentOptions): Subscription;
     /**
      * Unsubscribes the given computation from this component.
      *

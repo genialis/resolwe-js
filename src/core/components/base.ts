@@ -128,7 +128,7 @@ export class Computation {
      * @param observable Observable or promise to subscribe to
      * @return Underlying subscription disposable
      */
-    public subscribe<T>(target: string | ((data: T) => any),
+    public subscribe<T>(callback: (data: T) => any,
                         observable: Rx.Observable<T> | Promise<any>,
                         options: SubscribeComponentOptions = {}) {
         // Create a guard object that can be removed when a subscription is done. We need
@@ -156,11 +156,7 @@ export class Computation {
             this.component.$scope,
             (item) => {
                 try {
-                    if (_.isFunction(target)) {
-                        target(item);
-                    } else {
-                        this.component[target] = item;
-                    }
+                    callback(item);
                 } catch (exception) {
                     console.warn('Ignored error', exception);
                 } finally {
@@ -443,11 +439,11 @@ export abstract class ComponentBase {
      * @param observable Observable to subscribe to
      * @return Underlying subscription
      */
-    public subscribe<T>(target: string | ((data: T) => any),
+    public subscribe<T>(callback: (data: T) => any,
                         observable: Rx.Observable<T> | Promise<any>,
                         options: SubscribeComponentOptions = {}): Subscription {
         let computation = this._createComputation();
-        computation.subscribe(target, observable, options);
+        computation.subscribe(callback, observable, options);
         return computation;
     }
 
