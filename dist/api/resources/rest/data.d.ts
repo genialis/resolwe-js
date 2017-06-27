@@ -16,7 +16,11 @@ export declare class DataResource extends RESTResource<types.Data> implements Pe
      */
     slugExists(slug: string): Rx.Observable<boolean>;
     /**
-     * Get Data object if similar already exists, otherwise create it.
+     * Get Data object with the same inputs if it already exists, otherwise
+     * create it.
+     *
+     * Note: Consider sorting arrays in the inputs, to prevent needlessly
+     * creating the same Data objects.
      *
      * @param data Object attributes
      * @return An observable that emits the response
