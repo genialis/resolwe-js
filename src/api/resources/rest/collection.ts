@@ -48,6 +48,10 @@ export class CollectionResource extends RESTResource<types.Collection> implement
         return super.queryOne(query, options);
     }
 
+    public delete(primaryKey: number | string, deleteContent: boolean = false): Rx.Observable<Object> {
+        return super.delete(primaryKey, {}, { delete_content: deleteContent });
+    }
+
     public getPermissions(id: number): Rx.Observable<types.ItemPermissions[]> {
         return getPermissions(this, id);
     }

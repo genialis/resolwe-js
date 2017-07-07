@@ -79,6 +79,10 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
         throw new GenError("Replace method not supported");
     }
 
+    public delete(primaryKey: number | string, deleteContent: boolean = false): Rx.Observable<Object> {
+        return super.delete(primaryKey, {}, { delete_content: deleteContent });
+    }
+
     public getPermissions(id: number): Rx.Observable<types.ItemPermissions[]> {
         return getPermissions(this, id);
     }

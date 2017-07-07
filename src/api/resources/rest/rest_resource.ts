@@ -124,10 +124,12 @@ export class RESTResource<T> extends Resource {
      * Deletes an existing instance of the given resource.
      *
      * @param primaryKey Instance primary key
+     * @param data Request attributes
+     * @param parameters Request parameters
      * @return An observable that emits the response
      */
-    public delete(primaryKey: number | string): Rx.Observable<Object> {
-        return this.connection.delete(this.getDetailPath(primaryKey), {}, {});
+    public delete(primaryKey: number | string, data: Object = {}, parameters: Object = {}): Rx.Observable<Object> {
+        return this.connection.delete(this.getDetailPath(primaryKey), data, parameters);
     }
 
     /**

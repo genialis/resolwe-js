@@ -83,9 +83,11 @@ export declare class RESTResource<T> extends Resource {
      * Deletes an existing instance of the given resource.
      *
      * @param primaryKey Instance primary key
+     * @param data Request attributes
+     * @param parameters Request parameters
      * @return An observable that emits the response
      */
-    delete(primaryKey: number | string): Rx.Observable<Object>;
+    delete(primaryKey: number | string, data?: Object, parameters?: Object): Rx.Observable<Object>;
     /**
      * Retrieves an existing instance of the given resource. Does not subscribe
      * to subsequent updates. For reactive updates use query/queryOne.

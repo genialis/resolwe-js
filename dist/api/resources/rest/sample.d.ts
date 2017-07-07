@@ -36,6 +36,7 @@ export declare class SampleResource extends RESTResource<types.Sample | types.Pr
     addToCollections(sampleId: number, collectionIds: number[]): Rx.Observable<void>;
     create(data: Object): Rx.Observable<any>;
     replace(primaryKey: number | string, data: Object): Rx.Observable<any>;
+    delete(primaryKey: number | string, deleteContent?: boolean): Rx.Observable<Object>;
     getPermissions(id: number): Rx.Observable<types.ItemPermissions[]>;
     setPermissions(id: number, permissions: types.SetPermissionsRequest): Rx.Observable<types.ItemPermissions[]>;
 }

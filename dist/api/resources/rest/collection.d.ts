@@ -28,6 +28,7 @@ export declare class CollectionResource extends RESTResource<types.Collection> i
     query(query: types.QueryObjectHydrateData, options?: QueryOptions): Rx.Observable<types.CollectionHydrateData[]>;
     queryOne(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Collection>;
     queryOne(query: types.QueryObjectHydrateData, options?: QueryOptions): Rx.Observable<types.CollectionHydrateData>;
+    delete(primaryKey: number | string, deleteContent?: boolean): Rx.Observable<Object>;
     getPermissions(id: number): Rx.Observable<types.ItemPermissions[]>;
     setPermissions(id: number, permissions: types.SetPermissionsRequest): Rx.Observable<types.ItemPermissions[]>;
 }
