@@ -69,6 +69,7 @@ export interface SetPermissionsRequest {
         add?: NumericDictionary<Permission[]> | Dictionary<Permission[]>;
         remove?: NumericDictionary<Permission[]> | Dictionary<Permission[]>;
     };
+    share_content?: '0' | '1';
 }
 export interface Contributor {
     id: number;
@@ -217,6 +218,7 @@ export interface DataBase {
 export interface Data extends DataBase {
     permissions: ItemPermissionsOf<DataPermissions>[];
 }
+export declare function isData(object: {}): object is Data;
 export interface DataDifferentialExpression extends Data {
     output: {
         de_file: {
@@ -356,12 +358,14 @@ export interface CollectionBase {
 export interface Collection extends CollectionBase {
     data: number[];
 }
+export declare function isCollection(object: {}): object is Collection;
 export interface CollectionHydrateData extends CollectionBase {
     data: DataBase[];
 }
 export interface SampleBase extends CollectionBase {
     descriptor_completed: boolean;
 }
+export declare function isSampleBase(object: {}): object is SampleBase;
 export interface Sample extends Collection, SampleBase {
     descriptor_completed: true;
 }

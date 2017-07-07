@@ -1,6 +1,6 @@
+import * as Rx from 'rx';
 import * as types from '../../types/rest';
 import {RESTResource} from '../rest/rest_resource';
-
 
 /**
  * Interface for handling resource permissions.
