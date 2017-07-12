@@ -83,6 +83,8 @@ function safeApply<T>(observable: Rx.Observable<T>, scope: angular.IScope, callb
 export class Computation {
     private _subscriptions: Rx.Disposable[];
     private _pendingSubscriptions: SubscriptionGuard[];
+    private _dispose: () => void;
+    private _done: boolean;
 
     /**
      * Constructs a new computation.
@@ -93,6 +95,23 @@ export class Computation {
     constructor(public component: ComponentBase, public content: ComputationFunction) {
         this._subscriptions = [];
         this._pendingSubscriptions = [];
+        this._dispose = () => { /* Do nothing by default. */ };
+        this._done = false;
+    }
+
+    /**
+     * Return true if this computation has finished.
+     */
+    public isDone(): boolean {
+        return this._done;
+    }
+
+    /**
+     * Sets an alternative dispose callback for this computation. This callback
+     * is invoked when [[unsubscribe]] is called.
+     */
+    public setDisposeCallback(callback: () => void) {
+        this._dispose = callback;
     }
 
     /**
@@ -211,6 +230,8 @@ export class Computation {
      */
     public unsubscribe() {
         this.component.unsubscribe(this);
+        if (this._dispose) this._dispose();
+        this._done = true;
     }
 }
 
@@ -355,13 +376,22 @@ export abstract class ComponentBase {
      * @param objectEquality Should `angular.equals` be used for comparisons
      * @returns A function that unregisters the bound expression
      */
-    public watch(context: WatchExpression | WatchExpression[], content: ComputationFunction, objectEquality?: boolean): () => void {
+    public watch(context: WatchExpression | WatchExpression[],
+                 content: ComputationFunction,
+                 objectEquality?: boolean): Computation {
         let computation = this._createComputation(content);
         computation.compute();
+
+        // Initial evaluation may stop the computation. In this case, don't
+        // even create a watch and just return the (done) computation.
+        if (computation.isDone()) return computation;
+
         let expressions = Array.isArray(context) ? context : [context];
 
         if (!objectEquality) {
-            return this.$scope.$watchGroup(expressions, computation.compute.bind(computation));
+            const unwatch = this.$scope.$watchGroup(expressions, computation.compute.bind(computation));
+            computation.setDisposeCallback(unwatch);
+            return computation;
         }
 
         let watchedExpression: WatchExpression = () => _.map(expressions, fn => fn());
@@ -369,7 +399,9 @@ export abstract class ComponentBase {
             watchedExpression = expressions[0];
         }
 
-        return this.$scope.$watch(watchedExpression, computation.compute.bind(computation), true);
+        const unwatch = this.$scope.$watch(watchedExpression, computation.compute.bind(computation), true);
+        computation.setDisposeCallback(unwatch);
+        return computation;
     }
 
     /**
@@ -379,10 +411,18 @@ export abstract class ComponentBase {
      * @param context Function which returns the context to watch
      * @param content Function to run on changes
      */
-    public watchCollection(context: WatchExpression, content: ComputationFunction): void {
+    public watchCollection(context: WatchExpression,
+                           content: ComputationFunction): Computation {
         let computation = this._createComputation(content);
         computation.compute();
-        this.$scope.$watchCollection(context, computation.compute.bind(computation));
+
+        // Initial evaluation may stop the computation. In this case, don't
+        // even create a watch and just return the (done) computation.
+        if (computation.isDone()) return computation;
+
+        const unwatch = this.$scope.$watchCollection(context, computation.compute.bind(computation));
+        computation.setDisposeCallback(unwatch);
+        return computation;
     }
 
     /**
@@ -433,11 +473,12 @@ export abstract class ComponentBase {
         return Rx.Observable.create<T>((observer) => {
             notifyObserver(observer);
 
-            return this.watch(
+            const computation = this.watch(
                 context,
                 () => notifyObserver(observer),
                 objectEquality
             );
+            return () => { computation.unsubscribe(); };
         });
     }
 

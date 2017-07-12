@@ -41,6 +41,8 @@ export declare class Computation {
     content: ComputationFunction;
     private _subscriptions;
     private _pendingSubscriptions;
+    private _dispose;
+    private _done;
     /**
      * Constructs a new computation.
      *
@@ -48,6 +50,15 @@ export declare class Computation {
      * @param content Computation content
      */
     constructor(component: ComponentBase, content: ComputationFunction);
+    /**
+     * Return true if this computation has finished.
+     */
+    isDone(): boolean;
+    /**
+     * Sets an alternative dispose callback for this computation. This callback
+     * is invoked when [[unsubscribe]] is called.
+     */
+    setDisposeCallback(callback: () => void): void;
     /**
      * Subscribes to an observable, registering the subscription as a dependency
      * of this component. The subscription is automatically stopped when the
@@ -164,7 +175,7 @@ export declare abstract class ComponentBase {
      * @param objectEquality Should `angular.equals` be used for comparisons
      * @returns A function that unregisters the bound expression
      */
-    watch(context: WatchExpression | WatchExpression[], content: ComputationFunction, objectEquality?: boolean): () => void;
+    watch(context: WatchExpression | WatchExpression[], content: ComputationFunction, objectEquality?: boolean): Computation;
     /**
      * Watch component scope and run a computation on changes. This version uses Angular's
      * collection watch. The computation is executed once immediately prior to watching.
@@ -172,7 +183,7 @@ export declare abstract class ComponentBase {
      * @param context Function which returns the context to watch
      * @param content Function to run on changes
      */
-    watchCollection(context: WatchExpression, content: ComputationFunction): void;
+    watchCollection(context: WatchExpression, content: ComputationFunction): Computation;
     /**
      * Subscribes to an observable, registering the subscription as a dependency
      * of this component. The subscription is automatically stopped when the

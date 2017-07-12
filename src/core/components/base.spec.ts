@@ -63,6 +63,50 @@ describeComponent('base component', [], (tester) => {
         expect(arraySpy.calls.all()[0].args[0]).toEqual(['some value']);
         expect(arraySpy.calls.all()[1].args[0]).toEqual(['some value', 'some other value']);
     });
+
+    it('should support watch', () => {
+        const component = tester.createComponent<DummyComponent>(
+            DummyComponent.asView().template
+        );
+
+        // No watch should be created if computation is immediately unsubscribed.
+        let expression = 0;
+        let executed = 0;
+        let watchComputation = component.ctrl.watch(() => expression, (computation) => {
+            executed++;
+            expect(computation.isDone()).toBeFalsy();
+            computation.unsubscribe();
+        });
+        expect(watchComputation.isDone()).toBeTruthy();
+
+        expression = 1;
+        tester.digest();
+        expect(executed).toBe(1);
+
+        // Check that watching works correctly.
+        expression = 0;
+        executed = 0;
+        watchComputation = component.ctrl.watch(() => expression, (computation) => {
+            executed++;
+            if (executed > 2) computation.unsubscribe();
+        });
+        expect(watchComputation.isDone()).toBeFalsy();
+
+        expression = 1;
+        tester.digest();
+        // Just to check that watch is only evaluated when the expression changes.
+        tester.digest();
+        expect(executed).toBe(2);
+
+        expression = 2;
+        tester.digest();
+        expect(executed).toBe(3);
+
+        // Check that unsubscribe actually stops the watch.
+        expression = 3;
+        tester.digest();
+        expect(executed).toBe(3);
+    });
 });
 
 
