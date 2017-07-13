@@ -90,8 +90,9 @@ export declare class Computation {
      */
     stop(): void;
     /**
-     * Stops all subscriptions currently reigstered in this computation and removes
-     * this computation from the parent component.
+     * Stops all subscriptions currently registered in this computation and removes
+     * this computation from the parent component. If a dispose handler has been
+     * configured, it is invoked.
      */
     unsubscribe(): void;
 }
@@ -170,18 +171,25 @@ export declare abstract class ComponentBase {
      * Watch component scope and run a computation on changes. The computation is
      * executed once immediately prior to watching.
      *
+     * Returned computation instance may be used to stop the watch by calling its
+     * [[Computation.unsubscribe]] method.
+     *
      * @param context Function which returns the context to watch
      * @param content Function to run on changes
      * @param objectEquality Should `angular.equals` be used for comparisons
-     * @returns A function that unregisters the bound expression
+     * @returns Computation instance
      */
     watch(context: WatchExpression | WatchExpression[], content: ComputationFunction, objectEquality?: boolean): Computation;
     /**
      * Watch component scope and run a computation on changes. This version uses Angular's
      * collection watch. The computation is executed once immediately prior to watching.
      *
+     * Returned computation instance may be used to stop the watch by calling its
+     * [[Computation.unsubscribe]] method.
+     *
      * @param context Function which returns the context to watch
      * @param content Function to run on changes
+     * @returns Computation instance
      */
     watchCollection(context: WatchExpression, content: ComputationFunction): Computation;
     /**
