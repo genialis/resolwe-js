@@ -163,6 +163,10 @@ export function describeComponent(description: string,
         baseModules.forEach((baseModule) => beforeEach(angular.mock.module(baseModule)));
 
         beforeEach(angular.mock.module(($provide: angular.auto.IProvideService) => {
+            // Explicitly set root element because tests do not go through usual
+            // Angular bootstrapping.
+            $provide.value('$rootElement', angular.element(document.body));
+
             // Replace usual API service with mock API.
             $provide.service('api', compose([apiClass, MockApiService]));
         }));
