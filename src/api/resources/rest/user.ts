@@ -4,7 +4,6 @@ import * as Rx from 'rx';
 import {RESTResource} from './rest_resource';
 import {Connection} from '../../connection';
 import * as types from '../../types/rest';
-import {errorLog} from '../../../core/utils/error_log';
 
 /**
  * User resource class for dealing with user API endpoint.
@@ -29,7 +28,7 @@ export class UserResource extends RESTResource<types.User> {
     public profile(): Rx.Observable<types.User> {
         return this.query({current_only: 1}, {reactive: true}).map((users: types.User[]): types.User => {
             if (users.length > 1) {
-                errorLog('Query should not return more than one user');
+                console.error('Query should not return more than one user');
             }
 
             return _.first(users);

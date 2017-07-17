@@ -4,7 +4,6 @@ import * as Rx from 'rx';
 
 import {isPromise} from '../utils/lang';
 import {GenError} from '../errors/error';
-import {errorLog} from '../utils/error_log';
 
 enum DirectiveType {
     COMPONENT,
@@ -163,9 +162,7 @@ export class Computation {
                         this.component[target] = item;
                     }
                 } catch (exception) {
-                    // @ifndef GENJS_PRODUCTION
-                        errorLog('Ignored error', exception);
-                    // @endif
+                    console.warn('Ignored error', exception);
                 } finally {
                     // Dispose of the subscription immediately if this is a one shot subscription.
                     if (options.oneShot && subscription) {
@@ -180,13 +177,11 @@ export class Computation {
             (exception) => {
                 if (options.onError) {
                     // @ifndef GENJS_PRODUCTION
-                        errorLog('Handled error', exception);
+                        console.log('Handled error', exception);
                     // @endif
                     safeCallbackApply(this.component.$scope, () => { options.onError(exception); });
                 } else {
-                    // @ifndef GENJS_PRODUCTION
-                        errorLog('Unhandled error', exception);
-                    // @endif
+                    console.warn('Unhandled error', exception);
                 }
             }
         );
