@@ -218,7 +218,7 @@ export interface DataBase {
 export interface Data extends DataBase {
     permissions: ItemPermissionsOf<DataPermissions>[];
 }
-export declare function isData(object: {}): object is Data;
+export declare function isData(object: Collection | SampleBase | Data): object is Data;
 export interface DataDifferentialExpression extends Data {
     output: {
         de_file: {
@@ -358,14 +358,14 @@ export interface CollectionBase {
 export interface Collection extends CollectionBase {
     data: number[];
 }
-export declare function isCollection(object: {}): object is Collection;
+export declare function isCollection(object: Collection | SampleBase | Data): object is Collection;
 export interface CollectionHydrateData extends CollectionBase {
     data: DataBase[];
 }
 export interface SampleBase extends CollectionBase {
     descriptor_completed: boolean;
 }
-export declare function isSampleBase(object: {}): object is SampleBase;
+export declare function isSampleBase(object: Collection | SampleBase | Data): object is SampleBase;
 export interface Sample extends Collection, SampleBase {
     descriptor_completed: true;
 }

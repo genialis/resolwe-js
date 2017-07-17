@@ -297,7 +297,7 @@ export interface Data extends DataBase {
     permissions: ItemPermissionsOf<DataPermissions>[];
 }
 
-export function isData(object: {}): object is Data {
+export function isData(object: Collection | SampleBase | Data): object is Data {
     return _.all(['checksum', 'status', 'process', 'process_name', 'process_type', 'input', 'output', 'permissions'], (property) =>
         object.hasOwnProperty(property)
     );
@@ -473,10 +473,11 @@ export interface Collection extends CollectionBase {
     data: number[];
 }
 
-export function isCollection(object: {}): object is Collection {
-    return _.all(['description', 'settings', 'data'], (property) =>
-        object.hasOwnProperty(property)
-    );
+export function isCollection(object: Collection | SampleBase | Data): object is Collection {
+    return object.hasOwnProperty('description') &&
+        object.hasOwnProperty('settings') &&
+        object.hasOwnProperty('data') &&
+        !object.hasOwnProperty('descriptor_completed');
 }
 
 export interface CollectionHydrateData extends CollectionBase {
@@ -487,8 +488,11 @@ export interface SampleBase extends CollectionBase {
     descriptor_completed: boolean;
 }
 
-export function isSampleBase(object: {}): object is SampleBase {
-    return isCollection(object) && object.hasOwnProperty('descriptor_completed');
+export function isSampleBase(object: Collection | SampleBase | Data): object is SampleBase {
+    return object.hasOwnProperty('description') &&
+        object.hasOwnProperty('settings') &&
+        object.hasOwnProperty('data') &&
+        object.hasOwnProperty('descriptor_completed');
 }
 
 export interface Sample extends Collection, SampleBase {
