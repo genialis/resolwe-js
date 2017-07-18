@@ -100,7 +100,7 @@ export interface Process {
     output_schema: any;
     run: any;
     contributor: Contributor;
-    permissions: ItemPermissionsOf<ProcessPermissions>[];
+    current_user_permissions: ItemPermissionsOf<ProcessPermissions>[];
 }
 export interface ChoiceMap {
     value: string;
@@ -137,7 +137,7 @@ export interface DescriptorSchemaBase {
     contributor: Contributor;
 }
 export interface DescriptorSchema extends DescriptorSchemaBase {
-    permissions: ItemPermissionsOf<DescriptorSchemaPermissions>[];
+    current_user_permissions: ItemPermissionsOf<DescriptorSchemaPermissions>[];
 }
 export declare namespace ScatterPlotJson {
     interface RootObject {
@@ -216,7 +216,7 @@ export interface DataBase {
     process: number;
 }
 export interface Data extends DataBase {
-    permissions: ItemPermissionsOf<DataPermissions>[];
+    current_user_permissions: ItemPermissionsOf<DataPermissions>[];
 }
 export declare function isData(object: CollectionBase | SampleBase | Data): object is Data;
 export interface DataDifferentialExpression extends Data {
@@ -353,7 +353,7 @@ export interface CollectionBase {
     descriptor_schema: DescriptorSchemaBase;
     descriptor: any;
     contributor: Contributor;
-    permissions: ItemPermissionsOf<CollectionPermissions>[];
+    current_user_permissions: ItemPermissionsOf<CollectionPermissions>[];
 }
 export interface Collection extends CollectionBase {
     data: number[];

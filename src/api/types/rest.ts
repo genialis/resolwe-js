@@ -143,7 +143,7 @@ export interface Process {
     output_schema: any;
     run: any;
     contributor: Contributor;
-    permissions: ItemPermissionsOf<ProcessPermissions>[];
+    current_user_permissions: ItemPermissionsOf<ProcessPermissions>[];
 }
 
 
@@ -193,7 +193,7 @@ export interface DescriptorSchemaBase {
 }
 
 export interface DescriptorSchema extends DescriptorSchemaBase {
-    permissions: ItemPermissionsOf<DescriptorSchemaPermissions>[];
+    current_user_permissions: ItemPermissionsOf<DescriptorSchemaPermissions>[];
 }
 
 
@@ -294,12 +294,12 @@ export interface DataBase {
 }
 
 export interface Data extends DataBase {
-    permissions: ItemPermissionsOf<DataPermissions>[];
+    current_user_permissions: ItemPermissionsOf<DataPermissions>[];
 }
 
 export function isData(object: CollectionBase | SampleBase | Data): object is Data {
-    return _.all(['checksum', 'status', 'process', 'process_name', 'process_type', 'input', 'output', 'permissions'], (property) =>
-        object.hasOwnProperty(property)
+    return _.all(['checksum', 'status', 'process', 'process_name', 'process_type', 'input', 'output', 'current_user_permissions'],
+        (property) => object.hasOwnProperty(property)
     );
 }
 
@@ -466,7 +466,7 @@ export interface CollectionBase {
     descriptor_schema: DescriptorSchemaBase;
     descriptor: any;
     contributor: Contributor;
-    permissions: ItemPermissionsOf<CollectionPermissions>[];
+    current_user_permissions: ItemPermissionsOf<CollectionPermissions>[];
 }
 
 export interface Collection extends CollectionBase {
