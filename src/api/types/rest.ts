@@ -297,7 +297,7 @@ export interface Data extends DataBase {
     permissions: ItemPermissionsOf<DataPermissions>[];
 }
 
-export function isData(object: Collection | SampleBase | Data): object is Data {
+export function isData(object: CollectionBase | SampleBase | Data): object is Data {
     return _.all(['checksum', 'status', 'process', 'process_name', 'process_type', 'input', 'output', 'permissions'], (property) =>
         object.hasOwnProperty(property)
     );
@@ -473,7 +473,9 @@ export interface Collection extends CollectionBase {
     data: number[];
 }
 
-export function isCollection(object: Collection | SampleBase | Data): object is Collection {
+export function isCollection(object: CollectionBase | SampleBase | Data): object is Collection | CollectionHydrateData {
+    // CollectionBase doesn't contain `data` property in it's interface, but
+    // Collection and CollectionHydrateData do.
     return object.hasOwnProperty('description') &&
         object.hasOwnProperty('settings') &&
         object.hasOwnProperty('data') &&
@@ -488,7 +490,7 @@ export interface SampleBase extends CollectionBase {
     descriptor_completed: boolean;
 }
 
-export function isSampleBase(object: Collection | SampleBase | Data): object is SampleBase {
+export function isSampleBase(object: CollectionBase | SampleBase | Data): object is SampleBase {
     return object.hasOwnProperty('description') &&
         object.hasOwnProperty('settings') &&
         object.hasOwnProperty('data') &&
