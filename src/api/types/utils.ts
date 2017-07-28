@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import * as Rx from 'rx';
 
+import {GenError} from '../../core/errors/error';
 import {Query, PaginatedResponse} from './rest';
 import {Feature} from './modules';
 
@@ -42,4 +43,24 @@ export function transformFeaturesPaginated(features: Rx.Observable<PaginatedResp
  */
 export function limitFieldsQuery(query: Query, fields: string[]): Query {
     return {...query, fields: fields.join(',')};
+}
+
+/**
+ * Returns features' source.
+ *
+ * Throws `GenError` if source cannot be determined.
+ *
+ * @param features Features
+ */
+export function getSourceFromFeatures(features: Feature[]): string {
+    const sources = _.unique(_.map(features, (feature) => feature.source));
+
+    if (_.isEmpty(features)) {
+        throw new GenError('No features');
+    }
+    if (_.size(sources) > 1) {
+        throw new GenError(`Features come from multiple sources (${sources.join(', ')})`);
+    }
+
+    return _.first(features).source;
 }

@@ -15,3 +15,11 @@ export declare function transformFeaturesPaginated(features: Rx.Observable<Pagin
  * Transforms query to return response with limited set of fields.
  */
 export declare function limitFieldsQuery(query: Query, fields: string[]): Query;
+/**
+ * Returns features' source.
+ *
+ * Throws `GenError` if source cannot be determined.
+ *
+ * @param features Features
+ */
+export declare function getSourceFromFeatures(features: Feature[]): string;
