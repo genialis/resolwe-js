@@ -11,11 +11,15 @@ export interface Feature {
     description: string;
     aliases: string[];
 }
-export interface FeatureQuery extends Query {
+export interface FeatureQuery {
+    feature_id: string;
+    source: string;
+}
+export interface FeatureSearchQuery extends Query {
     query: string | string[];
     source?: string;
 }
-export interface FeatureAutocompleteQuery extends FeatureQuery {
+export interface FeatureAutocompleteQuery extends FeatureSearchQuery {
     query: string;
 }
 export interface FileDescriptor {

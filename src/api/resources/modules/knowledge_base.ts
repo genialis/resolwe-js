@@ -1,11 +1,26 @@
 import * as _ from 'lodash';
 import * as Rx from 'rx';
 
+import {GenError} from '../../../core/errors/error';
 import {Connection} from '../../connection';
-
-import {ModuleResource} from './module_resource';
-import {transformFeatures} from '../../types/utils';
+import {transformFeature, transformFeatures} from '../../types/utils';
 import * as types from '../../types/modules';
+import {ModuleResource} from './module_resource';
+
+export class MultipleFeaturesFoundError extends GenError {
+    constructor(message: string) {
+        super(message);
+        // https://github.com/Microsoft/TypeScript/wiki/Breaking-Changes#extending-built-ins-like-error-array-and-map-may-no-longer-work
+        Object['setPrototypeOf'](this, MultipleFeaturesFoundError.prototype);
+    }
+}
+export class NoFeatureFoundError extends GenError {
+    constructor(message: string) {
+        super(message);
+        // https://github.com/Microsoft/TypeScript/wiki/Breaking-Changes#extending-built-ins-like-error-array-and-map-may-no-longer-work
+        Object['setPrototypeOf'](this, NoFeatureFoundError.prototype);
+    }
+}
 
 /**
  * Abstract base class for knowledge base resources.
@@ -28,11 +43,36 @@ export class FeatureResource extends KnowledgeBaseResource {
     }
 
     /**
+     * Gets a single feature. Returns undefined if feature not found.
+     *
+     * @param query Feature query
+     * @returns Feature
+     * @throws `MultipleFeaturesFoundError` is thrown if multiple features found
+     * @throws `NoFeatureFoundError` is thrown if feature not found
+     */
+    public getFeature(query: types.FeatureQuery): Rx.Observable<types.Feature> {
+        const path = this.getModuleMethodPath('search');
+
+        return this.connection.get<types.Feature[]>(path, query).map((features) => {
+            if (features.length > 1) {
+                throw new MultipleFeaturesFoundError(
+                    `Multiple features identified by feature id ${query.feature_id} and source ${query.source}`
+                );
+            }
+            if (features.length === 0) {
+                throw new NoFeatureFoundError(`Feature identified by feature id ${query.feature_id} and source ${query.source} not found`);
+            }
+
+            return transformFeature(_.first(features));
+        });
+    }
+
+    /**
      * Searches for features.
      *
      * @param query Feature search query
      */
-    public search(query: types.FeatureQuery): Rx.Observable<types.Feature[]> {
+    public search(query: types.FeatureSearchQuery): Rx.Observable<types.Feature[]> {
         const path = this.getModuleMethodPath('search');
         let results: Rx.Observable<types.Feature[]>;
 

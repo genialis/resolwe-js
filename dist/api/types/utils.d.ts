@@ -2,6 +2,10 @@ import * as Rx from 'rx';
 import { Query, PaginatedResponse } from './rest';
 import { Feature } from './modules';
 /**
+ * Transforms a feature into one with some augmented attributes.
+ */
+export declare function transformFeature(feature: Feature): Feature;
+/**
  * Transforms features returned from the API into one with some
  * augmented attributes.
  */

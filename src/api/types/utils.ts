@@ -8,7 +8,7 @@ import {Feature} from './modules';
 /**
  * Transforms a feature into one with some augmented attributes.
  */
-function transformFeature(feature: Feature): Feature {
+export function transformFeature(feature: Feature): Feature {
     return _.assign<{}, Feature, {}, Feature>({}, feature, {
         id: `${feature.source}:${feature.feature_id}`,
     });
