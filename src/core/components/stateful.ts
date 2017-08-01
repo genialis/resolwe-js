@@ -168,6 +168,13 @@ export abstract class StatefulComponentBase extends ComponentBase {
         return this._stateManager;
     }
 
+    /**
+     * Returns the shared store manager.
+     */
+    protected get sharedStoreManager(): SharedStoreManager {
+        return this._sharedStoreManager;
+    }
+
     public onComponentDestroyed(): void {
         // Save current component state, so it will be available when this component
         // is instantiated again.

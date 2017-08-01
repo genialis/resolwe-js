@@ -1,6 +1,7 @@
 /// <reference types="angular" />
 import * as angular from 'angular';
 import { ComponentBase, ComponentConfiguration } from './base';
+import { SharedStoreManager } from '../shared_store/index';
 import { StateManager } from './manager';
 export declare class StateItemMetadata {
     propertyName: string;
@@ -90,6 +91,10 @@ export declare abstract class StatefulComponentBase extends ComponentBase {
      * Returns the state manager.
      */
     readonly stateManager: StateManager;
+    /**
+     * Returns the shared store manager.
+     */
+    protected readonly sharedStoreManager: SharedStoreManager;
     onComponentDestroyed(): void;
     /**
      * This method will be called after the component's state has been loaded.
