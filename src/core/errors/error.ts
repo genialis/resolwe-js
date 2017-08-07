@@ -9,7 +9,8 @@
 export class GenError extends Error {
     constructor(message: string) {
         super(message);
+        // XXX: PhantomJS does not implement setPrototypeOf. Uncomment this when we support tests on headless chrome.
         // https://github.com/Microsoft/TypeScript/wiki/Breaking-Changes#extending-built-ins-like-error-array-and-map-may-no-longer-work
-        Object['setPrototypeOf'](this, GenError.prototype);
+        // Object['setPrototypeOf'](this, GenError.prototype);
     }
 }
