@@ -395,6 +395,7 @@ export interface SampleClustering {
     linkage: number[][];
     zero_sample_ids: number[];
     zero_gene_symbols: string[];
+    missing_gene_symbols: string[];
 }
 export interface GeneClustering {
     gene_symbols: _.Dictionary<{
@@ -404,6 +405,7 @@ export interface GeneClustering {
     linkage: number[][];
     zero_sample_ids: number[];
     zero_gene_symbols: string[];
+    missing_gene_symbols: string[];
 }
 export interface PCA {
     explained_variance_ratios: number[];
