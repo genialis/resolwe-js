@@ -161,7 +161,7 @@ describeComponent('angular mock api', [], (tester) => {
 
         tester.api().whenUpload((data: any, fileUID: string) => {
             uploaded = true;
-            return {data: 'hello'};
+            return <angular.IHttpResponse<string>> {data: 'hello'};
         });
 
         tester.api().upload({}, 'test-uuid').then((response) => {

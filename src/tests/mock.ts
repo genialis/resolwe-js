@@ -18,7 +18,7 @@ export interface MockUploadHandler<T> {
  */
 export class MockApiService {
     // Mock upload handler.
-    private _uploadHandler: MockUploadHandler<any> = () => { return {data: null}; }
+    private _uploadHandler: MockUploadHandler<any> = () => { return <angular.IHttpResponse<string>> {data: null}; }
 
     /**
      * Performs a mock data upload.

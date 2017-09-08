@@ -10,7 +10,7 @@ export interface Message {
     observer: string;
     primary_key: string;
     order: number;
-    item: Object;
+    item: {};
 }
 /**
  * Response to REST API observe requests.
@@ -23,7 +23,7 @@ export interface Connection {
     /**
      * Establishes a connection with the genesis platform server.
      *
-     * @param {string} uri Genesis platform server URI
+     * @param uri Genesis platform server URI
      */
     connect(restUri: string, websocketUri: string): any;
     /**
@@ -33,58 +33,58 @@ export interface Connection {
     /**
      * Returns an observable that emits whether websocket connection is established or not.
      *
-     * @return {Rx.Observable<boolean>} An observable that emits true/false
+     * @return An observable that emits true/false
      */
     isConnected(): Rx.Observable<boolean>;
     /**
      * Performs a REST API GET request against the genesis platform backend.
      *
-     * @param {string} path Request path
-     * @param {Object} parameters Request parameters
-     * @return {Rx.Observable<T>} An observable that emits the response
+     * @param path Request path
+     * @param parameters Request parameters
+     * @return An observable that emits the response
      */
-    get<T>(path: string, parameters?: Object): Rx.Observable<T>;
+    get<T>(path: string, parameters?: {}): Rx.Observable<T>;
     /**
      * Performs a REST API POST request against the genesis platform backend.
      *
-     * @param {string} path Request path
-     * @param {Object} data Request body
-     * @param {Object} parameters Request parameters
-     * @return {Rx.Observable<T>} An observable that emits the response
+     * @param path Request path
+     * @param data Request body
+     * @param parameters Request parameters
+     * @return An observable that emits the response
      */
-    post<T>(path: string, data: Object, parameters?: Object): Rx.Observable<T>;
+    post<T>(path: string, data: {}, parameters?: {}): Rx.Observable<T>;
     /**
      * Performs a REST API PUT request against the genesis platform backend.
      *
-     * @param {string} path Request path
-     * @param {Object} data Request body
-     * @param {Object} parameters Request parameters
-     * @return {Rx.Observable<T>} An observable that emits the response
+     * @param path Request path
+     * @param data Request body
+     * @param parameters Request parameters
+     * @return An observable that emits the response
      */
-    put<T>(path: string, data: Object, parameters?: Object): Rx.Observable<T>;
+    put<T>(path: string, data: {}, parameters?: {}): Rx.Observable<T>;
     /**
      * Performs a REST API PATCH request against the genesis platform backend.
      *
-     * @param {string} path Request path
-     * @param {Object} data Request body
-     * @param {Object} parameters Request parameters
-     * @return {Rx.Observable<T>} An observable that emits the response
+     * @param path Request path
+     * @param data Request body
+     * @param parameters Request parameters
+     * @return An observable that emits the response
      */
-    patch<T>(path: string, data: Object, parameters?: Object): Rx.Observable<T>;
+    patch<T>(path: string, data: {}, parameters?: {}): Rx.Observable<T>;
     /**
      * Performs a REST API DELETE request against the genesis platform backend.
      *
-     * @param {string} path Request path
-     * @param {Object} data Request body
-     * @param {Object} parameters Request parameters
-     * @return {Rx.Observable<T>} An observable that emits the response
+     * @param path Request path
+     * @param data Request body
+     * @param parameters Request parameters
+     * @return An observable that emits the response
      */
-    delete<T>(path: string, data: Object, parameters?: Object): Rx.Observable<T>;
+    delete<T>(path: string, data: {}, parameters?: {}): Rx.Observable<T>;
     /**
      * Returns an absolute API URI for a specific resource path.
      *
-     * @param {string} path API resource path
-     * @return {string} Absolute URI
+     * @param path API resource path
+     * @return Absolute URI
      */
     createUriFromPath(path: string): string;
     /**
@@ -172,31 +172,31 @@ export declare class SimpleConnection implements Connection {
     /**
      * @inheritdoc
      */
-    get(path: string, parameters?: Object): Rx.Observable<Object>;
+    get(path: string, parameters?: {}): Rx.Observable<any>;
     /**
      * @inheritdoc
      */
-    post(path: string, data: Object, parameters?: Object): Rx.Observable<Object>;
+    post(path: string, data: {}, parameters?: {}): Rx.Observable<any>;
     /**
      * @inheritdoc
      */
-    put(path: string, data: Object, parameters?: Object): Rx.Observable<Object>;
+    put(path: string, data: {}, parameters?: {}): Rx.Observable<any>;
     /**
      * @inheritdoc
      */
-    patch(path: string, data: Object, parameters?: Object): Rx.Observable<Object>;
+    patch(path: string, data: {}, parameters?: {}): Rx.Observable<any>;
     /**
      * @inheritdoc
      */
-    delete(path: string, data: Object, parameters?: Object): Rx.Observable<Object>;
+    delete(path: string, data: {}, parameters?: {}): Rx.Observable<any>;
     /**
      * Performs a REST API request against the genesis platform backend.
      *
-     * @param {string} method Request method
-     * @param {string} path Request path
-     * @param {Object} data Request body
-     * @param {Object} parameters Request parameters
-     * @return {Rx.Observable<Object>} An observable that emits the response
+     * @param method Request method
+     * @param path Request path
+     * @param data Request body
+     * @param parameters Request parameters
+     * @return An observable that emits the response
      */
     private _update(method, path, data, parameters?);
     /**

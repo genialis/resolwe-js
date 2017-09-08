@@ -6,16 +6,13 @@ module.exports = (gulp, config) => {
     const Server = require('karma').Server;
     const $ = require('gulp-load-plugins')();
 
-    // Set singleRun to false if 'not-single-run' argument provided.
-    const singleRun = !minimist(process.argv.slice(3))['not-single-run'];
-
     // Json summary file path.
     const jsonSummaryPath = path.join(config.coverageDirAbs, 'json', 'summary.json');
 
     return (done) => {
         new Server({
             configFile: path.join(config.projectDir, 'karma.conf.js'),
-            singleRun: singleRun
+            singleRun: true,
         }, (exitCode) => {
             // Run remap when finished.
             gulp.src(path.join(config.coverageDirAbs, 'json', 'coverage-final.json'))

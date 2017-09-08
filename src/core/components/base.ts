@@ -660,7 +660,7 @@ function directiveFactory(config: ComponentConfiguration, type: DirectiveType) {
  * component directive with proper dependency injection.
  */
 export function component(config: ComponentConfiguration): ClassDecorator {
-    return directiveFactory(config, DirectiveType.COMPONENT);
+    return <ClassDecorator> directiveFactory(config, DirectiveType.COMPONENT);
 }
 
 /**
@@ -668,5 +668,5 @@ export function component(config: ComponentConfiguration): ClassDecorator {
  * attribute directive with proper dependency injection.
  */
 export function directive(config: ComponentConfiguration): ClassDecorator {
-    return directiveFactory(config, DirectiveType.ATTRIBUTE);
+    return <ClassDecorator> directiveFactory(config, DirectiveType.ATTRIBUTE);
 }

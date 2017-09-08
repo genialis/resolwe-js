@@ -15,7 +15,7 @@ export interface Message {
     observer: string;
     primary_key: string;
     order: number;
-    item: Object;
+    item: {};
 }
 
 /**
@@ -30,7 +30,7 @@ export interface Connection {
     /**
      * Establishes a connection with the genesis platform server.
      *
-     * @param {string} uri Genesis platform server URI
+     * @param uri Genesis platform server URI
      */
     connect(restUri: string, websocketUri: string);
 
@@ -42,64 +42,64 @@ export interface Connection {
     /**
      * Returns an observable that emits whether websocket connection is established or not.
      *
-     * @return {Rx.Observable<boolean>} An observable that emits true/false
+     * @return An observable that emits true/false
      */
     isConnected(): Rx.Observable<boolean>;
 
     /**
      * Performs a REST API GET request against the genesis platform backend.
      *
-     * @param {string} path Request path
-     * @param {Object} parameters Request parameters
-     * @return {Rx.Observable<T>} An observable that emits the response
+     * @param path Request path
+     * @param parameters Request parameters
+     * @return An observable that emits the response
      */
-    get<T>(path: string, parameters?: Object): Rx.Observable<T>;
+    get<T>(path: string, parameters?: {}): Rx.Observable<T>;
 
     /**
      * Performs a REST API POST request against the genesis platform backend.
      *
-     * @param {string} path Request path
-     * @param {Object} data Request body
-     * @param {Object} parameters Request parameters
-     * @return {Rx.Observable<T>} An observable that emits the response
+     * @param path Request path
+     * @param data Request body
+     * @param parameters Request parameters
+     * @return An observable that emits the response
      */
-    post<T>(path: string, data: Object, parameters?: Object): Rx.Observable<T>;
+    post<T>(path: string, data: {}, parameters?: {}): Rx.Observable<T>;
 
     /**
      * Performs a REST API PUT request against the genesis platform backend.
      *
-     * @param {string} path Request path
-     * @param {Object} data Request body
-     * @param {Object} parameters Request parameters
-     * @return {Rx.Observable<T>} An observable that emits the response
+     * @param path Request path
+     * @param data Request body
+     * @param parameters Request parameters
+     * @return An observable that emits the response
      */
-    put<T>(path: string, data: Object, parameters?: Object): Rx.Observable<T>;
+    put<T>(path: string, data: {}, parameters?: {}): Rx.Observable<T>;
 
     /**
      * Performs a REST API PATCH request against the genesis platform backend.
      *
-     * @param {string} path Request path
-     * @param {Object} data Request body
-     * @param {Object} parameters Request parameters
-     * @return {Rx.Observable<T>} An observable that emits the response
+     * @param path Request path
+     * @param data Request body
+     * @param parameters Request parameters
+     * @return An observable that emits the response
      */
-    patch<T>(path: string, data: Object, parameters?: Object): Rx.Observable<T>;
+    patch<T>(path: string, data: {}, parameters?: {}): Rx.Observable<T>;
 
     /**
      * Performs a REST API DELETE request against the genesis platform backend.
      *
-     * @param {string} path Request path
-     * @param {Object} data Request body
-     * @param {Object} parameters Request parameters
-     * @return {Rx.Observable<T>} An observable that emits the response
+     * @param path Request path
+     * @param data Request body
+     * @param parameters Request parameters
+     * @return An observable that emits the response
      */
-    delete<T>(path: string, data: Object, parameters?: Object): Rx.Observable<T>;
+    delete<T>(path: string, data: {}, parameters?: {}): Rx.Observable<T>;
 
     /**
      * Returns an absolute API URI for a specific resource path.
      *
-     * @param {string} path API resource path
-     * @return {string} Absolute URI
+     * @param path API resource path
+     * @return Absolute URI
      */
     createUriFromPath(path: string): string;
 
@@ -300,7 +300,7 @@ export class SimpleConnection implements Connection {
     /**
      * @inheritdoc
      */
-    public get(path: string, parameters: Object = {}): Rx.Observable<Object> {
+    public get(path: string, parameters: {} = {}): Rx.Observable<any> {
         if (!_.isEmpty(parameters)) {
             path += '?' + jQuery.param(parameters);
         }
@@ -326,41 +326,41 @@ export class SimpleConnection implements Connection {
     /**
      * @inheritdoc
      */
-    public post(path: string, data: Object, parameters: Object = {}): Rx.Observable<Object> {
+    public post(path: string, data: {}, parameters: {} = {}): Rx.Observable<any> {
         return this._update('POST', path, data, parameters);
     }
 
     /**
      * @inheritdoc
      */
-    public put(path: string, data: Object, parameters: Object = {}): Rx.Observable<Object> {
+    public put(path: string, data: {}, parameters: {} = {}): Rx.Observable<any> {
         return this._update('PUT', path, data, parameters);
     }
 
     /**
      * @inheritdoc
      */
-    public patch(path: string, data: Object, parameters: Object = {}): Rx.Observable<Object> {
+    public patch(path: string, data: {}, parameters: {} = {}): Rx.Observable<any> {
         return this._update('PATCH', path, data, parameters);
     }
 
     /**
      * @inheritdoc
      */
-    public delete(path: string, data: Object, parameters: Object = {}): Rx.Observable<Object> {
+    public delete(path: string, data: {}, parameters: {} = {}): Rx.Observable<any> {
         return this._update('DELETE', path, data, parameters);
     }
 
     /**
      * Performs a REST API request against the genesis platform backend.
      *
-     * @param {string} method Request method
-     * @param {string} path Request path
-     * @param {Object} data Request body
-     * @param {Object} parameters Request parameters
-     * @return {Rx.Observable<Object>} An observable that emits the response
+     * @param method Request method
+     * @param path Request path
+     * @param data Request body
+     * @param parameters Request parameters
+     * @return An observable that emits the response
      */
-    private _update(method: string, path: string, data: Object, parameters: Object = {}): Rx.Observable<Object> {
+    private _update(method: string, path: string, data: {}, parameters: {} = {}): Rx.Observable<any> {
         if (!_.isEmpty(parameters)) {
             path += '?' + jQuery.param(parameters);
         }
@@ -428,7 +428,7 @@ export class SimpleConnection implements Connection {
      * Checks XHR and notifies error observers.
      */
     private _interceptErrors(xhr: JQueryXHR): void {
-        xhr.then((response: Object) => {
+        xhr.then((response: {}) => {
             if (_.has(response, 'error')) {
                 const error = new APIError(<string> response['error'], response);
                 this._errors.onNext(error);

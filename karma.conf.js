@@ -11,7 +11,7 @@ module.exports = function(config) {
     config.set({
 
         // base path that will be used to resolve all patterns (eg. files, exclude)
-        basePath: '',
+        basePath: './',
 
 
         // frameworks to use
@@ -41,8 +41,8 @@ module.exports = function(config) {
         systemjs: {
             configFile: 'system.conf.js',
             serveFiles: [
-                'dist/**/*.js',
-                'node_modules/**/*.js'
+                path.join(buildDir, '**', '!(*.spec).js'),
+                path.join('node_modules', '**', '*.js')
             ],
         },
 
@@ -77,7 +77,7 @@ module.exports = function(config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['PhantomJS'],
+        browsers: ['ChromeHeadless'],
         browserNoActivityTimeout: 30000,
 
 

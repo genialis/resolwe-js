@@ -9,6 +9,8 @@ export class APIError extends GenError {
 
     constructor(message: string, associatedObject?: Object) {
         super(message);
+        // https://github.com/Microsoft/TypeScript/wiki/Breaking-Changes#extending-built-ins-like-error-array-and-map-may-no-longer-work
+        Object['setPrototypeOf'](this, APIError.prototype);
 
         this._associatedObject = associatedObject;
     }
@@ -26,6 +28,8 @@ export class QueryOneError extends APIError {
 
     constructor(message: string) {
         super(message);
+        // https://github.com/Microsoft/TypeScript/wiki/Breaking-Changes#extending-built-ins-like-error-array-and-map-may-no-longer-work
+        Object['setPrototypeOf'](this, QueryOneError.prototype);
     }
 }
 
@@ -37,6 +41,8 @@ export class WebsocketError extends APIError {
 
     constructor(message: string, associatedObject?: Object) {
         super(message, associatedObject);
+        // https://github.com/Microsoft/TypeScript/wiki/Breaking-Changes#extending-built-ins-like-error-array-and-map-may-no-longer-work
+        Object['setPrototypeOf'](this, WebsocketError.prototype);
     }
 }
 
@@ -48,5 +54,7 @@ export class QueryObserversError extends APIError {
 
     constructor(message: string, associatedObject?: Object) {
         super(message, associatedObject);
+        // https://github.com/Microsoft/TypeScript/wiki/Breaking-Changes#extending-built-ins-like-error-array-and-map-may-no-longer-work
+        Object['setPrototypeOf'](this, QueryObserversError.prototype);
     }
 }
