@@ -111,6 +111,10 @@ export abstract class StatefulComponentBase extends ComponentBase {
 
         this._stateManager = stateManager;
         this._sharedStoreManager = stateManager.sharedStoreManager;
+    }
+
+    public onComponentInit() {
+        super.onComponentInit();
 
         // When state identifier is not defined, default to directive name.
         if (_.isEmpty(this.stateId)) {
@@ -126,10 +130,6 @@ export abstract class StatefulComponentBase extends ComponentBase {
             this._stateManager.addTopLevelComponent(this);
             this.globalStateId = this.stateId;
         }
-    }
-
-    public onComponentInit() {
-        super.onComponentInit();
 
         // Check if there is any pending state for us.
         this._stateManager.loadPendingComponentState(this);

@@ -275,6 +275,10 @@ export abstract class ComponentBase {
      * class properties to be assigned and constructors to finish. (Class properties
      * defined in child components are assigned before child's constructor).
      *
+     * Value of `$compileProvider.preAssignBindingsEnabled` (false by default since angular 1.6.0)
+     * determines if bindings are to be present in `onComponentInit` method (false) or pre-assigned
+     * in constructor (true).
+     *
      * Order of execution:
      * ```ts
      * class Child extends Middle {
@@ -292,7 +296,7 @@ export abstract class ComponentBase {
      * }
      * ```
      */
-    public onComponentInit() {
+    public onComponentInit(...args: any[]): void {
         // Default implementation does nothing.
     }
 

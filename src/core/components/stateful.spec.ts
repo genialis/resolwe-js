@@ -1,4 +1,3 @@
-import * as angular from 'angular';
 import 'angular-mocks';
 
 import {ComponentBase, component} from './base';
@@ -26,8 +25,8 @@ describeComponent('stateful component', [
         @state() public foo: string;
         @state() public bar: number;
 
-        constructor($scope: angular.IScope, stateManager: StateManager) {
-            super($scope, stateManager);
+        public onComponentInit() {
+            super.onComponentInit();
 
             // Set state properties.
             this.foo = 'hello world';
@@ -230,12 +229,6 @@ describeComponent('stateful component', [
             public value: string[] = [];
             @sharedState() public foo: SimpleSharedStore<string[]>;
 
-            // @ngInject
-            constructor($scope: angular.IScope,
-                        stateManager: StateManager) { // tslint:disable-line:no-shadowed-variable
-                super($scope, stateManager);
-            }
-
             public onComponentInit() {
                 super.onComponentInit();
 
@@ -266,12 +259,6 @@ describeComponent('stateful component', [
         class SharedStateMutableBComponent extends StatefulComponentBase {
             public updates: number = 0;
             @sharedState() public foo: SimpleSharedStore<string[]>;
-
-            // @ngInject
-            constructor($scope: angular.IScope,
-                        stateManager: StateManager) { // tslint:disable-line:no-shadowed-variable
-                super($scope, stateManager);
-            }
 
             public onComponentInit() {
                 super.onComponentInit();
