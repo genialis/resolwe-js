@@ -67,6 +67,12 @@ export class FeatureResource extends KnowledgeBaseResource {
         });
     }
 
+    public getFeatures(query: types.FeaturesQuery): Rx.Observable<types.Feature[]> {
+        const path = this.getModuleMethodPath('search');
+        const features = this.connection.post<types.Feature[]>(path, query);
+        return transformFeatures(features);
+    }
+
     /**
      * Searches for features.
      *

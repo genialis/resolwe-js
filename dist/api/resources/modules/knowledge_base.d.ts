@@ -32,6 +32,7 @@ export declare class FeatureResource extends KnowledgeBaseResource {
      * @throws `NoFeatureFoundError` is thrown if feature not found
      */
     getFeature(query: types.FeatureQuery): Rx.Observable<types.Feature>;
+    getFeatures(query: types.FeaturesQuery): Rx.Observable<types.Feature[]>;
     /**
      * Searches for features.
      *

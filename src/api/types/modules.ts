@@ -21,6 +21,11 @@ export interface FeatureQuery {
     source: string;
 }
 
+export interface FeaturesQuery {
+    feature_id: string[];
+    source: string;
+}
+
 export interface FeatureSearchQuery extends Query {
     query: string | string[];
     source?: string;
