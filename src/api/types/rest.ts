@@ -146,6 +146,28 @@ export interface Process {
     current_user_permissions: ItemPermissionsOf<ProcessPermissions>[];
 }
 
+// ------------------------------------------------------------------
+// Relation
+
+// Relation entity
+export interface RelationEntity {
+    entity: number;
+    position: number;
+}
+
+export interface Relation {
+    id: number;
+    slug: string;
+    created: string;
+    modified: string;
+    type: string;
+    collection: number;
+    entities: RelationEntity[];
+    positions: string[];
+    label: string;
+    contributor: Contributor;
+
+}
 
 // ------------------------------------------------------------------
 // DescriptorSchema

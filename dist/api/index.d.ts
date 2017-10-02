@@ -23,6 +23,7 @@ export declare class ResolweApi {
     Sample: SampleResource;
     File: FileResource;
     Storage: StorageResource;
+    Relation: RESTResource<types.Relation>;
     KnowledgeBase: {
         Feature: FeatureResource;
     };

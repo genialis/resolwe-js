@@ -102,6 +102,22 @@ export interface Process {
     contributor: Contributor;
     current_user_permissions: ItemPermissionsOf<ProcessPermissions>[];
 }
+export interface RelationEntity {
+    entity: number;
+    position: number;
+}
+export interface Relation {
+    id: number;
+    slug: string;
+    created: string;
+    modified: string;
+    type: string;
+    collection: number;
+    entities: RelationEntity[];
+    positions: string[];
+    label: string;
+    contributor: Contributor;
+}
 export interface ChoiceMap {
     value: string;
     label: string;

@@ -27,6 +27,7 @@ export class ResolweApi {
     public Sample: SampleResource = new SampleResource(this.connection);
     public File: FileResource = new FileResource(this.connection);
     public Storage: StorageResource = new StorageResource(this.connection);
+    public Relation: RESTResource<types.Relation> = new RESTResource<types.Relation>('relation', this.connection);
 
     public KnowledgeBase = {
         Feature: new FeatureResource(this.connection),
