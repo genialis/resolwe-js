@@ -1,0 +1,49 @@
+##########
+Change Log
+##########
+
+All notable changes to this project are documented in this file.
+This project adheres to `Semantic Versioning <http://semver.org/>`_.
+
+==========
+Unreleased
+==========
+
+=====
+0.2.0
+=====
+
+Added
+-----
+- Added relation resource
+- Add slug exits method to data resource
+- Add DataVariantTable type
+- Add QC storage type
+- Add content parameters to set permissions request
+- Add delete content parameter to sample and collection delete method
+- Add helper function for getting source from features
+- Add get feature method
+- Add missing compiled error.js
+- Add getFeatures method to knowledge base module
+
+Changed
+-------
+- Make queries non-reactive by default
+- Improve watch API
+- Explicitly set root element before each test
+- Allow CollectionHydrateData into isData, isCollection, and isSampleBase
+- Remove errorLog and warn about unhandled errors on production too
+- Rename permissions attribute to current_user_permissions
+- Update npm-shrinkwrap
+- Expose shared store manager on StatefulComponentBase as protected member
+- Revert setting prototype on GenError
+- Update clustering type
+- Upgrade typescript to 2.5.2 and support running tests on node 8
+- Upgrade angular to 1.6.6
+
+Fixed
+-----
+- Fix ComponentBase and Computation documentation
+- Fix collection, sample and data type guards
+- Fix rx typings
+- Fix extending GenError
