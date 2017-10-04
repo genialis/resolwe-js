@@ -1,5 +1,5 @@
 {
-  "name": "resolwe",
+  "name": "@genialis/resolwe",
   "version": "0.2.0",
   "description": "Resolwe frontend libraries",
   "repository": {
