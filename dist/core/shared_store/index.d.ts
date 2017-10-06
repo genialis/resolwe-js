@@ -125,6 +125,12 @@ export declare abstract class SharedStore<T, U> {
      * mutation may cause undefined behavior.
      */
     observable(): Rx.Observable<T>;
+    /**
+     * Returns a value that should be used when saving store state.
+     *
+     * By default, this will return the same as [[value]].
+     */
+    saveValue(): T;
 }
 /**
  * [[SimpleSharedStore]] is a helper class intended to be used as a type in conjunction with

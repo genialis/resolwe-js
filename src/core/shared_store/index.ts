@@ -195,6 +195,15 @@ export abstract class SharedStore<T, U> {
     public observable(): Rx.Observable<T> {
         return this._subject;
     }
+
+    /**
+     * Returns a value that should be used when saving store state.
+     *
+     * By default, this will return the same as [[value]].
+     */
+    public saveValue(): T {
+        return this.value();
+    }
 }
 
 /**
@@ -472,7 +481,7 @@ export class SharedStoreManager {
     public saveState(): any {
         let result = {};
         for (const storeId of this._provider.stores) {
-            let value = this.getStore(storeId).value();
+            let value = this.getStore(storeId).saveValue();
             if (isJsonable(value)) {
                 result[storeId] = value.toJSON();
             } else {

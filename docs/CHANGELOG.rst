@@ -10,6 +10,14 @@ Unreleased
 ==========
 
 =====
+0.2.1
+=====
+
+Added
+-----
+- Allow override of what shared store value is saved
+
+=====
 0.2.0
 =====
 
