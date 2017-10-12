@@ -9,17 +9,18 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
-=====
-0.2.1
-=====
+
+==================
+0.2.1 - 2017-10-06
+==================
 
 Added
 -----
 - Allow override of what shared store value is saved
 
-=====
-0.2.0
-=====
+==================
+0.2.0 - 2017-10-04
+==================
 
 Added
 -----
