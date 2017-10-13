@@ -104,7 +104,7 @@ export interface Process {
 }
 export interface RelationEntity {
     entity: number;
-    position: number;
+    position: string;
 }
 export interface Relation {
     id: number;

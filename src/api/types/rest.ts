@@ -152,7 +152,7 @@ export interface Process {
 // Relation entity
 export interface RelationEntity {
     entity: number;
-    position: number;
+    position: string;
 }
 
 export interface Relation {
