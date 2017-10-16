@@ -25,10 +25,11 @@ export class DataResource extends RESTResource<types.Data> implements Permission
     }
 
     /**
-     * Get Data object if similar already exists, otherwise create it.
+     * Get Data object with the same inputs if it already exists, otherwise
+     * create it.
      *
-     * @param data Object attributes
-     * @return An observable that emits the response
+     * Note: Consider sorting arrays in the inputs, to prevent needlessly
+     * creating the same Data objects.
      */
     public getOrCreate(data: Object): Rx.Observable<types.Data> {
         return this.connection.post<types.Data>(this.getListMethodPath('get_or_create'), data);
