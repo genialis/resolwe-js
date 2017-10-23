@@ -1,6 +1,6 @@
 {
   "name": "@genialis/resolwe",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Resolwe frontend libraries",
   "repository": {
     "type": "git",
