@@ -65,10 +65,39 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
      *
      * @param sampleId Sample id
      * @param collectionIds Array of collection ids
-     * @returns {Rx.Observable<void>}
      */
     public addToCollections(sampleId: number, collectionIds: number[]): Rx.Observable<void> {
         return this.callMethod<void>(sampleId, 'add_to_collection', { ids: collectionIds });
+    }
+
+    /**
+     * Remove sample from collections.
+     *
+     * @param sampleId Sample id
+     * @param collectionIds Array of collection ids
+     */
+    public removeFromCollections(sampleId: number, collectionIds: number[]): Rx.Observable<void> {
+        return this.callMethod<void>(sampleId, 'remove_from_collection', { ids: collectionIds });
+    }
+
+    /**
+     * Adds data objects to sample.
+     *
+     * @param sampleId Sample id
+     * @param dataIds Array of data object ids
+     */
+    public addData(sampleId: number, dataIds: number[]): Rx.Observable<void> {
+        return this.callMethod<void>(sampleId, 'add_data', { ids: dataIds });
+    }
+
+    /**
+     * Removes data objects from sample.
+     *
+     * @param sampleId Sample id
+     * @param dataIds Array of data object ids
+     */
+    public removeData(sampleId: number, dataIds: number[]): Rx.Observable<void> {
+        return this.callMethod<void>(sampleId, 'remove_data', { ids: dataIds });
     }
 
     public create(data: Object): Rx.Observable<any> {

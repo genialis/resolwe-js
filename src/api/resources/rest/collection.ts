@@ -18,8 +18,7 @@ export class CollectionResource extends RESTResource<types.Collection> implement
     /**
      * Checks if collection slug already exists.
      *
-     * @param {string} Slug to check
-     * @return {Rx.Observable<boolean>} An observable that emits the response
+     * @param Slug to check
      */
     public slugExists(slug: string): Rx.Observable<boolean> {
         return <Rx.Observable<boolean>> this.connection.get(this.getListMethodPath('slug_exists'), { name: slug });
@@ -30,10 +29,19 @@ export class CollectionResource extends RESTResource<types.Collection> implement
      *
      * @param collectionId Collection id
      * @param dataIds Array of data object ids
-     * @returns {Rx.Observable<void>}
      */
     public addData(collectionId: number, dataIds: number[]): Rx.Observable<void> {
-        return this.connection.post<void>(this.getDetailMethodPath(collectionId, 'add_data'), { ids: dataIds });
+        return this.callMethod<void>(collectionId, 'add_data', { ids: dataIds });
+    }
+
+    /**
+     * Removes data objects from collection.
+     *
+     * @param collectionId Sample id
+     * @param dataIds Array of data object ids
+     */
+    public removeData(collectionId: number, dataIds: number[]): Rx.Observable<void> {
+        return this.callMethod<void>(collectionId, 'remove_data', { ids: dataIds });
     }
 
     public query(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Collection[]>;

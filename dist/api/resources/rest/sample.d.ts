@@ -31,9 +31,29 @@ export declare class SampleResource extends RESTResource<types.Sample | types.Pr
      *
      * @param sampleId Sample id
      * @param collectionIds Array of collection ids
-     * @returns {Rx.Observable<void>}
      */
     addToCollections(sampleId: number, collectionIds: number[]): Rx.Observable<void>;
+    /**
+     * Remove sample from collections.
+     *
+     * @param sampleId Sample id
+     * @param collectionIds Array of collection ids
+     */
+    removeFromCollections(sampleId: number, collectionIds: number[]): Rx.Observable<void>;
+    /**
+     * Adds data objects to sample.
+     *
+     * @param sampleId Sample id
+     * @param dataIds Array of data object ids
+     */
+    addData(sampleId: number, dataIds: number[]): Rx.Observable<void>;
+    /**
+     * Removes data objects from sample.
+     *
+     * @param sampleId Sample id
+     * @param dataIds Array of data object ids
+     */
+    removeData(sampleId: number, dataIds: number[]): Rx.Observable<void>;
     create(data: Object): Rx.Observable<any>;
     replace(primaryKey: number | string, data: Object): Rx.Observable<any>;
     delete(primaryKey: number | string, deleteContent?: boolean): Rx.Observable<Object>;
