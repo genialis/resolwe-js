@@ -1,0 +1,11 @@
+node_modules/
+src/
+tasks/
+
+.travis.yml
+eslint.json
+gulpfile.js
+karma.conf.js
+system.conf.js
+tsconfig.json
+tslint.json

@@ -1,7 +1,0 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-// Ensure jQuery is loaded before Angular in order to ensure it is used
-// instead of jqLite by Angular.
-require("jquery");
-
-//# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy90ZXN0cy9pbml0aWFsaXphdGlvbi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztBQUFBLHVFQUF1RTtBQUN2RSxnQ0FBZ0M7QUFDaEMsa0JBQWdCIiwiZmlsZSI6InRlc3RzL2luaXRpYWxpemF0aW9uLmpzIiwic291cmNlc0NvbnRlbnQiOlsiLy8gRW5zdXJlIGpRdWVyeSBpcyBsb2FkZWQgYmVmb3JlIEFuZ3VsYXIgaW4gb3JkZXIgdG8gZW5zdXJlIGl0IGlzIHVzZWRcbi8vIGluc3RlYWQgb2YganFMaXRlIGJ5IEFuZ3VsYXIuXG5pbXBvcnQgJ2pxdWVyeSc7XG4iXX0=

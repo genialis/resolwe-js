@@ -1,16 +1,17 @@
 {
   "name": "@genialis/resolwe",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Resolwe frontend libraries",
   "repository": {
     "type": "git",
     "url": "git@github.com:genialis/resolwe-js.git"
   },
   "scripts": {
-    "build": "gulp build"
+    "build": "gulp build",
+    "prepublishOnly": "gulp build"
   },
   "main": "dist/index.js",
-  "typings": "dist/index",
+  "types": "dist/index.d.ts",
   "devDependencies": {
     "@types/angular": "^1.6.32",
     "@types/angular-mocks": "^1.5.11",
