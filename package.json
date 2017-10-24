@@ -1,10 +1,15 @@
 {
   "name": "@genialis/resolwe",
-  "version": "0.2.4",
+  "author": "Genialis Inc.",
+  "version": "1.0.0",
   "description": "Resolwe frontend libraries",
+  "license" : "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git@github.com:genialis/resolwe-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/genialis/resolwe-js/issues"
   },
   "scripts": {
     "build": "gulp build",
