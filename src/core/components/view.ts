@@ -24,7 +24,7 @@ export abstract class ViewComponent extends StatefulComponentBase {
     protected static viewLoadingTemplate: string = `
         <div layout="row">
             <span flex></span>
-            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            <md-progress-circular md-diameter="25px" md-mode="indeterminate"></md-progress-circular>
             <span flex></span>
         </div>
     `;
