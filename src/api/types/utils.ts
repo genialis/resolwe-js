@@ -10,7 +10,7 @@ import {Feature} from './modules';
  */
 export function transformFeature(feature: Feature): Feature {
     return _.assign<{}, Feature, {}, Feature>({}, feature, {
-        id: `${feature.source}:${feature.feature_id}`,
+        id: `${feature.source}:${feature.feature_id}:${feature.species}`,
     });
 }
 

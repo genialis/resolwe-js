@@ -56,11 +56,15 @@ export class FeatureResource extends KnowledgeBaseResource {
         return this.connection.get<types.Feature[]>(path, query).map((features) => {
             if (features.length > 1) {
                 throw new MultipleFeaturesFoundError(
-                    `Multiple features identified by feature id ${query.feature_id} and source ${query.source}`
+                    `Multiple features identified by feature id ${query.feature_id}, source ${query.source}
+                    and species ${query.species}`
                 );
             }
             if (features.length === 0) {
-                throw new NoFeatureFoundError(`Feature identified by feature id ${query.feature_id} and source ${query.source} not found`);
+                throw new NoFeatureFoundError(
+                    `Feature identified by feature id ${query.feature_id},source ${query.source} and
+                    species ${query.species} not found`
+                );
             }
 
             return transformFeature(_.first(features));
