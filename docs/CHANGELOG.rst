@@ -11,12 +11,16 @@ Unreleased
 
 
 ==================
-0.2.4 - 2017-10-24
+1.0.0 - 2017-10-24
 ==================
 
 Added
 -----
 - License file
+
+Changed
+-------
+- **BACKWARD INCOMPATIBLE:** Removed bundled ``dist/`` directory
 
 ==================
 0.2.3 - 2017-10-23
