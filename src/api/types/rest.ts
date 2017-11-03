@@ -334,6 +334,7 @@ export interface DataDifferentialExpression extends Data {
         raw: { file: string, size: number };
         de_json: number;
         source: string;
+        species: string;
     };
 }
 
@@ -344,6 +345,7 @@ export interface DataGenesetOutput {
     geneset: { file: string, size: number };
     geneset_json: number; // => DataGenesetStorage
     source: string;
+    species: string;
 }
 
 export interface DataGeneset extends Data {
@@ -384,6 +386,7 @@ export interface DataGOEnrichmentAnalysis extends Data {
     output: {
         terms: number; // => DataGOEnrichmentAnalysisStorage
         source: string;
+        species: string;
     };
 }
 
@@ -411,6 +414,7 @@ export interface GOEnrichmentNode {
     // Added by frontend:
     depth?: number; // Numerical representation of the level of depth. Used for offsetting the term column.
     source?: string;
+    species?: string;
     score_percentage?: number; // Percentage of max score within GOEnrichmentAspect.
     gene_associations?: string[]; // Plucked from GOEnrichmentJson.gene_associations.
     collapsed?: boolean; // Boolean representation if the selected item is hidden.
@@ -424,6 +428,7 @@ export interface DataGOEnrichmentAnalysisInput {
     pval_threshold: number;
     genes: string[];
     source: string;
+    species: string;
     ontology: number;
     gaf: number;
 }
