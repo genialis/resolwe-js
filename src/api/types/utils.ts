@@ -62,5 +62,25 @@ export function getSourceFromFeatures(features: Feature[]): string {
         throw new GenError(`Features come from multiple sources (${sources.join(', ')})`);
     }
 
-    return _.first(features).source;
+    return _.first(sources);
+}
+
+/**
+ * Returns features' species.
+ *
+ * Throws `GenError` if species cannot be determined.
+ *
+ * @param features Features
+ */
+export function getSpeciesFromFeatures(features: Feature[]): string {
+    const species = _.unique(_.map(features, (feature) => feature.species));
+
+    if (_.isEmpty(features)) {
+        throw new GenError('No features');
+    }
+    if (_.size(species) > 1) {
+        throw new GenError(`Features come from multiple species (${species.join(', ')})`);
+    }
+
+    return _.first(species);
 }
