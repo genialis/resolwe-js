@@ -49,7 +49,6 @@ export class APIServiceBase {
      * @param {any} data See angular.angularFileUpload.IFileUploadConfigFile.
      */
     public upload<T>(data: any, fileUID: string = ''): angular.angularFileUpload.IUploadPromise<T> {
-        const http = this._http;
         const url = this.connection.createUriFromPath('/upload/');
         const headers: angular.IHttpRequestConfigHeaders = {
             'Session-Id': this.connection.sessionId(),
@@ -62,22 +61,12 @@ export class APIServiceBase {
             method: 'POST',
             headers: headers,
             withCredentials: true,
-            resumeSize: function () {
-                // There is a reason that this function does not use the fat arrow syntax. We need
-                // to get a reference to the internal config object (via 'this') due to a bug in
-                // the ng-file-upload library: https://github.com/danialfarid/ng-file-upload/issues/1392
-                const config = this;
-
-                return http.get(url, {
+            resumeSize: () => {
+                return this._http.get(url, {
                     headers: headers,
                     withCredentials: true,
                 }).then((response) => {
-                    // Set _end as it is otherwise not set due to the above bug.
-                    const resumeOffset: number = (<any> response.data).resume_offset;
-                    if (config._chunkSize) {
-                        config._end = resumeOffset + config._chunkSize;
-                    }
-                    return resumeOffset;
+                    return (<any> response.data).resume_offset;
                 });
             },
             resumeChunkSize: '1MB',
