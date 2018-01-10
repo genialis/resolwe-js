@@ -5,6 +5,14 @@ Change Log
 All notable changes to this project are documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+==========
+Unreleased
+==========
+
+Changed
+-------
+- **BACKWARD INCOMPATIBLE:** Refactored api.upload into an observable (cancelable by disposing it)
+
 ==================
 2.0.5 - 2017-11-08
 ==================

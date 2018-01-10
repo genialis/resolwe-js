@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import * as Rx from 'rx';
 import * as angular from 'angular';
 
-import {APIServiceBase} from './api';
+import {APIServiceBase, UploadEventType} from './api';
 import {ResolweApi} from '../../api/index';
 import {MockApi} from '../../api/mock';
 import {component, ComponentBase} from '../components/base';
@@ -161,13 +161,16 @@ describeComponent('angular mock api', [], (tester) => {
 
         tester.api().whenUpload((data: any, fileUID: string) => {
             uploaded = true;
-            return <angular.IHttpResponse<string>> {data: 'hello'};
+            return { data: 'hello' };
         });
 
-        tester.api().upload({}, 'test-uuid').then((response) => {
-            expect(uploaded).toEqual(true);
-            expect(response.data).toEqual('hello');
-            done();
+        tester.api().upload({}, 'test-uuid').subscribe((response) => {
+            expect(response.type).toEqual('result');
+            if (response.type === UploadEventType.RESULT) {
+                expect(uploaded).toEqual(true);
+                expect(response.result).toEqual({ data: 'hello' });
+                done();
+            }
         });
     });
 });

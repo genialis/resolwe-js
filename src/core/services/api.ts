@@ -1,3 +1,4 @@
+import * as Rx from 'rx';
 import * as angular from 'angular';
 import 'ng-file-upload';
 
@@ -11,6 +12,14 @@ import * as random from '../utils/random';
 const angularModule: angular.IModule = angular.module('resolwe.services.api', [
     'ngFileUpload',
 ]);
+
+export enum UploadEventType {
+    PROGRESS = 'progress',
+    RESULT = 'result',
+}
+
+export type UploadEvent<T> = { progress: ProgressEvent, type: UploadEventType.PROGRESS } |
+                             { result: T, type: UploadEventType.RESULT };
 
 /**
  * Base API service class providing additional features like file
@@ -48,7 +57,7 @@ export class APIServiceBase {
      *
      * @param {any} data See angular.angularFileUpload.IFileUploadConfigFile.
      */
-    public upload<T>(data: any, fileUID: string = ''): angular.angularFileUpload.IUploadPromise<T> {
+    public upload<T>(data: any, fileUID: string = ''): Rx.Observable<UploadEvent<T>> {
         const url = this.connection.createUriFromPath('/upload/');
         const headers: angular.IHttpRequestConfigHeaders = {
             'Session-Id': this.connection.sessionId(),
@@ -56,28 +65,51 @@ export class APIServiceBase {
             'X-CSRFToken': this.connection.csrfCookie(),
         };
 
-        return this._upload.upload<T>({
-            url: url,
-            method: 'POST',
-            headers: headers,
-            withCredentials: true,
-            resumeSize: () => {
-                return this._http.get(url, {
-                    headers: headers,
-                    withCredentials: true,
-                }).then((response) => {
-                    return (<any> response.data).resume_offset;
-                });
-            },
-            resumeChunkSize: '1MB',
-            data: data,
+        return Rx.Observable.create<UploadEvent<T>>((observer) => {
+            const rejectableResumeSizePromise = this._q.defer<number>();
+            const fileUpload = this._upload.upload<T>({
+                url: url,
+                method: 'POST',
+                headers: headers,
+                withCredentials: true,
+                resumeSize: () => {
+                    const resumeSizePromise = this._http.get(url, {
+                        headers: headers,
+                        withCredentials: true,
+                    }).then((response) => {
+                        return (<any> response.data).resume_offset;
+                    }, (error) => {
+                        observer.onError(error); // Handled in observables
+                        return this._q.defer().promise; // Never resolve
+                    });
+
+                    rejectableResumeSizePromise.resolve(resumeSizePromise);
+                    return rejectableResumeSizePromise.promise;
+                },
+                resumeChunkSize: '1MB',
+                data: data,
+            });
+
+            fileUpload.then((result) => {
+                observer.onNext({ result: result.data, type: UploadEventType.RESULT });
+                observer.onCompleted();
+            }, (error) => {
+                observer.onError(error);
+            }, (progress) => {
+                observer.onNext({ progress: progress, type: UploadEventType.PROGRESS });
+            });
+
+            return () => {
+                fileUpload.abort();
+                rejectableResumeSizePromise.reject();
+            };
         });
     }
 
     /**
      * Uploads string content as a file.
      */
-    public uploadString(filename: string, content: string): angular.angularFileUpload.IUploadPromise<FileUploadResponse> {
+    public uploadString(filename: string, content: string): Rx.Observable<UploadEvent<FileUploadResponse>> {
         let file: File;
         try {
             file = new File([content], filename, {type: 'text/plain', lastModified: Date.now()});
