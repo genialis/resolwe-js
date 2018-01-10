@@ -201,17 +201,27 @@ describe('resource', () => {
 describe('upload', () => {
     let api: APIServiceBase;
     let $httpBackend: angular.IHttpBackendService;
+    let $exceptionHandler: angular.IExceptionHandlerService & { errors: any[] };
 
+    // Auto-retry tests fail if $exceptionHandler rethrows errors.
+    angular.module('ignore_exceptions', []).config(($exceptionHandlerProvider: angular.IExceptionHandlerProvider) => {
+        $exceptionHandlerProvider.mode('log');
+    });
+
+    beforeEach(angular.mock.module('ignore_exceptions'));
     beforeEach(angular.mock.module('ngFileUpload'));
 
     beforeEach(inject((Upload: angular.angularFileUpload.IUploadService,
                        $q: angular.IQService,
                        $http: angular.IHttpService,
-                       _$httpBackend_) => {
+                       _$httpBackend_,
+                       _$exceptionHandler_) => {
         $httpBackend = _$httpBackend_;
+        $exceptionHandler = _$exceptionHandler_;
 
         api = new APIServiceBase(Upload, $q, $http);
         api.connection = new MockConnection();
+        api.RETRY_DELAY_INCREMENT = 10;
     }));
 
     it('should work for new files', (done) => {
@@ -231,6 +241,7 @@ describe('upload', () => {
             expect(response.type).toEqual('result');
             if (response.type === UploadEventType.RESULT) {
                 expect(response.result.files[0].name).toEqual('a.txt');
+                expect($exceptionHandler.errors).toEqual([]);
                 done();
             }
         });
@@ -250,6 +261,7 @@ describe('upload', () => {
             expect(response1.type).toEqual('progress');
             expect(response2.type).toEqual('progress');
             expect(response3.type).toEqual('result');
+            expect($exceptionHandler.errors).toEqual([]);
             done();
         });
         $httpBackend.flush();
@@ -266,10 +278,99 @@ describe('upload', () => {
         api.uploadString('a.txt', largeContent).toArray().subscribe(([response1, response2]) => {
             expect(response1.type).toEqual('progress');
             expect(response2.type).toEqual('result');
+            expect($exceptionHandler.errors).toEqual([]);
             done();
         });
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it('should auto-retry after failed requests', (done) => {
+        $httpBackend.expectGET('/upload/').respond(503, {});
+
+        const largeContent = _.range(3 * api.CHUNK_SIZE - 1).map(() => 'a').join('');
+        api.uploadString('a.txt', largeContent).toArray().subscribe((responses) => {
+            expect(responses[0].type).toEqual('retrying');
+            expect(responses[1].type).toEqual('retrying');
+            expect(responses[2].type).toEqual('progress');
+            expect(responses[3].type).toEqual('retrying');
+            expect(responses[4].type).toEqual('result');
+
+            const unexpectedLogs = $exceptionHandler.errors.filter((log) => {
+                const isExpected = _.isString(log) && /Possibly unhandled rejection: .*"status":503/.test(log);
+                return !isExpected;
+            });
+            expect(unexpectedLogs).toEqual([]);
+            done();
+        });
+        $httpBackend.flush();
+
+        $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.CHUNK_SIZE });
+        $httpBackend.expectPOST('/upload/').respond(503, {});
+        setTimeout(() => {
+            $httpBackend.flush();
+
+            $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.CHUNK_SIZE });
+            $httpBackend.expectPOST('/upload/').respond(200, {});
+            $httpBackend.expectPOST('/upload/').respond(503, {});
+            setTimeout(() => {
+                $httpBackend.flush();
+
+                $httpBackend.expectGET('/upload/').respond(200, { resume_offset: 2 * api.CHUNK_SIZE });
+                $httpBackend.expectPOST('/upload/').respond(200, { /* result */ });
+                setTimeout(() => {
+                    $httpBackend.flush();
+                }, 30 + 5);
+            }, 20 + 5);
+        }, 10 + 5); // Wait for RETRY_DELAY_INCREMENT, and 5ms padding time
+    });
+
+    it('should stop retrying after too many failed requests', (done) => {
+        $httpBackend.expectGET('/upload/').respond(503, {});
+
+        const largeContent = _.range(3 * api.CHUNK_SIZE - 1).map(() => 'a').join('');
+        api.uploadString('a.txt', largeContent).toArray().subscribe((responses) => {
+            done.fail('Expected upload to fail, not succeed');
+        }, (error) => {
+            expect(error.config.method).toEqual('POST');
+            expect(error.status).toEqual(503);
+
+            const unexpectedLogs = $exceptionHandler.errors.filter((log) => {
+                const isExpected = _.isString(log) && /Possibly unhandled rejection: .*"status":503/.test(log);
+                return !isExpected;
+            });
+            expect(unexpectedLogs).toEqual([]);
+            done();
+        });
+        $httpBackend.flush();
+
+        $httpBackend.expectGET('/upload/').respond(503, {});
+        setTimeout(() => {
+            $httpBackend.flush();
+
+            $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.CHUNK_SIZE });
+            $httpBackend.expectPOST('/upload/').respond(503, {});
+            setTimeout(() => {
+                $httpBackend.flush();
+
+                $httpBackend.expectGET('/upload/').respond(503, {});
+                setTimeout(() => {
+                    $httpBackend.flush();
+
+                    $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.CHUNK_SIZE });
+                    $httpBackend.expectPOST('/upload/').respond(503, {});
+                    setTimeout(() => {
+                        $httpBackend.flush();
+
+                        $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.CHUNK_SIZE });
+                        $httpBackend.expectPOST('/upload/').respond(503, {});
+                        setTimeout(() => {
+                            $httpBackend.flush();
+                        }, 50 + 5);
+                    }, 40 + 5);
+                }, 30 + 5);
+            }, 20 + 5);
+        }, 10 + 5);
     });
 });

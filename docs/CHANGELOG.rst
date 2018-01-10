@@ -11,7 +11,7 @@ Unreleased
 
 Changed
 -------
-- **BACKWARD INCOMPATIBLE:** Refactored api.upload into an observable (cancelable by disposing it)
+- **BACKWARD INCOMPATIBLE:** Refactored api.upload into an observable (cancelable by disposing it) with auto-retry on error
 
 ==================
 2.0.5 - 2017-11-08
