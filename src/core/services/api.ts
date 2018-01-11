@@ -117,13 +117,17 @@ export class APIServiceBase {
             });
 
             return () => {
+                // To differentiate between connections aborted by server or client (when computer
+                // goes to standby/sleep), we emit a custom error. Otherwise we would have to
+                // filter out all `xhrStatus === 'abort'` and couldn't auto-retry after standby.
+                observer.onError({xhrStatus: 'manual-abort'});
                 fileUpload.abort();
                 rejectableResumeSizePromise.reject();
             };
         })
         .retryWhen((errors) => {
             return errors
-                .filter((error) => error && error.xhrStatus !== 'abort')
+                .filter((error) => error && error.xhrStatus !== 'manual-abort')
                 .timeInterval()
                 .scan((accumulated, value) => {
                     const error = value.value;
@@ -138,6 +142,9 @@ export class APIServiceBase {
                     return { error, consecutiveErrors, timeSincePrevious, retry, delay };
                 }, { error: null, consecutiveErrors: 0, timeSincePrevious: 0, retry: false, delay: 0 })
                 .flatMap(({retry, delay, error}) => {
+                    // This event is probably computer going to standby. Wait a bit longer.
+                    if (error && error.xhrStatus === 'abort') delay = 10000;
+
                     if (!retry) { // Stop retrying after a while and return unwrapped error
                         return Rx.Observable.throw(error);
                     }
