@@ -16,6 +16,7 @@ Added
 Changed
 -------
 - **BACKWARD INCOMPATIBLE:** Refactored api.upload into an observable (cancelable by disposing it) with auto-retry on error
+- **BACKWARD INCOMPATIBLE:** Removed utils/lang/isPromise and added utils/lang/isPromiseLike
 
 ==================
 2.0.5 - 2017-11-08

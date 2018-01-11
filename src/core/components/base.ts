@@ -2,7 +2,7 @@ import * as angular from 'angular';
 import * as _ from 'lodash';
 import * as Rx from 'rx';
 
-import {isPromise} from '../utils/lang';
+import {isPromiseLike} from '../utils/lang';
 import {GenError} from '../errors/error';
 
 enum DirectiveType {
@@ -129,7 +129,7 @@ export class Computation {
      * @return Underlying subscription disposable
      */
     public subscribe<T>(target: string | ((data: T) => any),
-                        observable: Rx.Observable<T> | Promise<any>,
+                        observable: Rx.Observable<T> | Promise<any> | angular.IPromise<any>,
                         options: SubscribeComponentOptions = {}) {
         // Create a guard object that can be removed when a subscription is done. We need
         // to use guard objects instead of a simple reference counter because the pending
@@ -140,7 +140,7 @@ export class Computation {
         }
 
         let convertedObservable: Rx.Observable<T>;
-        if (isPromise(observable)) {
+        if (isPromiseLike(observable)) {
             convertedObservable = Rx.Observable.fromPromise(observable);
         } else {
             convertedObservable = observable;

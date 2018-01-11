@@ -10,8 +10,9 @@ export interface Jsonable {
  *
  * @param value Value to check
  */
-export function isPromise(value: any): value is Promise<any> {
-    return value instanceof Promise;
+export function isPromiseLike(value: any): value is Promise<any> | angular.IPromise<any> {
+    const promise = <Promise<any>> value;
+    return !!promise.then && typeof promise.then === 'function';
 }
 
 /**
