@@ -5,4 +5,6 @@ addons:
 before_script:
   - npm install -g gulp
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
-script: gulp sanity
+script:
+  - gulp check
+  - gulp test --chromium-headless-no-sandbox

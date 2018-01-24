@@ -6,14 +6,19 @@ module.exports = (gulp, config) => {
     const Server = require('karma').Server;
     const $ = require('gulp-load-plugins')();
 
+    const chromiumHeadlessNoSandbox = !!minimist(process.argv.slice(3))['chromium-headless-no-sandbox'];
+
     // Json summary file path.
     const jsonSummaryPath = path.join(config.coverageDirAbs, 'json', 'summary.json');
 
     return (done) => {
-        new Server({
+        const karmaConfig = {
             configFile: path.join(config.projectDir, 'karma.conf.js'),
-            singleRun: true,
-        }, (exitCode) => {
+            singleRun: true
+        };
+        if (chromiumHeadlessNoSandbox) karmaConfig.browsers = ['ChromiumHeadlessNoSandbox'];
+
+        new Server(karmaConfig, (exitCode) => {
             // Run remap when finished.
             gulp.src(path.join(config.coverageDirAbs, 'json', 'coverage-final.json'))
                 .pipe(remapIstanbul({
