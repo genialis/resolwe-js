@@ -11,6 +11,19 @@ Unreleased
 
 Added
 -----
+
+Changed
+-------
+
+Fixed
+-----
+
+==================
+3.0.0 - 2018-01-24
+==================
+
+Added
+-----
 - Support auto-resuming api.upload after computer standby/sleep
 
 Changed
