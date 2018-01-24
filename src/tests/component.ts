@@ -173,11 +173,10 @@ export function describeComponent(description: string,
         beforeEach(angular.mock.module(moduleName));
 
         // Register any shared stores.
-        let sharedStores = _.filter(modules, (m) => m.storeId);
-        modules = _.filter(modules, (m) => !m.storeId);
+        const [sharedStores, additionalModules] = _.partition(modules, (m) => !!m.storeId);
 
         module.config((sharedStoreManagerProvider: SharedStoreProvider) => {
-            sharedStores.forEach((descriptor: SharedStoreDescriptor) => {
+            _.each(sharedStores, (descriptor: SharedStoreDescriptor) => {
                 if (descriptor.factory) {
                     sharedStoreManagerProvider.register(descriptor.storeId, descriptor.factory);
                 } else {
@@ -186,18 +185,25 @@ export function describeComponent(description: string,
             });
         });
 
-        for (const additionalModuleName of modules) {
-            beforeEach(angular.mock.module(additionalModuleName));
-        }
+        _.each(additionalModules, (additionalModule) => {
+            beforeEach(angular.mock.module(additionalModule));
+        });
 
         // A container in DOM where we can temporarily append component elements.
-        let containerElement = null;
+        let containerElement: angular.IAugmentedJQuery = null;
 
         function provideRealDOM(): void {
+            removeRealDOM();
             const body = angular.element(document.body);
             containerElement = angular.element('<div id="test-container-element"></div>');
-            body.remove('#test-container-element');
             body.append(containerElement);
+        }
+
+        function removeRealDOM(): void {
+            if (containerElement) {
+                containerElement.remove();
+                containerElement = null;
+            }
         }
 
         beforeEach(() => {
@@ -218,7 +224,7 @@ export function describeComponent(description: string,
 
         afterEach(() => {
             $scope.$destroy();
-            if (containerElement) containerElement.empty();
+            removeRealDOM();
         });
 
         tests({

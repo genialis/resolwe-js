@@ -17,6 +17,7 @@ describeComponent('base component', [], (tester) => {
         public array: string[] = [];
         public arrayObservable: Rx.Observable<string[]>;
 
+        // @ngInject
         constructor($scope: angular.IScope) {
             super($scope);
 
