@@ -548,6 +548,9 @@ export abstract class ComponentBase {
         // Generate attributes.
         if (!_.isEmpty(attributes)) {
             _.forOwn(attributes, (attribute, attributeName) => {
+                if (_.contains(attribute, '"')) {
+                    throw new GenError(`asView attribute '${attribute}' is currently not supported.`);
+                }
                 // TODO: Properly escape attribute values.
                 template += ' ' + _.kebabCase(attributeName) + '="' + attribute + '"';
             });
