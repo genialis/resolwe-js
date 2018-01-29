@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import * as Rx from 'rx';
 import * as immutable from 'immutable';
 
 export interface Jsonable {
@@ -11,7 +12,7 @@ export interface Jsonable {
  * @param value Value to check
  */
 export function isPromise(value: any): value is Promise<any> {
-    return value instanceof Promise;
+    return Rx.helpers.isPromise(value);
 }
 
 /**
