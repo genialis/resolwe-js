@@ -4,7 +4,8 @@ import * as angular from 'angular';
 
 import {APIServiceBase, UploadEventType} from './api';
 import {ResolweApi} from '../../api/index';
-import {MockApi} from '../../api/mock';
+import {MockApi, MockConnection} from '../../api/mock';
+import {FileUploadResponse} from '../../api/types/modules';
 import {component, ComponentBase} from '../components/base';
 import {describeComponent} from '../../tests/component';
 
@@ -194,5 +195,81 @@ describe('resource', () => {
 
         // Ensure these queries have been delayed.
         expect(called).toEqual(0);
+    });
+});
+
+describe('upload', () => {
+    let api: APIServiceBase;
+    let $httpBackend: angular.IHttpBackendService;
+
+    beforeEach(angular.mock.module('ngFileUpload'));
+
+    beforeEach(inject((Upload: angular.angularFileUpload.IUploadService,
+                       $q: angular.IQService,
+                       $http: angular.IHttpService,
+                       _$httpBackend_) => {
+        $httpBackend = _$httpBackend_;
+
+        api = new APIServiceBase(Upload, $q, $http);
+        api.connection = new MockConnection();
+    }));
+
+    it('should work for new files', (done) => {
+        $httpBackend.expectGET('/upload/').respond((method, url, data, headers, queryParams) => {
+            expect(headers['X-File-Uid']).toBeDefined();
+            return [200, { resume_offset: 0 }, {}, 'OK'];
+        });
+
+        $httpBackend.expectPOST('/upload/').respond(
+            200,
+            <FileUploadResponse> {
+                files: [{ name: 'a.txt', size: 1000, done: true, temp: '5ed2a' }],
+            },
+        );
+
+        api.uploadString('a.txt', 'abcd').subscribe((response) => {
+            expect(response.type).toEqual('result');
+            if (response.type === UploadEventType.RESULT) {
+                expect(response.result.files[0].name).toEqual('a.txt');
+                done();
+            }
+        });
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it('should chunk large files', (done) => {
+        $httpBackend.expectGET('/upload/').respond(200, { resume_offset: 0 });
+        $httpBackend.expectPOST('/upload/').respond(200, {});
+        $httpBackend.expectPOST('/upload/').respond(200, {});
+        $httpBackend.expectPOST('/upload/').respond(200, { /* result */ });
+
+        const largeContent = _.range(3 * api.CHUNK_SIZE - 1).map(() => 'a').join('');
+        api.uploadString('a.txt', largeContent).toArray().subscribe(([response1, response2, response3]) => {
+            expect(response1.type).toEqual('progress');
+            expect(response2.type).toEqual('progress');
+            expect(response3.type).toEqual('result');
+            done();
+        });
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it('should resume for existing files', (done) => {
+        $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.CHUNK_SIZE });
+        $httpBackend.expectPOST('/upload/').respond(200, {});
+        $httpBackend.expectPOST('/upload/').respond(200, { /* result */ });
+
+        const largeContent = _.range(3 * api.CHUNK_SIZE - 1).map(() => 'a').join('');
+        api.uploadString('a.txt', largeContent).toArray().subscribe(([response1, response2]) => {
+            expect(response1.type).toEqual('progress');
+            expect(response2.type).toEqual('result');
+            done();
+        });
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
     });
 });
