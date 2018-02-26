@@ -14,6 +14,16 @@ Added
 
 Changed
 -------
+
+Fixed
+-----
+
+==================
+3.1.0 - 2018-02-26
+==================
+
+Changed
+-------
 - Support paginated Feature.autocomplete in knowledge base module
 
 Fixed
