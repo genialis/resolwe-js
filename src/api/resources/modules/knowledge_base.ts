@@ -3,7 +3,8 @@ import * as Rx from 'rx';
 
 import {GenError} from '../../../core/errors/error';
 import {Connection} from '../../connection';
-import {transformFeature, transformFeatures} from '../../types/utils';
+import {transformFeature, transformFeatures, transformFeaturesPaginated} from '../../types/utils';
+import {PaginatedResponse} from '../../types/rest';
 import * as types from '../../types/modules';
 import {ModuleResource} from './module_resource';
 
@@ -100,8 +101,14 @@ export class FeatureResource extends KnowledgeBaseResource {
      *
      * @param query Feature autocomplete query
      */
-    public autocomplete(query: types.FeatureAutocompleteQuery): Rx.Observable<types.Feature[]> {
+    public autocomplete(query: types.FeatureAutocompleteQuery & { limit: number }): Rx.Observable<PaginatedResponse<types.Feature>>;
+    public autocomplete(query: types.FeatureAutocompleteQuery): Rx.Observable<types.Feature[]>;
+    public autocomplete(query: types.FeatureAutocompleteQuery): Rx.Observable<types.Feature[] | PaginatedResponse<types.Feature>> {
         const path = this.getModuleMethodPath('autocomplete');
-        return transformFeatures(this.connection.post<types.Feature[]>(path, query));
+        const observable = this.connection.post<types.Feature[] | PaginatedResponse<types.Feature>>(path, query);
+        const isPaginated = _.has(query, 'limit');
+        return isPaginated
+            ? transformFeaturesPaginated(<Rx.Observable<PaginatedResponse<types.Feature>>> observable)
+            : transformFeatures(<Rx.Observable<types.Feature[]>> observable);
     }
 }

@@ -14,6 +14,7 @@ Added
 
 Changed
 -------
+- Support paginated Feature.autocomplete in knowledge base module
 
 Fixed
 -----
