@@ -17,6 +17,7 @@ Changed
 
 Fixed
 -----
+- Fixed missing Rx import in mocked upload
 
 ==================
 3.0.0 - 2018-01-24

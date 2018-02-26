@@ -166,7 +166,7 @@ describeComponent('angular mock api', [], (tester) => {
         });
 
         tester.api().upload({}, 'test-uuid').subscribe((response) => {
-            expect(response.type).toEqual('result');
+            expect(response.type).toEqual(UploadEventType.RESULT);
             if (response.type === UploadEventType.RESULT) {
                 expect(uploaded).toEqual(true);
                 expect(response.result).toEqual({ data: 'hello' });
@@ -238,7 +238,7 @@ describe('upload', () => {
         );
 
         api.uploadString('a.txt', 'abcd').subscribe((response) => {
-            expect(response.type).toEqual('result');
+            expect(response.type).toEqual(UploadEventType.RESULT);
             if (response.type === UploadEventType.RESULT) {
                 expect(response.result.files[0].name).toEqual('a.txt');
                 expect($exceptionHandler.errors).toEqual([]);
@@ -258,9 +258,9 @@ describe('upload', () => {
 
         const largeContent = _.range(3 * api.CHUNK_SIZE - 1).map(() => 'a').join('');
         api.uploadString('a.txt', largeContent).toArray().subscribe(([response1, response2, response3]) => {
-            expect(response1.type).toEqual('progress');
-            expect(response2.type).toEqual('progress');
-            expect(response3.type).toEqual('result');
+            expect(response1.type).toEqual(UploadEventType.PROGRESS);
+            expect(response2.type).toEqual(UploadEventType.PROGRESS);
+            expect(response3.type).toEqual(UploadEventType.RESULT);
             expect($exceptionHandler.errors).toEqual([]);
             done();
         });
@@ -276,8 +276,8 @@ describe('upload', () => {
 
         const largeContent = _.range(3 * api.CHUNK_SIZE - 1).map(() => 'a').join('');
         api.uploadString('a.txt', largeContent).toArray().subscribe(([response1, response2]) => {
-            expect(response1.type).toEqual('progress');
-            expect(response2.type).toEqual('result');
+            expect(response1.type).toEqual(UploadEventType.PROGRESS);
+            expect(response2.type).toEqual(UploadEventType.RESULT);
             expect($exceptionHandler.errors).toEqual([]);
             done();
         });
@@ -291,11 +291,11 @@ describe('upload', () => {
 
         const largeContent = _.range(3 * api.CHUNK_SIZE - 1).map(() => 'a').join('');
         api.uploadString('a.txt', largeContent).toArray().subscribe((responses) => {
-            expect(responses[0].type).toEqual('retrying');
-            expect(responses[1].type).toEqual('retrying');
-            expect(responses[2].type).toEqual('progress');
-            expect(responses[3].type).toEqual('retrying');
-            expect(responses[4].type).toEqual('result');
+            expect(responses[0].type).toEqual(UploadEventType.RETRYING);
+            expect(responses[1].type).toEqual(UploadEventType.RETRYING);
+            expect(responses[2].type).toEqual(UploadEventType.PROGRESS);
+            expect(responses[3].type).toEqual(UploadEventType.RETRYING);
+            expect(responses[4].type).toEqual(UploadEventType.RESULT);
 
             const unexpectedLogs = $exceptionHandler.errors.filter((log) => {
                 const isExpected = _.isString(log) && /Possibly unhandled rejection: .*"status":503/.test(log);

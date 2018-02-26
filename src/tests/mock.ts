@@ -1,3 +1,4 @@
+import * as Rx from 'rx';
 import {UploadEvent, UploadEventType} from '../core/services/api';
 import 'ng-file-upload';
 
