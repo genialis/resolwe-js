@@ -17,6 +17,13 @@ Changed
 
 Fixed
 -----
+
+==================
+3.1.1 - 2018-03-07
+==================
+
+Fixed
+-----
 - Added last_login and date_joined properties to User type
 
 ==================
