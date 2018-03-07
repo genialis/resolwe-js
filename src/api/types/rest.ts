@@ -609,6 +609,8 @@ export interface User {
     location: string;
     lab: string;
     phone_number: string;
+    last_login: string;
+    date_joined: string;
 }
 
 export interface LoginResponse {
