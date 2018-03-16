@@ -27,7 +27,7 @@ export class FileResource extends RESTResource<string> {
     }
 
     private _getFileUrl(id: number, filename: string): string {
-        return '/data/' + id + '/' + filename;
+        return `/data/${id}/${filename}`;
     }
 
     public getForcedDownloadUrl(id: number, filename: string): string {
@@ -39,7 +39,7 @@ export class FileResource extends RESTResource<string> {
     }
 
     public getUngzippedUrl(id: number, filename: string): string {
-        return this._getFileUrl(id, filename) + '?' + jQuery.param({ gzip_header: 1 });
+        return `/datagzip/${id}/${filename}`;
     }
 
     public create(data: Object): Rx.Observable<any> {

@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Changed
+-------
+- Updated endpoint for ungzipped url
+
 ==================
 3.1.2 - 2018-03-22
 ==================
