@@ -11,6 +11,7 @@ Unreleased
 
 Added
 -----
+- Added ``process_slug`` to Data type
 
 Changed
 -------

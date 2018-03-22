@@ -304,6 +304,7 @@ export interface DataBase {
     process_type: string;
     process_input_schema: any;
     process_output_schema: any;
+    process_slug: string;
     process_name: string;
     slug: string;
     name: string;
