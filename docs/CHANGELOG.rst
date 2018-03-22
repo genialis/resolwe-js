@@ -9,15 +9,13 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+==================
+3.1.2 - 2018-03-22
+==================
+
 Added
 -----
 - Added ``process_slug`` to Data type
-
-Changed
--------
-
-Fixed
------
 
 ==================
 3.1.1 - 2018-03-07

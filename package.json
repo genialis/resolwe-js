@@ -1,9 +1,9 @@
 {
   "name": "@genialis/resolwe",
   "author": "Genialis Inc.",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Resolwe frontend libraries",
-  "license" : "Apache-2.0",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git@github.com:genialis/resolwe-js.git"
