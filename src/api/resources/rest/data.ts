@@ -1,4 +1,5 @@
 import * as Rx from 'rx';
+import * as _ from 'lodash';
 
 import {RESTResource} from './rest_resource';
 import {Connection} from '../../connection';
@@ -12,6 +13,26 @@ export class DataResource extends RESTResource<types.Data> implements Permission
 
     constructor(connection: Connection) {
         super('data', connection);
+    }
+
+    protected transformQuery(query: types.Query): types.Query {
+        // Rename `sample` query field to `entity`.
+        const transformedQuery = _.mapKeys(query, (value, field) => {
+            return field
+                .replace(/^sample$/g, 'entity')
+                .replace(/^sample__/g, 'entity__');
+        });
+
+        // Rename `sample` in limit fields to `entity`.
+        if (transformedQuery.fields) {
+            transformedQuery.fields = transformedQuery.fields.split(',').map((field) => {
+                return field
+                    .replace(/^sample$/g, 'entity')
+                    .replace(/^sample__/g, 'entity__');
+            }).join(',');
+        }
+
+        return super.transformQuery(transformedQuery);
     }
 
     /**

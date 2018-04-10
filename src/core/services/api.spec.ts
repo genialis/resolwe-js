@@ -6,6 +6,7 @@ import {APIServiceBase, UploadEventType} from './api';
 import {ResolweApi} from '../../api/index';
 import {MockApi, MockConnection} from '../../api/mock';
 import {FileUploadResponse} from '../../api/types/modules';
+import {limitFieldsQuery} from '../../api/types/utils';
 import {component, ComponentBase} from '../components/base';
 import {describeComponent} from '../../tests/component';
 
@@ -195,6 +196,45 @@ describe('resource', () => {
 
         // Ensure these queries have been delayed.
         expect(called).toEqual(0);
+    });
+
+    describe('Data', () => {
+        it('correctly translates "sample" field to "entity"', () => {
+            const mockApi = new MockApi();
+            const resultSubscriber = jasmine.createSpy('resultSubscriber');
+            const querySubscriber = jasmine.createSpy('querySubscriber');
+
+            mockApi.createResource('data', 'id', (query, items) => {
+                querySubscriber(query);
+                return items;
+            });
+
+            const query = {
+                sample: 1,
+                sample__in: [1, 2, 3].join(','),
+                samplex: 1,
+                xsample__in: [1].join(','),
+                status: 'PR',
+            };
+            const limitedFieldsQuery = limitFieldsQuery(query, [
+                'sample__slug',
+                'status',
+                'samplex',
+                'xsample__slug',
+                'sample__name',
+            ]);
+            mockApi.Data.query(limitedFieldsQuery).subscribe(resultSubscriber);
+
+            const transformedQuery = querySubscriber.calls.mostRecent().args[0];
+            expect(transformedQuery).toEqual({
+                entity: 1, // Expect sample field to be translated.
+                entity__in: '1,2,3', // Expect operations on sample field to be translated.
+                samplex: 1, // Expect other fields to stay the same.
+                xsample__in: '1',
+                status: 'PR',
+                fields: 'entity__slug,status,samplex,xsample__slug,entity__name', // Expect sample to be translated in limiting fields.
+            });
+        });
     });
 });
 
