@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+==================
+4.0.0 - 2018-04-11
+==================
+
 Changed
 -------
 - **BACKWARD INCOMPATIBLE:** Rename ``sample`` query field to ``entity`` in api.Data
