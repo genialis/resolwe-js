@@ -21,6 +21,20 @@ export class APIError extends GenError {
 }
 
 /**
+ * Request error.
+ */
+export class RequestError extends APIError {
+    public name = 'RequestError';
+
+    constructor(public url: string, message: string, associatedObject?: Object) {
+        super(message, associatedObject);
+        // https://github.com/Microsoft/TypeScript/wiki/Breaking-Changes#extending-built-ins-like-error-array-and-map-may-no-longer-work
+        Object['setPrototypeOf'](this, RequestError.prototype);
+    }
+}
+
+
+/**
  * QueryOne error thrown when [[Resource]]'s queryOne method fails.
  */
 export class QueryOneError extends APIError {

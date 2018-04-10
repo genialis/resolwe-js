@@ -4,7 +4,7 @@ import * as Rx from 'rx';
 import 'jquery.cookie';
 
 import {QueryObserverManager} from './queryobserver';
-import {APIError, WebsocketError} from './errors';
+import {APIError, RequestError, WebsocketError} from './errors';
 import * as random from '../core/utils/random';
 
 /**
@@ -317,7 +317,7 @@ export class SimpleConnection implements Connection {
                 },
             });
 
-            this._interceptErrors(jQueryXHR);
+            this._interceptErrors(path, jQueryXHR);
 
             return jQueryXHR;
         }));
@@ -381,7 +381,7 @@ export class SimpleConnection implements Connection {
                 },
             });
 
-            this._interceptErrors(jQueryXHR);
+            this._interceptErrors(path, jQueryXHR);
 
             return jQueryXHR;
         }));
@@ -427,17 +427,17 @@ export class SimpleConnection implements Connection {
     /**
      * Checks XHR and notifies error observers.
      */
-    private _interceptErrors(xhr: JQueryXHR): void {
+    private _interceptErrors(url: string, xhr: JQueryXHR): void {
         xhr.then((response: {}) => {
             if (_.has(response, 'error')) {
-                const error = new APIError(<string> response['error'], response);
+                const error = new RequestError(url, <string> response['error'], response);
                 this._errors.onNext(error);
             }
         });
 
         xhr.fail((jqXHR: JQueryXHR, textStatus: string, errorThrown: string) => {
             if (500 <= jqXHR.status && jqXHR.status < 600) {
-                const error = new APIError(errorThrown, jqXHR);
+                const error = new RequestError(url, errorThrown, jqXHR);
                 this._errors.onNext(error);
             }
         });
