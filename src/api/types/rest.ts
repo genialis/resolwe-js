@@ -449,11 +449,31 @@ export interface DataGafAnnotation extends Data {
 // ------------------------------------------------------------------
 // data:varianttable:
 
-export interface DataVariantTable extends Data {
+export interface DataVariantAmpliconTable extends Data {
+    input: {
+        master_file: number; // data ID
+        coverage: number; // data ID
+        annot_vars: number[]; // data IDs
+        all_amplicons: boolean;
+        table_name: string;
+    };
     output: {
         variant_table: number; // => DataVariantTableStorage
     };
 }
+
+export interface DataVariantTLATable extends Data {
+    input: {
+        tla_results: number; // data ID
+    };
+    output: {
+        variant_table: number; // => DataVariantTableStorage
+        species: string;
+        build: string;
+    };
+}
+
+export type DataVariantTable = DataVariantAmpliconTable | DataVariantTLATable;
 
 export type DataVariantTableJsonValueColumn = string; // Example: MSH6_exon5_F1/2
 export type DataVariantTableJsonDelimitedColumn = string; // Example: DP4=46,41,11,16;SB=4

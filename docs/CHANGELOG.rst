@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Fixed
+-----
+- Added input types to DataVariantTable
+
 ==================
 4.0.0 - 2018-04-11
 ==================
