@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+==================
+4.0.3 - 2018-06-07
+==================
+
 Added
 -----
 - Added custom partial serialization of ``undefined``, ``Infinity``, and ``NaN`` values
