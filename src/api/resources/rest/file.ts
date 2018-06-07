@@ -39,6 +39,8 @@ export class FileResource extends RESTResource<string> {
     }
 
     public getUngzippedUrl(id: number, filename: string): string {
+        const isCompressed = /\.gz$/.test(filename);
+        if (!isCompressed) return this._getFileUrl(id, filename);
         return `/datagzip/${id}/${filename}`;
     }
 

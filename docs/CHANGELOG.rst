@@ -9,6 +9,9 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Fixed
+-----
+- Stopped using /datagzip for uncompressed files
 
 ==================
 4.0.1 - 2018-05-23
