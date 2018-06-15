@@ -159,7 +159,7 @@ export class APIServiceBase {
                     return Rx.Observable.just(error).delay(delay);
                 })
                 .do((error) => {
-                    console.log("Retrying upload after an error", error);
+                    console.info("Retrying upload after an error", error);
                 });
         })
         .skip(1) // Skip initial 'retrying' event.

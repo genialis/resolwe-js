@@ -1,10 +1,12 @@
 import 'angular-mocks';
 
+import * as _ from 'lodash';
 import {ComponentBase, component} from './base';
 import {StatefulComponentBase, state, sharedState} from './stateful';
 import {StateManager} from './manager';
 import {Actions, SimpleSharedStore} from '../shared_store/index';
 import {describeComponent, createSharedStore} from '../../tests/component';
+import {SerializationError} from '../../core/utils/serialization';
 
 describeComponent('stateful component', [
     // Simple shared stores used in tests.
@@ -120,6 +122,22 @@ describeComponent('stateful component', [
     })
     class SharedStateContainer extends StatefulComponentBase {
     }
+
+    @component({
+        module: tester.module,
+        directive: 'gen-dummy-not-saveable-stateful-component',
+        template: `<div>{{ctrl.foo}}</div>`,
+    })
+    class DummyNotSaveableStatefulComponent extends StatefulComponentBase {
+        @state() public foo: {};
+
+        public onComponentInit() {
+            super.onComponentInit();
+
+            this.foo = { func: () => {} }; // tslint:disable-line:no-empty
+        }
+    }
+
 
     // Ensure we have a state manager for each test.
     let stateManager: StateManager;
@@ -247,6 +265,76 @@ describeComponent('stateful component', [
         component.ctrl.fooPreferStateOverDefault = null;
         reload();
         expect(component.ctrl.fooPreferStateOverDefault).toBeNull();
+    });
+
+    it('serializes and loads undefined, NaN, and Infinity values', () => {
+        let component = tester.createComponent<DummyStatefulComponent>(
+            DummyStatefulComponent.asView().template
+        );
+        function saveAndReload() {
+            const state = JSON.stringify(stateManager.saveSerializableState());
+
+            // Replace component with new value.
+            component.element.remove();
+            component.ctrl.destroy();
+            component = tester.createComponent<DummyStatefulComponent>(
+                DummyStatefulComponent.asView().template
+            );
+
+            // Expect to be initialized with default values (they override loaded pending state).
+            expect(component.ctrl.bar).toBe(42);
+            stateManager.loadSerializableState(JSON.parse(state)); // Explicitly load saved state.
+            return state;
+        }
+
+        component.ctrl.foo = undefined;
+        component.ctrl.bar = 1 / 0; // Infinity
+        saveAndReload();
+        expect(component.ctrl.foo).toBeUndefined();
+        expect(component.ctrl.bar).toBe(Infinity);
+
+        component.ctrl.foo = null;
+        component.ctrl.bar = -1 / 0; // -Infinity
+        saveAndReload();
+        expect(component.ctrl.foo).toBeNull();
+        expect(component.ctrl.bar).toBe(-Infinity);
+
+        component.ctrl.foo = '';
+        component.ctrl.bar = <any> 'a' / 0; // NaN
+        saveAndReload();
+        expect(component.ctrl.foo).toBe('');
+        expect(component.ctrl.bar).toBeNaN();
+    });
+
+    it('throws error if the state is not serializable', () => {
+        tester.createComponent<DummyNotSaveableStatefulComponent>(
+            DummyNotSaveableStatefulComponent.asView().template
+        );
+
+        expect(() => stateManager.saveSerializableState()).toThrowError(SerializationError);
+
+        // No error if it doesn't have to be serializable.
+        expect(() => stateManager.save()).not.toThrow();
+    });
+
+    it('should warn about incorrect usage (serializing stateManager.save())', () => {
+        const consoleError = console.error;
+        spyOn(console, 'error').and.callFake((...args) => {
+            // Suppress the following console errors.
+            if (_.startsWith(args[0], 'stateManager.save() is not serializable')) return;
+            return consoleError.apply(console, args);
+        });
+
+        tester.createComponent<DummyNotSaveableStatefulComponent>(
+            DummyNotSaveableStatefulComponent.asView().template
+        );
+
+        expect(() => stateManager.save()).not.toThrow();
+        expect(console.error).not.toHaveBeenCalled();
+
+        // Soft error log about incorrect usage.
+        expect(() => JSON.stringify(stateManager.save())).not.toThrow();
+        expect(console.error).toHaveBeenCalled();
     });
 
     it('handles shared state', () => {

@@ -1,10 +1,11 @@
 import * as _ from 'lodash';
 import * as angular from 'angular';
 
-import {ComponentBase, component, ComponentConfiguration, Subscription} from './base';
-import {SharedStore, SharedStoreManager} from '../shared_store/index';
-import {StateManager} from './manager';
 import {GenError} from '../errors/error';
+import {SharedStore, SharedStoreManager} from '../shared_store/index';
+
+import {ComponentBase, component, ComponentConfiguration, Subscription} from './base';
+import {StateManager} from './manager';
 
 export class StateItemMetadata {
     constructor(public propertyName: string, public shared: boolean) {

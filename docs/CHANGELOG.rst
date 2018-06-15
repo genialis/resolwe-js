@@ -9,10 +9,16 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Added
+-----
+- Added custom partial serialization of ``undefined``, ``Infinity``, and ``NaN`` values
+  that are otherwise unsupported by JSON.stringify
+
 Changed
 -------
 - **BACKWARD INCOMPATIBLE:** Replaced $apply in component.subscribe with $evalAsync. This
   improves performance, but doesn't guarantee an immediate digest cycle.
+- An error is thrown if state is not serializable when stateful component is saving state
 
 ==================
 4.0.2 - 2018-07-13

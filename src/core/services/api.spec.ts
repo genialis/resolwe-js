@@ -327,6 +327,13 @@ describe('upload', () => {
     });
 
     it('should auto-retry after failed requests', (done) => {
+        const consoleInfo = console.info;
+        spyOn(console, 'info').and.callFake((...args) => {
+            // Suppress the following console infos.
+            if (args[0] === 'Retrying upload after an error') return;
+            return consoleInfo.apply(console, args);
+        });
+
         $httpBackend.expectGET('/upload/').respond(503, {});
 
         const largeContent = _.range(3 * api.CHUNK_SIZE - 1).map(() => 'a').join('');
@@ -367,6 +374,13 @@ describe('upload', () => {
     });
 
     it('should stop retrying after too many failed requests', (done) => {
+        const consoleInfo = console.info;
+        spyOn(console, 'info').and.callFake((...args) => {
+            // Suppress the following console infos.
+            if (args[0] === 'Retrying upload after an error') return;
+            return consoleInfo.apply(console, args);
+        });
+
         $httpBackend.expectGET('/upload/').respond(503, {});
 
         const largeContent = _.range(3 * api.CHUNK_SIZE - 1).map(() => 'a').join('');

@@ -3,6 +3,7 @@ import * as angular from 'angular';
 
 import {StatefulComponentBase} from './stateful';
 import {SharedStoreManager} from '../shared_store/index';
+import {makeSafelySerializable, parseSafelySerializable, verboseSerialize, SerializationError} from '../utils/serialization';
 
 /**
  * Manager of all stateful components' state.
@@ -76,9 +77,16 @@ export class StateManager {
     }
 
     /**
-     * Saves application state.
+     * Returns application state by combining component.saveState of all
+     * components and shared stores.
      *
-     * @return Application state
+     * When to use:
+     *   - saving state into memory (non-serialized), e.g. like components do
+     *     when they are destroyed
+     *   - when you just need to collect components' saveState
+     *   - if you need to store functions in state
+     * When not to use:
+     *   - when saving state into a serialized form; use [[saveSerializableState]].
      */
     public save(): any {
         if (_.isEmpty(this._topLevelComponents)) return null;
@@ -88,6 +96,13 @@ export class StateManager {
         const state = _.assign({}, ...states);
 
         state['_stores'] = this._sharedStoreManager.saveState();
+
+        // Safeguard against incorrect usage of JSON.stringify.
+        state['toJSON'] = function (this: any) {
+            console.error(`stateManager.save() is not serializable. Use stateManager.saveSerializableState() when you want to stringify
+                state (and loadSerializableState after parse).`);
+            return this;
+        };
         return state;
     }
 
@@ -103,6 +118,37 @@ export class StateManager {
 
         _.each(this._topLevelComponents, (component) => component.loadState(this._nextState));
     }
+
+    /**
+     * Saves this component's current state and returns it in a format that is
+     * safe to serialize. Values `undefined`, `NaN`, and `Infinity` are kept
+     * when stringified with JSON.stringify.
+     *
+     * When to use:
+     *   - saving state into serialized forms, e.g. before transferring to backend
+     * When not to use:
+     *   - to store functions
+     */
+    public saveSerializableState(): any {
+        const state = this.save();
+        delete state['toJSON']; // Remove safeguard.
+
+        try {
+            return makeSafelySerializable(state);
+        } catch (e) {
+            if (e instanceof SerializationError) {
+                throw new SerializationError(`Error saving state. ${e.message} ${e.serializedValue}`, verboseSerialize(state));
+            } else {
+                throw e;
+            }
+        }
+    }
+
+    public loadSerializableState(serializableState: any): void {
+        const state = parseSafelySerializable(serializableState);
+        return this.load(state);
+    }
+
 }
 
 const angularModule: angular.IModule = angular.module('resolwe.services.state_manager', [

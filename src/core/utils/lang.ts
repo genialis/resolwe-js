@@ -94,3 +94,21 @@ export function compose(mixins: any[], separateArguments: boolean = false) {
 
     return ctor;
 }
+
+/**
+ * Traverse and transform objects by visiting every node on a recursive walk.
+ * This is needed because `_.cloneDeep(value, replacer)` drops object keys when
+ * replacer returns `undefined`.
+ */
+export function deepTraverse(tree: any, replacer: (value: any) => any): any {
+    const transformedTree = replacer(tree);
+
+    if (_.isArray(transformedTree)) {
+        return _.map(transformedTree, (element) => deepTraverse(element, replacer));
+    }
+    if (_.isObject(transformedTree) && !_.isFunction(transformedTree) && !_.isArray(transformedTree)) {
+        return _.mapValues(transformedTree, (element) => deepTraverse(element, replacer));
+    }
+    // Leaf node
+    return transformedTree;
+}
