@@ -30,12 +30,20 @@ export type UploadEvent<T> = { progress: ProgressEvent, type: UploadEventType.PR
  * actual API class.
  */
 export class APIServiceBase {
-    // Note that this is configurable in provider
-    public consecutiveAutoretryAttempts = 5;
     public CHUNK_SIZE = 1 * 1024 * 1024; // 1MB
+
+    /**
+     * Max consecutive autoretry attempts are configurable in provider. An autoretry attempt is not
+     * considered consecutive if it happens later than 2 * maxDelay (retry attempts are reset after
+     * that time).
+     */
+    public maxConsecutiveAutoretryAttempts = 5;
     public RETRY_DELAY_INCREMENT = 500;
     public MAX_RETRY_DELAY = 5000;
-    public ERROR_GROUPING_TIME = () => this.RETRY_DELAY_INCREMENT * this.consecutiveAutoretryAttempts * 2;
+    public isTimeToResetAutoretryAttempts(timeSincePreviousError: number): boolean {
+        const maxDelay = Math.max(this.maxConsecutiveAutoretryAttempts * this.RETRY_DELAY_INCREMENT, this.MAX_RETRY_DELAY);
+        return timeSincePreviousError > 2 * maxDelay;
+    }
 
     // Note that this connection property is not initialized anywhere as it will
     // be initialized by the actual API which is mixed in by the provider.
@@ -48,13 +56,13 @@ export class APIServiceBase {
     constructor(Upload: angular.angularFileUpload.IUploadService,
                 $q: angular.IQService,
                 $http: angular.IHttpService,
-                consecutiveAutoretryAttempts?: number) {
+                maxConsecutiveAutoretryAttempts?: number) {
         this._upload = Upload;
         this._q = $q;
         this._http = $http;
 
-        if (!_.isUndefined(consecutiveAutoretryAttempts)) {
-            this.consecutiveAutoretryAttempts = consecutiveAutoretryAttempts;
+        if (!_.isUndefined(maxConsecutiveAutoretryAttempts)) {
+            this.maxConsecutiveAutoretryAttempts = maxConsecutiveAutoretryAttempts;
         }
     }
 
@@ -134,9 +142,9 @@ export class APIServiceBase {
                     const timeSincePrevious = value.interval;
 
                     let consecutiveErrors = accumulated.consecutiveErrors + 1;
-                    if (timeSincePrevious > this.ERROR_GROUPING_TIME()) consecutiveErrors = 1;
+                    if (this.isTimeToResetAutoretryAttempts(timeSincePrevious)) consecutiveErrors = 1;
 
-                    const retry = consecutiveErrors <= this.consecutiveAutoretryAttempts;
+                    const retry = consecutiveErrors <= this.maxConsecutiveAutoretryAttempts;
                     const delay = Math.min(consecutiveErrors * this.RETRY_DELAY_INCREMENT, this.MAX_RETRY_DELAY);
 
                     return { error, consecutiveErrors, timeSincePrevious, retry, delay };
@@ -201,7 +209,7 @@ export class APIServiceBase {
  *     );
  *
  *     // Configure upload auto-retries to infinity
- *     apiProvider.setConsecutiveAutoretryAttempts(Infinity);
+ *     apiProvider.setMaxConsecutiveAutoretryAttempts(Infinity);
  * });
  * ```
  */
@@ -211,7 +219,7 @@ export class APIServiceProvider {
     private _connection: Connection;
     private _restUri: string;
     private _websocketUri: string;
-    private _consecutiveAutoretryAttempts: number;
+    private _maxConsecutiveAutoretryAttempts: number;
 
     public setAPI(api: typeof ResolweApi,
                   connection: Connection,
@@ -223,8 +231,8 @@ export class APIServiceProvider {
         this._websocketUri = websocketUri;
     }
 
-    public setConsecutiveAutoretryAttempts(retries: number) {
-        this._consecutiveAutoretryAttempts = retries;
+    public setMaxConsecutiveAutoretryAttempts(retries: number) {
+        this._maxConsecutiveAutoretryAttempts = retries;
     }
 
     // @ngInject
@@ -240,7 +248,7 @@ export class APIServiceProvider {
             // Arguments for the API part.
             [this._connection, this._restUri, this._websocketUri],
             // Arguments for APIServiceBase part.
-            [Upload, $q, $http, this._consecutiveAutoretryAttempts]
+            [Upload, $q, $http, this._maxConsecutiveAutoretryAttempts]
         );
     }
 }
