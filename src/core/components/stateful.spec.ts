@@ -36,6 +36,26 @@ describeComponent('stateful component', [
 
     @component({
         module: tester.module,
+        directive: 'gen-dummy-defaults-component',
+    })
+    class DummyDefaultsComponent extends StatefulComponentBase {
+        @state() public foo: string;
+        @state() public fooPreferStateOverDefault: string;
+
+        public onComponentInit() {
+            super.onComponentInit();
+
+            this.foo = 'hello world';
+
+            // Prefer value from state than default.
+            if (this.isPropertyNotLoadedFromStateOrIsUndefined('fooPreferStateOverDefault')) {
+                this.fooPreferStateOverDefault = 'hello world';
+            }
+        }
+    }
+
+    @component({
+        module: tester.module,
         directive: 'gen-parent-stateful-component',
         template: `
             <div>
@@ -187,6 +207,46 @@ describeComponent('stateful component', [
         expect((<DummyStatefulComponent> component.ctrl.childComponents()[1]).bar).toBe(21);
         expect((<DummyStatefulComponent> component.ctrl.childComponents()[2]).foo).toBe('hello world');
         expect((<DummyStatefulComponent> component.ctrl.childComponents()[2]).bar).toBe(42);
+    });
+
+    it('isPropertyNotLoadedFromStateOrIsUndefined prevents defaults from overriding state', () => {
+        let component = tester.createComponent<DummyDefaultsComponent>(
+            DummyDefaultsComponent.asView().template
+        );
+        function reload() {
+            // Replace component with new value.
+            component.element.remove();
+            component.ctrl.destroy();
+            component = tester.createComponent<DummyDefaultsComponent>(
+                DummyDefaultsComponent.asView().template
+            );
+        }
+
+        // Without isPropertyNotLoadedFromStateOrIsUndefined
+        component.ctrl.foo = 'Foo';
+        reload();
+        expect(component.ctrl.foo).toBe('hello world');
+
+        // With isPropertyNotLoadedFromStateOrIsUndefined
+        expect(component.ctrl.fooPreferStateOverDefault).toBe('hello world');
+        reload();
+        expect(component.ctrl.fooPreferStateOverDefault).toBe('hello world');
+
+        component.ctrl.fooPreferStateOverDefault = '';
+        reload();
+        expect(component.ctrl.fooPreferStateOverDefault).toBe('');
+
+        component.ctrl.fooPreferStateOverDefault = 'Foo';
+        reload();
+        expect(component.ctrl.fooPreferStateOverDefault).toBe('Foo');
+
+        component.ctrl.fooPreferStateOverDefault = undefined;
+        reload();
+        expect(component.ctrl.fooPreferStateOverDefault).toBe('hello world'); // Default overrides undefined too.
+
+        component.ctrl.fooPreferStateOverDefault = null;
+        reload();
+        expect(component.ctrl.fooPreferStateOverDefault).toBeNull();
     });
 
     it('handles shared state', () => {

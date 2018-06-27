@@ -398,6 +398,14 @@ export abstract class StatefulComponentBase extends ComponentBase {
         this.$scope.$applyAsync();
     }
 
+    /**
+     * Check if property has not been loaded from state, or isn't defined. Usually used
+     * before setting a deferred default value.
+     */
+    public isPropertyNotLoadedFromStateOrIsUndefined<P extends keyof this>(property: P) {
+        return _.isUndefined(this[property]);
+    }
+
     public static configureComponent(config: ComponentConfiguration): ComponentConfiguration {
         const stateMetadata = this.prototype.__stateMetadata;
         if (!config.bindings) config.bindings = {};
