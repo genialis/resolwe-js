@@ -358,9 +358,9 @@ export abstract class StatefulComponentBase extends ComponentBase {
         const state = globalState[this.globalStateId];
         let sharedStateChanged = false;
         _.forOwn(this.__stateMetadata, (metadata, key) => {
-            let value = state[key];
-            if (_.isUndefined(value)) return;
+            if (!(key in state)) return;
 
+            const value = state[key];
             if (metadata.shared) {
                 // Get the shared store from the shared store manager.
                 const existingValue: SharedStore<any, any> = this[metadata.propertyName];

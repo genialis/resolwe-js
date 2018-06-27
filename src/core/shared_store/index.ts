@@ -497,9 +497,9 @@ export class SharedStoreManager {
      */
     public loadState(state: any): void {
         for (const storeId of this._provider.stores) {
-            const value = state[storeId];
-            if (!value) continue;
+            if (!(storeId in state)) continue;
 
+            const value = state[storeId];
             this.getStore(storeId).dispatch({type: Actions.SET, value: value});
         }
     }

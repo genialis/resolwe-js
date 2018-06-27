@@ -84,7 +84,8 @@ export class StateManager {
         if (_.isEmpty(this._topLevelComponents)) return null;
 
         const states = _.map(this._topLevelComponents, (component) => component.saveState());
-        const state = _.merge({}, ...states);
+        // Note: _.merge loses undefined values. `_.merge({}, {a:undefined}, {b:4})` returns {b:4}.
+        const state = _.assign({}, ...states);
 
         state['_stores'] = this._sharedStoreManager.saveState();
         return state;
