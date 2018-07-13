@@ -59,11 +59,8 @@ function safeCallbackApply($scope: angular.IScope, callback: () => void): void {
         return;
     }
 
-    if ($scope.$$phase || $scope.$root.$$phase) {
-        callback();
-    } else {
-        $scope.$apply(() => { callback(); });
-    }
+    callback();
+    $scope.$evalAsync();
 }
 
 function safeApply<T>(observable: Rx.Observable<T>, scope: angular.IScope, callback: (data: T) => void) {

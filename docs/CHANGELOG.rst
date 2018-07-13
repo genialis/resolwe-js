@@ -9,6 +9,11 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Changed
+-------
+- **BACKWARD INCOMPATIBLE:** Replaced $apply in component.subscribe with $evalAsync. This
+  improves performance, but doesn't guarantee an immediate digest cycle.
+
 ==================
 4.0.2 - 2018-07-13
 ==================
