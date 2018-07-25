@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+==================
+4.0.4 - 2018-07-25
+==================
+
 Fixed
 -----
 - Fixed loading from state with missing fields. Loading state after introducing new
