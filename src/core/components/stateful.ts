@@ -359,6 +359,7 @@ export abstract class StatefulComponentBase extends ComponentBase {
         const state = globalState[this.globalStateId];
         let sharedStateChanged = false;
         _.forOwn(this.__stateMetadata, (metadata, key) => {
+            if (!state) return;
             if (!(key in state)) return;
 
             const value = state[key];

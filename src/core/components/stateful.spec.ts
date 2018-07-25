@@ -71,6 +71,20 @@ describeComponent('stateful component', [
     }
 
     @component({
+        directive: 'gen-parent-stateful-component-v2',
+        template: `
+            <div>
+                <gen-dummy-stateful-component state-id="dummy-1"></gen-dummy-stateful-component>
+                <gen-dummy-stateful-component state-id="dummy-2"></gen-dummy-stateful-component>
+                <gen-dummy-stateful-component state-id="dummy-3"></gen-dummy-stateful-component>
+                <gen-dummy-stateful-component state-id="dummy-4"></gen-dummy-stateful-component>
+            </div>
+        `,
+    })
+    class ParentStatefulComponentV2 extends ParentStatefulComponent {
+    }
+
+    @component({
         module: tester.module,
         directive: 'gen-multiple-top-component',
         template: `
@@ -225,6 +239,18 @@ describeComponent('stateful component', [
         expect((<DummyStatefulComponent> component.ctrl.childComponents()[1]).bar).toBe(21);
         expect((<DummyStatefulComponent> component.ctrl.childComponents()[2]).foo).toBe('hello world');
         expect((<DummyStatefulComponent> component.ctrl.childComponents()[2]).bar).toBe(42);
+    });
+
+    it('allows loading state after introducing new stateful components', () => {
+        const component = tester.createComponent<ParentStatefulComponent>(
+            ParentStatefulComponent.asView().template
+        );
+        const stateV1 = component.ctrl.saveState();
+
+        const componentV2 = tester.createComponent<ParentStatefulComponentV2>(
+            ParentStatefulComponentV2.asView().template
+        );
+        expect(() => componentV2.ctrl.loadState(stateV1)).not.toThrow();
     });
 
     it('isPropertyNotLoadedFromStateOrIsUndefined prevents defaults from overriding state', () => {

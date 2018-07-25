@@ -9,6 +9,11 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Fixed
+-----
+- Fixed loading from state with missing fields. Loading state after introducing new
+  stateful components should no longer throw an error.
+
 ==================
 4.0.3 - 2018-06-07
 ==================
