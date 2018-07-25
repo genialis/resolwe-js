@@ -149,10 +149,9 @@ export interface Process {
 // ------------------------------------------------------------------
 // Relation
 
-// Relation entity
 export interface RelationEntity {
     entity: number;
-    position: string;
+    position: string | null;
 }
 
 export interface Relation {
@@ -163,10 +162,8 @@ export interface Relation {
     type: string;
     collection: number;
     entities: RelationEntity[];
-    positions: string[];
     label: string;
     contributor: Contributor;
-
 }
 
 // ------------------------------------------------------------------
