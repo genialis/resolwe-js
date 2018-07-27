@@ -163,6 +163,14 @@ export abstract class Resource {
                 for (const subscription of subscriptions) {
                     subscription.dispose();
                 }
+
+                // If query is still just pending, remove observer before it even becomes disposable.
+                if (this._pendingQueries[serializedQuery]) {
+                    this._pendingQueries[serializedQuery] = _.reject(this._pendingQueries[serializedQuery], (pending) => {
+                        // Check for same reference, not content!
+                        return pending.subscriptions === subscriptions;
+                    });
+                }
             };
         }).publish().refCount();
     }

@@ -61,5 +61,41 @@ describeComponent('reactive queries', [], () => {
                 done();
             }, 100);
         });
+
+        it('after disposing all subscriptions', (done) => {
+            mockApi.Data.query({}, {reactive: true}).subscribe().dispose();
+            const subscription1 = mockApi.Data.query({}, {reactive: true}).subscribe();
+            const subscription2 = mockApi.Data.query({}, {reactive: true}).subscribe();
+
+            setTimeout(() => {
+                // QueryObserver is initialized.
+                expect(unsubscribeRequestedSpy).not.toHaveBeenCalled();
+
+                subscription1.dispose();
+                expect(unsubscribeRequestedSpy).not.toHaveBeenCalled();
+
+                subscription2.dispose();
+                expect(unsubscribeRequestedSpy).toHaveBeenCalled();
+
+                done();
+            }, 100);
+        });
+
+        // tslint:disable-next-line:max-line-length
+        it('after disposing a subscription that was made after another subscription is disposed before QueryObserver is INITIALIZED', (done) => {
+            mockApi.Data.query({}, {reactive: true}).subscribe().dispose();
+            mockApi.Data.query({}, {reactive: true}).subscribe().dispose();
+            const subscription3 = mockApi.Data.query({}, {reactive: true}).subscribe();
+
+            setTimeout(() => {
+                // QueryObserver is initialized.
+                expect(unsubscribeRequestedSpy).not.toHaveBeenCalled();
+
+                subscription3.dispose();
+                expect(unsubscribeRequestedSpy).toHaveBeenCalled();
+
+                done();
+            }, 100);
+        });
     });
 });
