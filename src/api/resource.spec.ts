@@ -81,6 +81,17 @@ describeComponent('reactive queries', [], () => {
             }, 100);
         });
 
+        it('after a subscription is disposed before QueryObserver is INITIALIZED', (done) => {
+            mockApi.Data.query({}, {reactive: true}).subscribe().dispose();
+            mockApi.Data.query({}, {reactive: true}).subscribe().dispose();
+            expect(unsubscribeRequestedSpy).not.toHaveBeenCalled();
+            setTimeout(() => {
+                // QueryObserver is initialized.
+                expect(unsubscribeRequestedSpy).toHaveBeenCalled();
+                done();
+            }, 100);
+        });
+
         // tslint:disable-next-line:max-line-length
         it('after disposing a subscription that was made after another subscription is disposed before QueryObserver is INITIALIZED', (done) => {
             mockApi.Data.query({}, {reactive: true}).subscribe().dispose();
@@ -95,6 +106,26 @@ describeComponent('reactive queries', [], () => {
                 expect(unsubscribeRequestedSpy).toHaveBeenCalled();
 
                 done();
+            }, 100);
+        });
+
+        // tslint:disable-next-line:max-line-length
+        it('after disposing a subscription that was made after QueryObserver is INITIALIZED after another subscription is disposed before QueryObserver is INITIALIZED', (done) => {
+            mockApi.Data.query({}, {reactive: true}).subscribe().dispose();
+            mockApi.Data.query({}, {reactive: true}).subscribe().dispose();
+            expect(unsubscribeRequestedSpy).not.toHaveBeenCalled();
+            setTimeout(() => {
+                // QueryObserver is initialized.
+                expect(unsubscribeRequestedSpy).toHaveBeenCalled();
+                unsubscribeRequestedSpy.calls.reset();
+
+                const subscription3 = mockApi.Data.query({}, {reactive: true}).subscribe();
+                setTimeout(() => {
+                    expect(unsubscribeRequestedSpy).not.toHaveBeenCalled();
+                    subscription3.dispose();
+                    expect(unsubscribeRequestedSpy).toHaveBeenCalled();
+                    done();
+                }, 100);
             }, 100);
         });
     });

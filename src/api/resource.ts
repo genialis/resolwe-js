@@ -136,12 +136,18 @@ export abstract class Resource {
                                 return this.connection.get(path, query);
                             });
 
-                            for (const pending of this._pendingQueries[serializedQuery]) {
-                                pending.subscriptions.push(queryObserver.observable().subscribe(pending.observer));
+                            if (_.isEmpty(this._pendingQueries[serializedQuery])) {
+                                // Send /api/queryobserver/unsubscribe, same as we would if subscribers got disposed after
+                                // pendingQueries resolve, instead of before.
+                                queryObserver.observable().subscribe().dispose();
+                            } else {
+                                for (const pending of this._pendingQueries[serializedQuery]) {
+                                    pending.subscriptions.push(queryObserver.observable().subscribe(pending.observer));
 
-                                if (queryObserver.status === QueryObserverStatus.INITIALIZED) {
-                                    // If the query observer is already initialized, emit the current items immediately.
-                                    pending.observer.onNext(queryObserver.items);
+                                    if (queryObserver.status === QueryObserverStatus.INITIALIZED) {
+                                        // If the query observer is already initialized, emit the current items immediately.
+                                        pending.observer.onNext(queryObserver.items);
+                                    }
                                 }
                             }
 

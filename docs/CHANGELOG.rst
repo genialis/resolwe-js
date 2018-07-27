@@ -9,6 +9,11 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Fixed
+-----
+- Fixed disposing subscriptions to a reactive query after another subscription disposes
+  before QueryObserver is initialized
+
 ==================
 5.0.0 - 2018-08-03
 ==================
