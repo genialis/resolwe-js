@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+==================
+5.0.0 - 2018-08-03
+==================
+
 Changed
 -------
 - **BACKWARD INCOMPATIBLE:** Changed types of sample and gene clustering
