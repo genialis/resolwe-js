@@ -573,21 +573,15 @@ export interface Storage {
 }
 
 export interface SampleClustering { // api-typecheck:sample_cluster_data.json.gz
-    sample_ids: _.Dictionary<{ id: number }>;
     order: number[];
     linkage: number[][]; // [[node1, node2, distance, number of samples]]
-    zero_sample_ids: number[]; // sample ids with no expressions
-    zero_gene_symbols: string[]; // gene symbols with no expressions
-    missing_gene_symbols: string[];
+    sample_ids: _.Dictionary<{ id: number }>;
 }
 
 export interface GeneClustering { // api-typecheck:gene_cluster_data.json.gz
-    gene_symbols: _.Dictionary<{ gene: string }>;
     order: number[];
     linkage: number[][]; // [[node1, node2, distance, number of genes]]
-    zero_sample_ids: number[]; // sample ids with no expressions
-    zero_gene_symbols: string[]; // gene symbols with no expressions
-    missing_gene_symbols: string[];
+    gene_symbols: _.Dictionary<{ gene: string }>;
 }
 
 export interface PCA { // api-typecheck:pca_plot_ncbi.json.gz
