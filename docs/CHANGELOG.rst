@@ -9,6 +9,11 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+
+==================
+5.0.1 - 2018-08-14
+==================
+
 Fixed
 -----
 - Fixed disposing subscriptions to a reactive query after another subscription disposes
