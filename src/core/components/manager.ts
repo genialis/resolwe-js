@@ -131,7 +131,9 @@ export class StateManager {
      */
     public saveSerializableState(): any {
         const state = this.save();
-        delete state['toJSON']; // Remove safeguard.
+        if (!_.isNull(state)) {
+            delete state['toJSON']; // Remove safeguard.
+        }
 
         try {
             return makeSafelySerializable(state);
