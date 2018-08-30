@@ -9,6 +9,9 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Changed
+-------
+- **BACKWARD INCOMPATIBLE:** Disallowed using deprecated ``api.Sample.queryOne({ data: data.id })``.
 
 ==================
 5.0.1 - 2018-08-14

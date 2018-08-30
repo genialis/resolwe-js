@@ -44,14 +44,14 @@ export class CollectionResource extends RESTResource<types.Collection> implement
         return this.callMethod<void>(collectionId, 'remove_data', { ids: dataIds });
     }
 
-    public query(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Collection[]>;
     public query(query: types.QueryObjectHydrateData, options?: QueryOptions): Rx.Observable<types.CollectionHydrateData[]>;
+    public query(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Collection[]>;
     public query(query: types.Query = {}, options?: QueryOptions): Rx.Observable<any> {
         return super.query(query, options);
     }
 
-    public queryOne(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Collection>;
     public queryOne(query: types.QueryObjectHydrateData, options?: QueryOptions): Rx.Observable<types.CollectionHydrateData>;
+    public queryOne(query?: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Collection>;
     public queryOne(query: types.Query = {}, options?: QueryOptions): Rx.Observable<any> {
         return super.queryOne(query, options);
     }

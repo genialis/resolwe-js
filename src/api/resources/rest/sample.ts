@@ -36,26 +36,26 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
         throw new GenError("Query method not supported");
     }
 
-    public queryOne(query?: types.QueryObject, options?: QueryOptions):
-        Rx.Observable<types.Sample | types.Presample>;
     public queryOne(query: types.QueryObjectHydrateData, options?: QueryOptions):
         Rx.Observable<types.SampleHydrateData | types.PresampleHydrateData>;
+    public queryOne(query?: types.QueryObject, options?: QueryOptions):
+        Rx.Observable<types.Sample | types.Presample>;
     public queryOne(query: types.Query = {}, options?: QueryOptions): Rx.Observable<any> {
         return super.queryOne({...query, workaroundForQueryOne: true}, options);
     }
 
-    public queryUnannotated(query?: types.QueryObject, options?: QueryOptions):
-        Rx.Observable<types.Presample[]>;
     public queryUnannotated(query: types.QueryObjectHydrateData, options?: QueryOptions):
         Rx.Observable<types.PresampleHydrateData[]>;
+    public queryUnannotated(query?: types.QueryObject, options?: QueryOptions):
+        Rx.Observable<types.Presample[]>;
     public queryUnannotated(query: types.Query = {}, options?: QueryOptions): Rx.Observable<any> {
         return super.query({...query, descriptor_completed: false}, options);
     }
 
-    public queryAnnotated(query?: types.QueryObject, options?: QueryOptions):
-        Rx.Observable<types.Sample[]>;
     public queryAnnotated(query: types.QueryObjectHydrateData, options?: QueryOptions):
         Rx.Observable<types.SampleHydrateData[]>;
+    public queryAnnotated(query?: types.QueryObject, options?: QueryOptions):
+        Rx.Observable<types.Sample[]>;
     public queryAnnotated(query: types.Query = {}, options?: QueryOptions): Rx.Observable<any> {
         return super.query({...query, descriptor_completed: true}, options);
     }

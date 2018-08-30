@@ -23,6 +23,7 @@ export interface Query {
 }
 
 export interface QueryObject extends Query {
+    data?: "Disallow deprecated api.Sample.queryOne({ data: data.id }).";
     hydrate_data?: void;
 }
 
