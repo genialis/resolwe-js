@@ -27,13 +27,13 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
     }
 
     /**
-     * This method should not be used.
+     * Use this method carefully. Check to make sure you need unannotated and annotated samples.
      */
-    public query(query: types.Query, options?: QueryOptions): Rx.Observable<any> {
-        if (query['workaroundForQueryOne']) {
-            return super.query(_.omit(query, 'workaroundForQueryOne'), options);
+    public query(query: types.Query & { getUnannotatedAndAnnotated: true }, options?: QueryOptions) {
+        if (query.getUnannotatedAndAnnotated) {
+            return super.query(_.omit(query, 'getUnannotatedAndAnnotated'), options);
         }
-        throw new GenError("Query method not supported");
+        throw new GenError("Query method must be invoked with getUnannotatedAndAnnotated");
     }
 
     public queryOne(query: types.QueryObjectHydrateData, options?: QueryOptions):
@@ -41,7 +41,7 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
     public queryOne(query?: types.QueryObject, options?: QueryOptions):
         Rx.Observable<types.Sample | types.Presample>;
     public queryOne(query: types.Query = {}, options?: QueryOptions): Rx.Observable<any> {
-        return super.queryOne({...query, workaroundForQueryOne: true}, options);
+        return super.queryOne({...query, getUnannotatedAndAnnotated: true}, options);
     }
 
     public queryUnannotated(query: types.QueryObjectHydrateData, options?: QueryOptions):
