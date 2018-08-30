@@ -6,11 +6,7 @@ module.exports = (gulp, config) => {
         return gulp
             .src(path.join(config.srcDir, '**', '*.ts'))
             .pipe(typedoc({
-                module: "amd",
-                target: "es5",
-                experimentalDecorators: true,
-                // TODO: Remove this when TypeDoc can handle all supported options from Typescript 2.1.
-                ignoreCompilerErrors: true,
+                tsconfig: path.join(config.projectDir, 'tsconfig.json'),
                 out: "docs/",
                 name: "Resolwe"
             }));

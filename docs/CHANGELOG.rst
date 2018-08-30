@@ -13,6 +13,7 @@ Changed
 -------
 - **BACKWARD INCOMPATIBLE:** Disallowed using deprecated ``api.Sample.queryOne({ data: data.id })``.
   Use ``api.Data.getSampleFromDataId(data.id)`` instead.
+- Upgrade TypeScript to 3.0
 
 ==================
 5.0.1 - 2018-08-14
