@@ -12,6 +12,7 @@ Unreleased
 Changed
 -------
 - **BACKWARD INCOMPATIBLE:** Disallowed using deprecated ``api.Sample.queryOne({ data: data.id })``.
+  Use ``api.Data.getSampleFromDataId(data.id)`` instead.
 
 ==================
 5.0.1 - 2018-08-14

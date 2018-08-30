@@ -1,6 +1,7 @@
 import * as Rx from 'rx';
 import * as _ from 'lodash';
 
+import {QueryOptions} from '../../resource';
 import {RESTResource} from './rest_resource';
 import {Connection} from '../../connection';
 import {Permissionable, getPermissions, setPermissions} from '../addons/permissions';
@@ -46,14 +47,54 @@ export class DataResource extends RESTResource<types.Data> implements Permission
     }
 
     /**
+     * Explicitly re-defined with return type Data, because this differs from `create` and `get`.
+     */
+    public query(query: types.Query = {}, options?: QueryOptions): Rx.Observable<types.Data[]> {
+        return super.query(query, options);
+    }
+
+    /**
+     * Explicitly re-defined with return type Data, because this differs from `create` and `get`.
+     */
+    public queryOne(query: types.Query = {}, options?: QueryOptions): Rx.Observable<types.Data> {
+        return super.queryOne(query, options);
+    }
+
+    /**
+     * Explicitly re-defined with return type SingleDataObject, because this differs from `query`.
+     */
+    public create(data: Object): Rx.Observable<types.SingleDataObject<{}>> {
+        return <Rx.Observable<types.SingleDataObject<{}>>> super.create(data);
+    }
+
+    /**
+     * Explicitly re-defined with return type SingleDataObject, and extra parameters.
+     */
+    public get<Q extends types.SingleDataObjectParams>(primaryKey: number | string, opts?: Q): Rx.Observable<types.SingleDataObject<Q>> {
+        return this.connection.get(this.getDetailPath(primaryKey), opts);
+    }
+
+    /**
+     * Get a sample by data id.
+     */
+    public getSampleFromDataId(id: number): Rx.Observable<types.Sample | types.Presample> {
+        return this.get(id, { hydrate_entities: '1' }).map((data) => {
+            if (_.size(data.entities) !== 1) console.error('Expected data to belong to exactly one sample', data);
+
+            const sample = _.first(data.entities);
+            return sample;
+        });
+    }
+
+    /**
      * Get Data object with the same inputs if it already exists, otherwise
      * create it.
      *
      * Note: Consider sorting arrays in the inputs, to prevent needlessly
      * creating the same Data objects.
      */
-    public getOrCreate(data: Object): Rx.Observable<types.Data> {
-        return this.connection.post<types.Data>(this.getListMethodPath('get_or_create'), data);
+    public getOrCreate(data: Object): Rx.Observable<types.SingleDataObject<{}>> {
+        return this.connection.post<types.SingleDataObject<{}>>(this.getListMethodPath('get_or_create'), data);
     }
 
     public getPermissions(id: number): Rx.Observable<types.ItemPermissions[]> {

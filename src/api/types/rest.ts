@@ -23,7 +23,7 @@ export interface Query {
 }
 
 export interface QueryObject extends Query {
-    data?: "Disallow deprecated api.Sample.queryOne({ data: data.id }).";
+    data?: "Disallow deprecated api.Sample.queryOne({ data: data.id }). Use api.Data.getSampleFromDataId(data.id) instead.";
     hydrate_data?: void;
 }
 
@@ -317,6 +317,20 @@ export interface DataBase {
 export interface Data extends DataBase {
     current_user_permissions: ItemPermissionsOf<DataPermissions>[];
 }
+
+export interface SingleDataObjectParams {
+    hydrate_collections?: '1' | void;
+    hydrate_entities?: '1' | void;
+}
+
+/**
+ * This should never be used to lists of data objects.
+ */
+export type SingleDataObject<Q extends SingleDataObjectParams> =
+    Q extends { hydrate_collections: '1', hydrate_entities: '1' } ? Data & { collections: Collection[], entities: (Sample | Presample)[] } :
+                           Q extends { hydrate_collections: '1' } ? Data & { collections: Collection[], entities: number[] } :
+                              Q extends { hydrate_entities: '1' } ? Data & { collections: number[], entities: (Sample | Presample)[] }
+                                                                  : Data & { collections: number[], entities: number[] };
 
 export function isData(object: CollectionBase | SampleBase | Data): object is Data {
     return _.all(['checksum', 'status', 'process', 'process_name', 'process_type', 'input', 'output', 'current_user_permissions'],
