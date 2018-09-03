@@ -150,9 +150,11 @@ export interface Process {
 // ------------------------------------------------------------------
 // Relation
 
-export interface RelationEntity {
+export interface RelationPartition {
+    id: number;
     entity: number;
-    position: string | null;
+    position: number | null;
+    label: string | null;
 }
 
 export interface Relation {
@@ -162,8 +164,9 @@ export interface Relation {
     modified: string;
     type: string;
     collection: number;
-    entities: RelationEntity[];
-    label: string;
+    partitions: RelationPartition[];
+    category: string;
+    unit: 's' | 'min' | 'hr' | 'd' | 'wk' | null;
     contributor: Contributor;
 }
 
