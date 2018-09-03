@@ -29,7 +29,11 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
     /**
      * Use this method carefully. Check to make sure you need unannotated and annotated samples.
      */
-    public query(query: types.Query & { getUnannotatedAndAnnotated: true }, options?: QueryOptions) {
+    public query(query: types.QueryObjectHydrateData & { getUnannotatedAndAnnotated: true }, options?: QueryOptions):
+        Rx.Observable<(types.SampleHydrateData | types.PresampleHydrateData)[]>;
+    public query(query: types.QueryObject & { getUnannotatedAndAnnotated: true }, options?: QueryOptions):
+        Rx.Observable<(types.Sample | types.Presample)[]>;
+    public query(query: types.Query & { getUnannotatedAndAnnotated: true }, options?: QueryOptions): Rx.Observable<any> {
         if (query.getUnannotatedAndAnnotated) {
             return super.query(_.omit(query, 'getUnannotatedAndAnnotated'), options);
         }
