@@ -41,8 +41,9 @@ export function transformFeaturesPaginated(features: Rx.Observable<PaginatedResp
 /**
  * Transforms query to return response with limited set of fields.
  */
-export function limitFieldsQuery(query: Query, fields: string[]): Query {
-    return {...query, fields: fields.join(',')};
+export function limitFieldsQuery<T extends Query>(query: T, fields: string[]): T & { fields: string } {
+    // TODO remove any when TypeScript supports spread on generics.
+    return { ...<any> query, fields: fields.join(',') };
 }
 
 /**
