@@ -354,8 +354,9 @@ export class MockConnection implements Connection, MockBase {
     /**
      * @inheritdoc
      */
-    public createUriFromPath(path: string): string {
-        return path;
+    public createUriFromPath(path: string, queryParameters?: {}): string {
+        const parameters = !_.isEmpty(queryParameters) ? '?' + jQuery.param(queryParameters) : '';
+        return path + parameters;
     }
 
     /**

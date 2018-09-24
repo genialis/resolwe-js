@@ -99,9 +99,10 @@ export interface Connection {
      * Returns an absolute API URI for a specific resource path.
      *
      * @param path API resource path
+     * @param queryParameters Query parameters
      * @return Absolute URI
      */
-    createUriFromPath(path: string): string;
+    createUriFromPath(path: string, queryParameters?: {}): string;
 
     /**
      * Returns the CSRF cookie value that must be used when doing POST requests.
@@ -293,31 +294,28 @@ export class SimpleConnection implements Connection {
     /**
      * @inheritdoc
      */
-    public createUriFromPath(path: string): string {
-        return this._restUri + path;
+    public createUriFromPath(path: string, queryParameters?: {}): string {
+        const parameters = !_.isEmpty(queryParameters) ? '?' + jQuery.param(queryParameters) : '';
+        return this._restUri + path + parameters;
     }
 
     /**
      * @inheritdoc
      */
     public get(path: string, parameters: {} = {}): Rx.Observable<any> {
-        if (!_.isEmpty(parameters)) {
-            path += '?' + jQuery.param(parameters);
-        }
-
-        path = this.createUriFromPath(path);
+        const url = this.createUriFromPath(path, parameters);
 
         return Rx.Observable.fromPromise(this._request((): Rx.IPromise<any> => {
             const jQueryXHR = jQuery.ajax({
                 type: 'get',
-                url: path,
+                url: url,
                 contentType: 'application/json',
                 xhrFields: {
                     withCredentials: true,
                 },
             });
 
-            this._interceptErrors(path, jQueryXHR);
+            this._interceptErrors(url, jQueryXHR);
 
             return jQueryXHR;
         }));
@@ -361,16 +359,12 @@ export class SimpleConnection implements Connection {
      * @return An observable that emits the response
      */
     private _update(method: string, path: string, data: {}, parameters: {} = {}): Rx.Observable<any> {
-        if (!_.isEmpty(parameters)) {
-            path += '?' + jQuery.param(parameters);
-        }
-
-        path = this.createUriFromPath(path);
+        const url = this.createUriFromPath(path, parameters);
 
         return Rx.Observable.fromPromise(this._request((): Rx.IPromise<any> => {
             const jQueryXHR = jQuery.ajax({
                 type: method,
-                url: path,
+                url: url,
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 xhrFields: {
@@ -381,7 +375,7 @@ export class SimpleConnection implements Connection {
                 },
             });
 
-            this._interceptErrors(path, jQueryXHR);
+            this._interceptErrors(url, jQueryXHR);
 
             return jQueryXHR;
         }));

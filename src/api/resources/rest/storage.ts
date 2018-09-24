@@ -14,7 +14,7 @@ export class StorageResource extends RESTResource<types.Storage> {
     }
 
     public getStorageLink(primaryKey: number | string): string {
-        return this.connection.createUriFromPath(`${this.getDetailPath(primaryKey)}?format=json`);
+        return this.connection.createUriFromPath(this.getDetailPath(primaryKey), { format: 'json' });
     }
 
     public query(query: types.Query = {}): Rx.Observable<types.Storage[]> {
