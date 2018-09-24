@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+==================
+7.1.0 - 2018-09-24
+==================
+
 Changed
 -------
 - Updated createUriFromPath function to add query parameters to uri
