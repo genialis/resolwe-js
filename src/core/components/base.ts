@@ -21,6 +21,7 @@ export interface ComponentConfiguration {
     controllerAs?: string;
     templateUrl?: string;
     template?: string;
+    transclude?: boolean | {[slot: string]: string};
     require?: string | string[];
 }
 
@@ -633,6 +634,7 @@ function directiveFactory(config: ComponentConfiguration, type: DirectiveType) {
                     },
                     templateUrl: config.templateUrl,
                     template: config.template,
+                    transclude: config.transclude,
                     require: config.require,
                 };
 

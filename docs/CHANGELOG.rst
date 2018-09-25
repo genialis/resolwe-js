@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Added
+-----
+- Support transclusion in @component decorator
+
 ==================
 7.1.0 - 2018-09-24
 ==================
