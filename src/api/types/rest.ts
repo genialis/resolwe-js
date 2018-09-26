@@ -135,7 +135,7 @@ export interface Process {
     name: string;
     created: string;
     modified: string;
-    version: number;
+    version: string;
     type: string;
     category: string;
     persistence: ProcessPersistence;
@@ -210,7 +210,7 @@ export interface DescriptorSchemaBase {
     modified: string;
     slug: string;
     name: string;
-    version: number;
+    version: string;
     schema: Schema;
     contributor: Contributor;
 }
