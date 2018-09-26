@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+==================
+7.1.2 - 2018-09-26
+==================
+
 Fixed
 -----
 - Fixed types
