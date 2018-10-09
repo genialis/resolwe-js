@@ -11,6 +11,12 @@ import * as types from '../../types/rest';
  * Sample resource class for dealing with sample endpoint.
  */
 export class SampleResource extends RESTResource<types.Sample | types.Presample> implements Permissionable {
+    /**
+     * Ordering by relevance constant. Apply this value to `ordering` query parameter to
+     * order by relevance.
+     * This works by overriding any default ordering on backend, so it keeps order of ES results
+     */
+    public readonly ORDERING_BY_RELEVANCE = '';
 
     constructor(connection: Connection) {
         super('sample', connection);

@@ -10,6 +10,12 @@ import * as types from '../../types/rest';
  * Collection resource class for dealing with collection endpoint.
  */
 export class CollectionResource extends RESTResource<types.Collection> implements Permissionable {
+    /**
+     * Ordering by relevance constant. Apply this value to `ordering` query parameter to
+     * order by relevance.
+     * This works by overriding any default ordering on backend, so it keeps order of ES results
+     */
+    public readonly ORDERING_BY_RELEVANCE = '';
 
     constructor(connection: Connection) {
         super('collection', connection);
