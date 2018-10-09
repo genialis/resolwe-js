@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+==================
+7.1.3 - 2018-10-09
+==================
+
 Added
 -----
 - Order by relevance constant on Sample and Collection resource
