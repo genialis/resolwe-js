@@ -9,6 +9,12 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Changed
+-------
+- **BACKWARD INCOMPATIBLE:** Sample resource refactored
+  ``queryAnnotated`` and ``queryUnannotated`` methods removed
+  in favor of using ``query`` method directly
+
 ==================
 7.1.3 - 2018-10-09
 ==================

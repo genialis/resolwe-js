@@ -35,15 +35,24 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
     /**
      * Use this method carefully. Check to make sure you need unannotated and annotated samples.
      */
-    public query(query: types.QueryObjectHydrateData & { getUnannotatedAndAnnotated: true }, options?: QueryOptions):
+    public query(query: types.QueryObjectHydrateData & { annotation: 'annotated' }, options?: QueryOptions):
+        Rx.Observable<types.SampleHydrateData[]>;
+    public query(query: types.QueryObjectHydrateData & { annotation: 'unannotated' }, options?: QueryOptions):
+        Rx.Observable<types.PresampleHydrateData[]>;
+    public query(query: types.QueryObjectHydrateData & { annotation: 'annotatedAndUnannotated' }, options?: QueryOptions):
         Rx.Observable<(types.SampleHydrateData | types.PresampleHydrateData)[]>;
-    public query(query: types.QueryObject & { getUnannotatedAndAnnotated: true }, options?: QueryOptions):
+    public query(query: types.QueryObject & { annotation: 'annotated' }, options?: QueryOptions):
+        Rx.Observable<types.Sample[]>;
+    public query(query: types.QueryObject & { annotation: 'unannotated' }, options?: QueryOptions):
+        Rx.Observable<types.Presample[]>;
+    public query(query: types.QueryObject & { annotation: 'annotatedAndUnannotated' }, options?: QueryOptions):
         Rx.Observable<(types.Sample | types.Presample)[]>;
-    public query(query: types.Query & { getUnannotatedAndAnnotated: true }, options?: QueryOptions): Rx.Observable<any> {
-        if (query.getUnannotatedAndAnnotated) {
-            return super.query(_.omit(query, 'getUnannotatedAndAnnotated'), options);
-        }
-        throw new GenError("Query method must be invoked with getUnannotatedAndAnnotated");
+    public query(query: types.Query & { annotation: string }, options?: QueryOptions): Rx.Observable<unknown> {
+        const annotationQuery = query.annotation === 'annotated' ? { descriptor_completed: true } :
+                              query.annotation === 'unannotated' ? { descriptor_completed: false }
+                                                                 : {};
+
+        return super.query({ ..._.omit(query, 'annotation'), ...annotationQuery }, options);
     }
 
     public queryOne(query: types.QueryObjectHydrateData, options?: QueryOptions):
@@ -51,23 +60,7 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
     public queryOne(query?: types.QueryObject, options?: QueryOptions):
         Rx.Observable<types.Sample | types.Presample>;
     public queryOne(query: types.Query = {}, options?: QueryOptions): Rx.Observable<any> {
-        return super.queryOne({...query, getUnannotatedAndAnnotated: true}, options);
-    }
-
-    public queryUnannotated(query: types.QueryObjectHydrateData, options?: QueryOptions):
-        Rx.Observable<types.PresampleHydrateData[]>;
-    public queryUnannotated(query?: types.QueryObject, options?: QueryOptions):
-        Rx.Observable<types.Presample[]>;
-    public queryUnannotated(query: types.Query = {}, options?: QueryOptions): Rx.Observable<any> {
-        return super.query({...query, descriptor_completed: false}, options);
-    }
-
-    public queryAnnotated(query: types.QueryObjectHydrateData, options?: QueryOptions):
-        Rx.Observable<types.SampleHydrateData[]>;
-    public queryAnnotated(query?: types.QueryObject, options?: QueryOptions):
-        Rx.Observable<types.Sample[]>;
-    public queryAnnotated(query: types.Query = {}, options?: QueryOptions): Rx.Observable<any> {
-        return super.query({...query, descriptor_completed: true}, options);
+        return super.queryOne(query, options);
     }
 
     /**
