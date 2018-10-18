@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+==================
+8.0.0 - 2018-10-18
+==================
+
 Changed
 -------
 - **BACKWARD INCOMPATIBLE:** Sample resource refactored
