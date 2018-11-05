@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+==================
+8.0.1 - 2018-11-05
+==================
+
 Changed
 -------
 - Updated FieldSchema type
