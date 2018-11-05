@@ -196,6 +196,7 @@ export interface FieldSchema {
     name: string;
     label: string;
     group?: Schema;
+    range?: [number, number]; // Min, max
 }
 
 export type Schema = FieldSchema[];
