@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+==================
+8.1.0 - 2018-11-12
+==================
+
 Added
 -----
 - Add helper function shallowPickType for getting a type with limited fields
