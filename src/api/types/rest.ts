@@ -531,6 +531,7 @@ export interface CollectionBase {
     descriptor: any;
     contributor: Contributor;
     current_user_permissions: ItemPermissionsOf<CollectionPermissions>[];
+    tags: string[];
 }
 
 export interface Collection extends CollectionBase {
@@ -551,6 +552,7 @@ export interface CollectionHydrateData extends CollectionBase {
 }
 
 export interface SampleBase extends CollectionBase {
+    collections: number[];
     descriptor_completed: boolean;
 }
 
