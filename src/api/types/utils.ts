@@ -39,14 +39,6 @@ export function transformFeaturesPaginated(features: Rx.Observable<PaginatedResp
 }
 
 /**
- * Transforms query to return response with limited set of fields.
- */
-export function limitFieldsQuery<T extends Query>(query: T, fields: string[]): T & { fields: string } {
-    // TODO remove any when TypeScript supports spread on generics.
-    return { ...<any> query, fields: fields.join(',') };
-}
-
-/**
  * Returns features' source.
  *
  * Throws `GenError` if source cannot be determined.
@@ -85,3 +77,29 @@ export function getSpeciesFromFeatures(features: Feature[]): string {
 
     return _.first(species);
 }
+
+/**
+ * Transforms query to return response with limited set of fields.
+ */
+export function limitFieldsQuery<T extends Query>(query: T, fields: string[]): T & { fields: string } {
+    // TODO remove any when TypeScript supports spread on generics.
+    return { ...<any> query, fields: fields.join(',') };
+}
+
+/**
+ * Returns a type with limited set of fields.
+ *
+ * Example:
+ * ```
+ * const limitedCollection = shallowPickType(<CollectionHydrateData> {}, ['id', 'data']);
+ * type LimitedCollection = typeof limitedCollection.type;
+ * const limitFields = limitedCollection.limitFields;
+ * ```
+ */
+export function shallowPickType<T extends object, K extends keyof T>(_type: T, shallowKeys: K[]) {
+    return {
+        type: <Pick<T, typeof shallowKeys[number]>> undefined,
+        limitFields: shallowKeys,
+    };
+}
+
