@@ -12,6 +12,8 @@ Unreleased
 Added
 -----
 - Add helper function shallowPickType for getting a type with limited fields
+- Add helper function deepPickType for getting a type with limited fields
+
 ==================
 8.0.1 - 2018-11-05
 ==================

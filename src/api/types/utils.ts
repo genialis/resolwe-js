@@ -95,6 +95,9 @@ export function limitFieldsQuery<T extends Query>(query: T, fields: string[]): T
  * type LimitedCollection = typeof limitedCollection.type;
  * const limitFields = limitedCollection.limitFields;
  * ```
+ *
+ * To limit subfields look at [uniteDeepPicks]
+ * @see uniteDeepPicks
  */
 export function shallowPickType<T extends object, K extends keyof T>(_type: T, shallowKeys: K[]) {
     return {
@@ -103,3 +106,50 @@ export function shallowPickType<T extends object, K extends keyof T>(_type: T, s
     };
 }
 
+// From https://stackoverflow.com/questions/50374908/transform-union-type-to-intersection-type
+export type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+
+/**
+ * Returns a type with limited set of fields and limited subfields.
+ *
+ * Example:
+ * ```
+ * const limitedCollection = uniteDeepPicks([
+ *     deepPickType(<CollectionHydrateData> {}, 'id'),
+ *     deepPickType(<CollectionHydrateData> {}, 'data', '[*]', 'process_progress'),
+ *     deepPickType(<CollectionHydrateData> {}, 'data', '[*]', 'name'),
+ * ]);
+ * type LimitedCollection = typeof limitedCollection.type;
+ * const limitFields = limitedCollection.limitFields;
+ * ```
+ *
+ * To only limit shallow fields look at simpler [shallowPickType]
+ * @see shallowPickType
+ */
+export function uniteDeepPicks<T extends { type: any, limitField: string }>(picks: T[]) {
+    return {
+        type: <UnionToIntersection<T['type']>> undefined,
+        limitFields: _.map(picks, (pick) => pick.limitField),
+    };
+}
+
+// tslint:disable:max-line-length
+
+/**
+ * @see uniteDeepPicks
+ */
+export function deepPickType<K1 extends string, T extends {[k1 in K1]: any}, R extends { [k1 in K1]: T[k1] }>(_type: T, k1: K1): { type: R, limitField: string };
+export function deepPickType<K1 extends string, K2 extends string, T extends {[k1 in K1]: {[k2 in K2]: any}}, R extends { [k1 in K1]: { [k2 in K2]: T[k1][k2] } }>(_type: T, k1: K1, k2: K2): { type: R, limitField: string };
+export function deepPickType<K1 extends '[*]', K2 extends string, T extends Array<{[k2 in K2]: any}>, R extends Array<{ [k2 in K2]: T[number][k2] }>>(_type: T, k1: K1, k2: K2): { type: R, limitField: string };
+export function deepPickType<K1 extends string, K2 extends string, K3 extends string, T extends {[k1 in K1]: {[k2 in K2]: {[k3 in K3]: any}}}, R extends { [k1 in K1]: { [k2 in K2]: { [k3 in K3]: T[k1][k2][k3] } } }>(_type: T, k1: K1, k2: K2, k3: K3): { type: R, limitField: string };
+export function deepPickType<K1 extends string, K2 extends '[*]', K3 extends string, T extends {[k1 in K1]: Array<{[k3 in K3]: any}>}, R extends { [k1 in K1]: Array<{ [k3 in K3]: T[k1][number][k3] }> }>(_type: T, k1: K1, k2: K2, k3: K3): { type: R, limitField: string };
+export function deepPickType<K1 extends '[*]', K2 extends '[*]', K3 extends string, T extends Array<Array<{[k3 in K3]: any}>>, R extends Array<Array<{ [k3 in K3]: T[number][number][k3] }>>>(_type: T, k1: K1, k2: K2, k3: K3): { type: R, limitField: string };
+export function deepPickType(_type: any, ...keys: any[]): { type: any, limitField: string } {
+
+    const keysWithoutStars = _.reject(keys, (key) => key === '[*]');
+    return {
+        type: undefined,
+        limitField: keysWithoutStars.join('__'),
+    };
+}
+// tslint:enable:max-line-length
