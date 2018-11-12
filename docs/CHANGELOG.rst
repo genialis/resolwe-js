@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+==================
+8.1.1 - 2018-11-13
+==================
+
 Fixed
 -----
 - Updated Sample type
