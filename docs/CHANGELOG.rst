@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Changed
+-------
+- Expand deepPickType to four levels deep
+
 ==================
 8.1.1 - 2018-11-13
 ==================
