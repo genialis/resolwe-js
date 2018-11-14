@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Fixed
+-----
+- Re-build code. Something failed when building 8.1.2
+
 ==================
 8.1.2 - 2018-11-14
 ==================
