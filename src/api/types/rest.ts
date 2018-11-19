@@ -316,6 +316,7 @@ export interface DataBase {
     descriptor: any;
     contributor: Contributor;
     process: number;
+    tags: string[];
 }
 
 export interface Data extends DataBase {
