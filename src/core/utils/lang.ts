@@ -72,7 +72,7 @@ function extend(target: any, source: any) {
  */
 export function compose(mixins: any[], separateArguments: boolean = false) {
     // Constructor function that will be called every time a new composed object is created.
-    let ctor = function(...args: any[]) {
+    let ctor = function (...args: any[]) {
         if (separateArguments) {
             // Call each construction function with respective arguments.
             _.zip(mixins, args).forEach(([mixin, mixinArgs]) => {
@@ -94,6 +94,52 @@ export function compose(mixins: any[], separateArguments: boolean = false) {
 
     return ctor;
 }
+
+
+interface AngularConstructor {
+    new (...args: any[]): void;
+    $inject?: ReadonlyArray<string>;
+}
+function getInjects(mixin: AngularConstructor): ReadonlyArray<string> {
+    const numArguments = mixin.length;
+    // If no arguments and no inject, pretend that inject is [].
+    if (numArguments === 0 && !mixin.$inject) return [];
+    return mixin.$inject;
+}
+
+/**
+ * Create a constructor function for a class implementing the given mixins. All mixins
+ * must have annotated injections (// @ngInject) with $inject property, so that returned
+ * constructor can be instantiated with $injector.instantiate
+ */
+export function ngCompose(mixins: AngularConstructor[]) {
+    if (!_.all(mixins, (mixin) => getInjects(mixin))) {
+        throw new Error('All mixins in ngCompose must have $inject property or no arguments');
+    }
+
+    const ctor = class {
+        constructor (...flattenedArgs: any[]) {
+            let mutableFlattenedArgs = _.clone(flattenedArgs);
+            _.each(mixins, (mixin) => {
+                // Take and remove it's part of flattened args.
+                const argsPart = mutableFlattenedArgs.splice(0, getInjects(mixin).length);
+                // Construct
+                mixin.apply(this, argsPart);
+            });
+        };
+    };
+
+    ctor.$inject = <string[]> _.flatten(_.map(mixins, (mixin) => getInjects(mixin)));
+
+    // Add all mixins properties and methods to the constructor prototype for all
+    // created objects to have them.
+    mixins.forEach((mixin) => {
+        extend(ctor.prototype, mixin.prototype);
+    });
+
+    return ctor;
+}
+
 
 /**
  * Traverse and transform objects by visiting every node on a recursive walk.
