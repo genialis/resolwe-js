@@ -420,7 +420,7 @@ export interface GOEnrichmentJson {
 }
 
 export interface GOEnrichmentNode {
-    gene_ids: string[];
+    gene_ids: string[]; // selected_gene_associations
     term_name: string;
     term_id: string;
     pval: number;
@@ -434,7 +434,7 @@ export interface GOEnrichmentNode {
     source?: string;
     species?: string;
     score_percentage?: number; // Percentage of max score within GOEnrichmentAspect.
-    gene_associations?: string[]; // Plucked from GOEnrichmentJson.gene_associations.
+    gene_associations?: string[]; // all_gene_associations - Plucked from GOEnrichmentJson.gene_associations.
     collapsed?: boolean; // Boolean representation if the selected item is hidden.
 }
 

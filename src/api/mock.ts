@@ -673,13 +673,14 @@ export class MockApiMixin implements MockBase {
 export interface MockApiBase extends ResolweApi, MockApiMixin {
     connection: MockConnection;
 
-    new (...args: any[]): MockApiBase;
-    (...args: any[]): void;
+    new (...args: ConstructorParameters<typeof ResolweApi>): MockApiBase;
+    (...args: ConstructorParameters<typeof ResolweApi>): void;
 }
 
 export let MockApiBase: MockApiBase = <MockApiBase> compose([ResolweApi, MockApiMixin]);
 
 export class MockApi extends MockApiBase {
+    // @ngInject
     constructor() {
         super(new MockConnection(), null, null);
     }

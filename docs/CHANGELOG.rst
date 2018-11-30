@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Changed
+-------
+- Made api extendable with additional injections
+
 ==================
 8.1.4 - 2018-11-19
 ==================

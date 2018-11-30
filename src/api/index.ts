@@ -33,6 +33,7 @@ export class ResolweApi {
         Feature: new FeatureResource(this.connection),
     };
 
+    // @ngInject
     constructor(public connection: Connection, restUri: string, websocketUri: string) {
         this.connect(restUri, websocketUri);
 

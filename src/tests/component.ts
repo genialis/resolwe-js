@@ -7,7 +7,7 @@ import {MockBase, MockApi} from '../api/mock';
 import {ngEqualMatcher} from './matchers';
 import {SharedStoreFactory, SharedStoreProvider} from '../core/shared_store/index';
 import {GenError} from '../core/errors/error';
-import {compose} from '../core/utils/lang';
+import {ngCompose} from '../core/utils/lang';
 import {MockApiService} from './mock';
 import './matchers';
 
@@ -168,7 +168,7 @@ export function describeComponent(description: string,
             $provide.value('$rootElement', angular.element(document.body));
 
             // Replace usual API service with mock API.
-            $provide.service('api', compose([apiClass, MockApiService]));
+            $provide.service('api', ngCompose([apiClass, MockApiService]));
         }));
         beforeEach(angular.mock.module(moduleName));
 

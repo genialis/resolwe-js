@@ -7,7 +7,7 @@ import {GenError} from '../errors/error';
 import {ResolweApi} from '../../api';
 import {Connection} from '../../api/connection';
 import {FileUploadResponse} from '../../api/types/modules';
-import {compose} from '../utils/lang';
+import {ngCompose} from '../utils/lang';
 import * as random from '../utils/random';
 
 const angularModule: angular.IModule = angular.module('resolwe.services.api', [
@@ -53,6 +53,7 @@ export class APIServiceBase {
     private _q: angular.IQService;
     private _http: angular.IHttpService;
 
+    // @ngInject
     constructor(Upload: angular.angularFileUpload.IUploadService,
                 $q: angular.IQService,
                 $http: angular.IHttpService,
@@ -216,19 +217,13 @@ export class APIServiceBase {
 export class APIServiceProvider {
     // API instance that should be used by the service.
     private _api: typeof ResolweApi;
-    private _connection: Connection;
-    private _restUri: string;
-    private _websocketUri: string;
+    private _apiLocals: _.Dictionary<string>;
     private _maxConsecutiveAutoretryAttempts: number;
 
-    public setAPI(api: typeof ResolweApi,
-                  connection: Connection,
-                  restUri: string,
-                  websocketUri: string) {
+    public setAPI(api: new (...injections: any[]) => ResolweApi,
+                  locals: {connection: Connection, restUri: string, websocketUri: string, [key: string]: any }) {
         this._api = api;
-        this._connection = connection;
-        this._restUri = restUri;
-        this._websocketUri = websocketUri;
+        this._apiLocals = locals;
     }
 
     public setMaxConsecutiveAutoretryAttempts(retries: number) {
@@ -236,20 +231,17 @@ export class APIServiceProvider {
     }
 
     // @ngInject
-    public $get(Upload: angular.angularFileUpload.IUploadService,
-                $q: angular.IQService,
-                $http: angular.IHttpService) {
+    public $get($injector: angular.auto.IInjectorService) {
         // TODO: Use error notification service instead.
         if (!this._api) throw new GenError("API not configured.");
 
         // Mix together the API and the APIServiceBase.
-        let serviceClass = compose([this._api, APIServiceBase], true);
-        return new serviceClass(
-            // Arguments for the API part.
-            [this._connection, this._restUri, this._websocketUri],
-            // Arguments for APIServiceBase part.
-            [Upload, $q, $http, this._maxConsecutiveAutoretryAttempts]
-        );
+        const serviceClass = ngCompose([this._api, APIServiceBase]);
+
+        return $injector.instantiate(serviceClass, {
+            ...this._apiLocals,
+            maxConsecutiveAutoretryAttempts: this._maxConsecutiveAutoretryAttempts,
+        });
     }
 }
 
