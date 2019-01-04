@@ -1,21 +1,33 @@
 import * as _ from 'lodash';
 
-import {SharedStoreManager, SharedStore} from './index';
+import {SharedStoreManager, SharedStore, GetActions} from './index';
 import {describeComponent, useSharedStore} from '../../tests/component';
 
- // Complex store actions.
-const ADD_ITEM = 'add_item';
-const REMOVE_ITEM = 'remove_item';
+class ComplexActions {
+    public notAnAction() {
+        return 'not an action';
+    }
 
-class ComplexStore extends SharedStore<string[], any> {
+    public static ADD_ITEM = <'add_item'> 'add_item';
+    public addItem(newItem: string) {
+        return { type: ComplexActions.ADD_ITEM, newItem };
+    }
+
+    public static REMOVE_ITEM = <'remove_item'> 'remove_item';
+    public removeItem(item: string) {
+        return { type: ComplexActions.REMOVE_ITEM, item };
+    }
+}
+
+class ComplexStore extends SharedStore<string[], ComplexActions> {
     protected initialState(): string[] {
         return [];
     }
 
-    protected reduce(state: string[], action: any): string[] {
+    protected reduce(state: string[], action: GetActions<ComplexActions>): string[] {
         switch (action.type) {
-            case ADD_ITEM: return _.union(state, [action.item]);
-            case REMOVE_ITEM: return _.without(state, action.item);
+            case ComplexActions.ADD_ITEM: return _.union(state, [action.newItem]);
+            case ComplexActions.REMOVE_ITEM: return _.without(state, action.item);
             default: fail(`${action.type} handling not implemented`);
         }
     }
@@ -33,29 +45,40 @@ describeComponent('shared store', [
     it('dispatches to complex stores', () => {
         const subscriber = jasmine.createSpy('subscriber');
 
-        const store = sharedStoreManager.getStore('complex');
+        const store = <ComplexStore> sharedStoreManager.getStore('complex');
         expect(store).toBeDefined();
         store.observable().subscribe(subscriber);
         expect(subscriber).toHaveBeenCalledTimes(1);
 
-        store.dispatch({type: ADD_ITEM, item: 'hello'});
-        store.dispatch({type: ADD_ITEM, item: 'world'});
-        store.dispatch({type: ADD_ITEM, item: 'hello'});
+        store.dispatch({type: 'add_item', newItem: 'hello'});
+        store.dispatch({type: 'add_item', newItem: 'world'});
+        store.dispatch({type: 'add_item', newItem: 'hello'});
 
         expect(store.value()).toEqual(['hello', 'world']);
         expect(subscriber).toHaveBeenCalledTimes(3);
 
-        store.dispatch({type: REMOVE_ITEM, item: 'hello'});
-        store.dispatch({type: REMOVE_ITEM, item: 'hello'});
-        store.dispatch({type: REMOVE_ITEM, item: 'hello'});
+        store.dispatch({type: 'remove_item', item: 'hello'});
+        store.dispatch({type: 'remove_item', item: 'hello'});
+        store.dispatch({type: 'remove_item', item: 'hello'});
 
         expect(store.value()).toEqual(['world']);
         expect(subscriber).toHaveBeenCalledTimes(4);
 
-        sharedStoreManager.dispatch({type: REMOVE_ITEM, item: 'world'});
-        sharedStoreManager.dispatch({type: ADD_ITEM, item: 'global'});
-        sharedStoreManager.dispatch({type: ADD_ITEM, item: 'dispatch'});
+        // Not typesafe
+        sharedStoreManager.dispatch({type: 'remove_item', item: 'world'});
+        sharedStoreManager.dispatch({type: 'add_item', newItem: 'global'});
+        sharedStoreManager.dispatch({type: 'add_item', newItem: 'dispatch'});
 
         expect(store.value()).toEqual(['global', 'dispatch']);
+    });
+
+    it('type-only test of GetActions', () => {
+        { // tslint:disable:no-unused-variable interface-over-type-literal
+            type A = GetActions<ComplexActions>;
+            type B = { type: 'add_item', newItem: string } | { type: 'remove_item', item: string } | { type: '...' };
+            const test1: A = <B> {};
+            const test2: B = <A> {};
+            const testThatNotAny: 'type' = <keyof A> '';
+        } // tslint:enable:no-unused-variable interface-over-type-literal
     });
 });

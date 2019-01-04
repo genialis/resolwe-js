@@ -12,6 +12,7 @@ Unreleased
 Changed
 -------
 - Upgrade TypeScript to 3.2
+- Support typesafe shared store actions
 
 ==================
 9.0.0 - 2018-11-30

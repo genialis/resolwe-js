@@ -15,6 +15,10 @@ export interface Action {
     [propertyName: string]: any;
 }
 
+type MethodReturns<Actions> = Actions extends { [key in keyof Actions]: (() => infer Return) | infer Else } ? Return : never;
+type FilterActions<Return> = Return extends { type: infer R } ? Return : never;
+export type GetActions<Actions> = FilterActions<MethodReturns<Actions>> | { type: '...' };
+
 /**
  * A thunk is a function, which mediates the dispatch of an action. It may
  * be dispatched in the same way as an action.
@@ -29,7 +33,10 @@ export interface SharedStoreQuery<T, U> {
 
 export class Actions {
     /// Internal action for setting this store to a specific value.
-    public static SET = '@@internal/SET';
+    public static SET = <'@@internal/SET'> '@@internal/SET';
+    public set(value: any) {
+        return { type: Actions.SET, value };
+    }
 }
 
 /**
@@ -103,8 +110,8 @@ export abstract class SharedStore<T, U> {
      *
      * @param action Action to dispatch
      */
-    public dispatch(action: Action | Thunk): any {
-        return this._dispatcher.dispatch(action);
+    public dispatch(action: GetActions<U> | GetActions<Actions> | Thunk): any {
+        return this._dispatcher.dispatch(<Action | Thunk> action);
     }
 
     /**
@@ -137,7 +144,7 @@ export abstract class SharedStore<T, U> {
      * @param action Operation to perform
      * @return New shared store state
      */
-    protected abstract reduce(state: T, action: Action): T;
+    protected abstract reduce(state: T, action: GetActions<U>): T;
 
     /**
      * Provides the initial state for this shared store. This state is
