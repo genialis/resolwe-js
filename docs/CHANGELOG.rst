@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Changed
+-------
+- Upgrade TypeScript to 3.2
+
 ==================
 9.0.0 - 2018-11-30
 ==================
