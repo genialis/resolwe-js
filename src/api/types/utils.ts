@@ -102,6 +102,7 @@ export function shallowPickType<T extends object, K extends keyof T>(_type: T, s
     return {
         type: <Pick<T, typeof shallowKeys[number]>> undefined,
         limitFields: shallowKeys,
+        limitQuery: limitFieldsQuery({}, <string[]> shallowKeys),
     };
 }
 
@@ -129,6 +130,7 @@ export function uniteDeepPicks<T extends { type: any, limitField: string }>(pick
     return {
         type: <UnionToIntersection<T['type']>> undefined,
         limitFields: _.map(picks, (pick) => pick.limitField),
+        limitQuery: limitFieldsQuery({}, _.map(picks, (pick) => pick.limitField)),
     };
 }
 

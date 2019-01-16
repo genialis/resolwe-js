@@ -11,6 +11,7 @@ describe('utils', () => {
             // tslint:disable-next-line:no-unused-variable
             const expectKeysToBe: 'id' | 'data' = <keyof LimitedCollection> '';
             expect(limitFieldsQuery({}, limitFields)).toEqual({ fields: 'id,data' });
+            expect(limitedCollection.limitQuery).toEqual({ fields: 'id,data' });
         });
     });
 
@@ -25,6 +26,7 @@ describe('utils', () => {
             const limitFields = limitedCollection.limitFields;
 
             expect(limitFieldsQuery({}, limitFields)).toEqual({ fields: 'id,data__process_progress,data__name' });
+            expect(limitedCollection.limitQuery).toEqual({ fields: 'id,data__process_progress,data__name' });
 
             { // tslint:disable:no-unused-variable interface-over-type-literal
                 type A = LimitedCollection;
