@@ -216,23 +216,20 @@ describe('resource', () => {
                 xsample__in: [1].join(','),
                 status: 'PR',
             };
-            const limitedFieldsQuery = limitFieldsQuery(query, [
-                'sample__slug',
-                'status',
-                'samplex',
-                'xsample__slug',
-                'sample__name',
-            ]);
+            const limitedFieldsQuery = limitFieldsQuery(query,
+                ['sample__slug', 'status', 'samplex', 'xsample__slug', 'sample__name'],
+            );
             mockApi.Data.query(limitedFieldsQuery).subscribe(resultSubscriber);
 
             const transformedQuery = querySubscriber.calls.mostRecent().args[0];
             expect(transformedQuery).toEqual({
                 entity: 1, // Expect sample field to be translated.
-                entity__in: '1,2,3', // Expect operations on sample field to be translated.
+                entity__in: ['1', '2', '3'].join(','), // Expect operations on sample field to be translated.
                 samplex: 1, // Expect other fields to stay the same.
                 xsample__in: '1',
                 status: 'PR',
-                fields: 'entity__slug,status,samplex,xsample__slug,entity__name', // Expect sample to be translated in limiting fields.
+                // Expect sample to be translated in limiting fields.
+                fields: ['entity__slug', 'status', 'samplex', 'xsample__slug', 'entity__name'].join(','),
             });
         });
     });

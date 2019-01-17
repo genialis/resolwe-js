@@ -10,8 +10,8 @@ describe('utils', () => {
 
             // tslint:disable-next-line:no-unused-variable
             const expectKeysToBe: 'id' | 'data' = <keyof LimitedCollection> '';
-            expect(limitFieldsQuery({}, limitFields)).toEqual({ fields: 'id,data' });
-            expect(limitedCollection.limitQuery).toEqual({ fields: 'id,data' });
+            expect(limitFieldsQuery({}, limitFields)).toEqual({ fields: ['id', 'data'].join(',') });
+            expect(limitedCollection.limitQuery).toEqual({ fields: ['id', 'data'].join(',') });
         });
     });
 
@@ -25,8 +25,8 @@ describe('utils', () => {
             type LimitedCollection = typeof limitedCollection.type;
             const limitFields = limitedCollection.limitFields;
 
-            expect(limitFieldsQuery({}, limitFields)).toEqual({ fields: 'id,data__process_progress,data__name' });
-            expect(limitedCollection.limitQuery).toEqual({ fields: 'id,data__process_progress,data__name' });
+            expect(limitFieldsQuery({}, limitFields)).toEqual({ fields: ['id', 'data__process_progress', 'data__name'].join(',') });
+            expect(limitedCollection.limitQuery).toEqual({ fields: ['id', 'data__process_progress', 'data__name'].join(',') });
 
             { // tslint:disable:no-unused-variable interface-over-type-literal
                 type A = LimitedCollection;
