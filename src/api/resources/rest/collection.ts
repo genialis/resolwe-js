@@ -66,6 +66,16 @@ export class CollectionResource extends RESTResource<types.Collection> implement
         return super.delete(primaryKey, {}, { delete_content: deleteContent });
     }
 
+    /**
+     * Makes a copy of collections.
+     *
+     * @param collectionIds A list of collection ids to duplicate
+     * @return Duplicated collections.
+     */
+    public duplicate(collectionIds: number[]): Rx.Observable<types.Collection[]> {
+        return this.connection.post<types.Collection[]>(this.getListMethodPath('duplicate'), { ids: collectionIds });
+    }
+
     public getPermissions(id: number): Rx.Observable<types.ItemPermissions[]> {
         return getPermissions(this, id);
     }

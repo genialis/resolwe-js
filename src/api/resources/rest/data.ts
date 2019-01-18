@@ -97,6 +97,16 @@ export class DataResource extends RESTResource<types.Data> implements Permission
         return this.connection.post<types.SingleDataObject<{}>>(this.getListMethodPath('get_or_create'), data);
     }
 
+    /**
+     * Makes a copy of data objects.
+     *
+     * @param dataIds A list of data object ids to duplicate
+     * @return Duplicated data objects.
+     */
+    public duplicate(dataIds: number[]): Rx.Observable<types.Data[]> {
+        return this.connection.post<types.Data[]>(this.getListMethodPath('duplicate'), { ids: dataIds });
+    }
+
     public getPermissions(id: number): Rx.Observable<types.ItemPermissions[]> {
         return getPermissions(this, id);
     }

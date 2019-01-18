@@ -115,6 +115,20 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
         return super.delete(primaryKey, {}, { delete_content: deleteContent });
     }
 
+    /**
+     * Makes a copy of samples.
+     *
+     * @param sampleIds A list of sample ids to duplicate
+     * @return Duplicated samples.
+     */
+    public duplicate(sampleIds: number[],
+                     opts: { inheritCollections: boolean }): Rx.Observable<(types.Sample | types.Presample)[]> {
+        return this.callListMethod<(types.Sample | types.Presample)[]>('duplicate', {
+            ids: sampleIds,
+            inherit_collections: opts.inheritCollections,
+        });
+    }
+
     public getPermissions(id: number): Rx.Observable<types.ItemPermissions[]> {
         return getPermissions(this, id);
     }
