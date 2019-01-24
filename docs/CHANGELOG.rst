@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+==================
+9.3.1 - 2019-01-24
+==================
+
 Changed
 -------
 - Updated Query type
