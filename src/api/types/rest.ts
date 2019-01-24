@@ -24,7 +24,6 @@ export interface StrictQuery {
     id__in?: string; // '13,24,35'
     slug__in?: string; // 'reads1,reads-paired-2'
     tags?: string; // 'community:universe,community:expressions'
-    dont_filter_by_community?: true; // Custom handled property
 }
 
 export interface Query extends StrictQuery {
