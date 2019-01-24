@@ -84,6 +84,20 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
     }
 
     /**
+     * Move samples to collection.
+     *
+     * @param sampleId Sample id
+     * @param collectionIds Array of collection ids
+     */
+    public moveToCollection(sampleIds: number[], sourceCollectionId: number, destinationCollectionId: number): Rx.Observable<void> {
+        return this.callListMethod<void>('move_to_collection', {
+            ids: sampleIds,
+            source_collection: sourceCollectionId,
+            destination_collection: destinationCollectionId,
+         });
+    }
+
+    /**
      * Adds data objects to sample.
      *
      * @param sampleId Sample id

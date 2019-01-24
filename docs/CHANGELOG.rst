@@ -12,6 +12,7 @@ Unreleased
 Added
 -----
 - Data, sample and collection duplication endpoints
+- Move samples between collections endpoint
 
 ===================
 10.0.3 - 2019-03-07
