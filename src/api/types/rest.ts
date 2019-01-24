@@ -23,6 +23,9 @@ export interface StrictQuery {
     slug?: string;
     id__in?: string; // '13,24,35'
     slug__in?: string; // 'reads1,reads-paired-2'
+    name__icontains?: string;
+    status__in?: string; // 'UP,WT,RE,PR'
+    text?: string; // Elastic search
     tags?: string; // 'community:universe,community:expressions'
 }
 
