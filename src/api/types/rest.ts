@@ -538,7 +538,6 @@ export interface CollectionBase {
     slug: string;
     name: string;
     description: string;
-    settings: any;
     descriptor_schema: DescriptorSchemaBase;
     descriptor: any;
     contributor: Contributor;
@@ -554,7 +553,6 @@ export function isCollection(object: CollectionBase | SampleBase | Data): object
     // CollectionBase doesn't contain `data` property in it's interface, but
     // Collection and CollectionHydrateData do.
     return object.hasOwnProperty('description') &&
-        object.hasOwnProperty('settings') &&
         object.hasOwnProperty('data') &&
         !object.hasOwnProperty('descriptor_completed');
 }
@@ -570,7 +568,6 @@ export interface SampleBase extends CollectionBase {
 
 export function isSampleBase(object: CollectionBase | SampleBase | Data): object is SampleBase {
     return object.hasOwnProperty('description') &&
-        object.hasOwnProperty('settings') &&
         object.hasOwnProperty('data') &&
         object.hasOwnProperty('descriptor_completed');
 }

@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Changed
+-------
+- **BACKWARD INCOMPATIBLE:** Removed settings field type from Collection
+
 ==================
 9.3.1 - 2019-01-24
 ==================
