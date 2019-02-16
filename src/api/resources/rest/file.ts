@@ -1,4 +1,5 @@
 import * as Rx from 'rx';
+import * as jQuery from 'jquery';
 
 import {RESTResource} from './rest_resource';
 import {Connection} from '../../connection';

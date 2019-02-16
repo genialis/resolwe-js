@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import * as jQuery from 'jquery';
 import * as Rx from 'rx';
 
 import {Connection, Message} from './connection';
