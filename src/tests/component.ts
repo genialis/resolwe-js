@@ -215,11 +215,9 @@ export function describeComponent(description: string,
             $scope = _$rootScope_.$new();
             mockApi = _api_;
 
-            // @ifndef GENJS_PRODUCTION
-                if (_.contains(tests.toString(), 'debugger') || _.contains(tests.toString(), ' fit(')) {
-                    provideRealDOM();
-                }
-            // @endif
+            if (_.contains(tests.toString(), 'debugger') || _.contains(tests.toString(), ' fit(')) {
+                provideRealDOM();
+            }
         }));
 
         afterEach(() => {
