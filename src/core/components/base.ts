@@ -160,7 +160,7 @@ export class Computation {
                         this.component[target] = item;
                     }
                 } catch (exception) {
-                    console.warn('Ignored error', exception);
+                    console.warn('Ignored error in ' + this.component.getConfig().directive, exception);
                 } finally {
                     // Dispose of the subscription immediately if this is a one shot subscription.
                     if (options.oneShot && subscription) {
@@ -175,11 +175,11 @@ export class Computation {
             (exception) => {
                 if (options.onError) {
                     // @ifndef GENJS_PRODUCTION
-                        console.log('Handled error', exception);
+                        console.log('Handled error in ' + this.component.getConfig().directive, exception);
                     // @endif
                     safeCallbackApply(this.component.$scope, () => { options.onError(exception); });
                 } else {
-                    console.warn('Unhandled error', exception);
+                    console.warn('Unhandled error in ' + this.component.getConfig().directive, exception);
                 }
             }
         );
