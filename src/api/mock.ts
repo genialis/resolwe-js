@@ -55,6 +55,11 @@ export interface MockBase {
     simulateDelay(value: boolean): void;
 
     /**
+     * Enables or disables logging requests without matching handlers.
+     */
+    logUnhandledRequests(value: boolean): void;
+
+    /**
      * Creates a new mock resource that will handle reactive queries. A resource
      * must be created before it can be used in [[addItem]], [[updateItem]] and
      * [[removeItem]].
@@ -205,6 +210,7 @@ class MockQueryObserverManager extends QueryObserverManager {
 }
 
 export class MockConnection implements Connection, MockBase {
+    private _logUnhandledRequests: boolean = false;
     private _mockItems: MockItemStore = {};
     private _mockResponses: MockResponseStore = {};
     private _messages: Rx.Subject<Message>;
@@ -263,6 +269,15 @@ export class MockConnection implements Connection, MockBase {
         });
 
         if (_.isEmpty(matchingHandlers)) {
+            if (this._logUnhandledRequests) {
+                const prettyPath = decodeURIComponent(this.createUriFromPath(responsePath, parameters));
+                console.info(`Mock API ${method}: ${prettyPath} requested, but didnt match any handler`, {
+                    mockItems: _.keys(this._mockItems),
+                    lookedForMockItem: responsePath.split('/').slice(2).join('/'),
+                    mockResponses: this._mockResponses[method],
+                    lookedForMockResponse: responsePath,
+                });
+            }
             return Rx.Observable.just({});
         }
 
@@ -283,6 +298,13 @@ export class MockConnection implements Connection, MockBase {
      */
     public simulateDelay(value: boolean): void {
         this._simulateDelay = value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public logUnhandledRequests(value: boolean): void {
+        this._logUnhandledRequests = value;
     }
 
     /**
@@ -591,6 +613,13 @@ export class MockApiMixin implements MockBase {
      */
     public simulateDelay(value: boolean): void {
         this.connection.simulateDelay(value);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public logUnhandledRequests(value: boolean): void {
+        this.connection.logUnhandledRequests(value);
     }
 
     /**

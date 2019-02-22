@@ -217,6 +217,7 @@ export function describeComponent(description: string,
 
             if (_.contains(tests.toString(), 'debugger') || _.contains(tests.toString(), ' fit(')) {
                 provideRealDOM();
+                mockApi.logUnhandledRequests(true);
             }
         }));
 
