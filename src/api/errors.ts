@@ -33,6 +33,19 @@ export class RequestError extends APIError {
     }
 }
 
+/**
+ * HTTP status 500 - 599
+ */
+export class ServerError extends RequestError {
+    public name = 'ServerError';
+
+    constructor(public url: string, message: string, associatedObject?: Object) {
+        super(url, message, associatedObject);
+        // https://github.com/Microsoft/TypeScript/wiki/Breaking-Changes#extending-built-ins-like-error-array-and-map-may-no-longer-work
+        Object['setPrototypeOf'](this, RequestError.prototype);
+    }
+}
+
 
 /**
  * QueryOne error thrown when [[Resource]]'s queryOne method fails.

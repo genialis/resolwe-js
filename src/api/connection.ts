@@ -4,7 +4,7 @@ import * as Rx from 'rx';
 import 'jquery.cookie';
 
 import {QueryObserverManager} from './queryobserver';
-import {APIError, RequestError, WebsocketError} from './errors';
+import {APIError, RequestError, ServerError, WebsocketError} from './errors';
 import * as random from '../core/utils/random';
 
 /**
@@ -431,7 +431,7 @@ export class SimpleConnection implements Connection {
 
         xhr.fail((jqXHR: JQueryXHR, textStatus: string, errorThrown: string) => {
             if (500 <= jqXHR.status && jqXHR.status < 600) {
-                const error = new RequestError(url, errorThrown, jqXHR);
+                const error = new ServerError(url, `${jqXHR.status}: ${errorThrown}`, jqXHR);
                 this._errors.onNext(error);
             }
         });
