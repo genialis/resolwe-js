@@ -328,6 +328,7 @@ export interface DataBase {
     contributor: Contributor;
     process: number;
     tags: string[];
+    entity_names: string[];
 }
 
 export interface Data extends DataBase {

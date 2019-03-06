@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Added
+-------
+- Added ``entity_names`` field to Data type
+
 ===================
 10.0.2 - 2019-03-04
 ===================
