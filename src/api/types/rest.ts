@@ -149,6 +149,14 @@ export interface Process {
     version: string;
     type: string;
     category: string;
+    requirements?: {
+        relations?: Array<{
+            type: string;
+            category?: string;
+            labels?: string[];
+            required?: boolean;
+        }>;
+    };
     persistence: ProcessPersistence;
     description: string;
     input_schema: any;
