@@ -65,7 +65,17 @@ export abstract class Resource {
      * @return Transformed query
      */
     protected transformQuery(query: types.Query): types.Query {
-        return _.cloneDeep(query);
+        return _.cloneDeep(this._fixQueryForElasticSearch(query));
+    }
+
+    private _fixQueryForElasticSearch(query: types.Query): types.Query {
+        // Move `__in` query keys to the end.
+        // TODO: remove this workaround when elastic search is fixed and these both return results
+        // /api/data?entity__in=2726&collection=246&tags=community%3Aexpressions
+        // /api/data?collection=246&tags=community%3Aexpressions&entity__in=2726
+        return _.zipObject(_.sortBy(_.pairs(query), ([key]) => {
+            return _.contains(key, '__in') ? Infinity : -1;
+        }));
     }
 
     /**
