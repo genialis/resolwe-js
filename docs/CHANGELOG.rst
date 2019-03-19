@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+===================
+10.0.6 - 2019-03-19
+===================
+
 Fixed
 -----
 - Changed requests from ``/api/data?entity__in=2726&collection=246&tags=community%3Aexpressions`` (that
