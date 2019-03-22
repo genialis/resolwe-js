@@ -151,7 +151,7 @@ export interface Process {
     category: string;
     requirements?: {
         relations?: Array<{
-            type: string;
+            type: 'compare' | 'group' | 'background' | 'series';
             category?: string;
             labels?: string[];
             required?: boolean;
