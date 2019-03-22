@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+===================
+10.0.7 - 2019-03-22
+===================
+
 Changed
 -------
 - Updated Process requirements' relations type
