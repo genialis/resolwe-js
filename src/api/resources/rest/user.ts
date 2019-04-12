@@ -25,8 +25,8 @@ export class UserResource extends RESTResource<types.User> {
     /**
      * Returns the current user's profile.
      */
-    public profile(): Rx.Observable<types.User> {
-        return this.query({current_only: 1}, {reactive: true}).map((users: types.User[]): types.User => {
+    public profile(): Rx.Observable<types.User | void> {
+        return this.query({current_only: 1}, {reactive: true}).map((users: types.User[]): types.User | void => {
             if (users.length > 1) {
                 console.error('Query should not return more than one user');
             }
@@ -58,7 +58,8 @@ export class UserResource extends RESTResource<types.User> {
      * @param newPassword New password
      */
     public changePassword(oldPassword: string, newPassword: string) {
-        return this.profile().flatMapLatest((user: types.User) => {
+        return this.profile().flatMapLatest((user: types.User | void) => {
+            if (!user) throw new Error('Logged out users cant change password');
             return this.callMethod(user.id, 'change_password', {
                 existing_password: oldPassword,
                 new_password: newPassword,
