@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+===================
+10.0.8 - 2019-04-12
+===================
+
 Changed
 -------
 - Updated api.User.profile type
