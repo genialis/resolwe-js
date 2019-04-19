@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Changed
+-------
+- Catch ``413`` Request Entity Too Large request errors
+
 ===================
 10.0.8 - 2019-04-12
 ===================

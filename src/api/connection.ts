@@ -430,6 +430,10 @@ export class SimpleConnection implements Connection {
         });
 
         xhr.fail((jqXHR: JQueryXHR, textStatus: string, errorThrown: string) => {
+            if (jqXHR.status === 413) {
+                const error = new RequestError(url, `${jqXHR.status}: ${errorThrown}`, jqXHR);
+                this._errors.onNext(error);
+            }
             if (500 <= jqXHR.status && jqXHR.status < 600) {
                 const error = new ServerError(url, `${jqXHR.status}: ${errorThrown}`, jqXHR);
                 this._errors.onNext(error);
