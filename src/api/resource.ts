@@ -65,6 +65,7 @@ export abstract class Resource {
      * @return Transformed query
      */
     protected transformQuery(query: types.Query): types.Query {
+        this._validateParameters(query);
         return _.cloneDeep(this._fixQueryForElasticSearch(query));
     }
 
@@ -74,8 +75,16 @@ export abstract class Resource {
         // /api/data?entity__in=2726&collection=246&tags=community%3Aexpressions
         // /api/data?collection=246&tags=community%3Aexpressions&entity__in=2726
         return _.zipObject(_.sortBy(_.pairs(query), ([key]) => {
-            return _.contains(key, '__in') ? Infinity : -1;
+            return _.endsWith(key, '__in') ? Infinity : -1;
         }));
+    }
+
+    /**
+     * Warn about invalid query parameters, like ?id__in=&...
+     */
+    private _validateParameters(query: types.Query): void {
+        const hasEmptyInArray = _.any(query, (value, key) => _.endsWith(key, '__in') && !value);
+        if (hasEmptyInArray) console.error('Invalid parameter *__in=empty in query', query);
     }
 
     /**
@@ -88,11 +97,11 @@ export abstract class Resource {
         options = _.defaults({}, options || {}, {
             reactive: false,
         });
+        query = this.transformQuery(query);
 
         return Rx.Observable.create<T[]>((observer) => {
             if (!options.reactive) {
                 // Reactivity is disabled for this query.
-                query = this.transformQuery(query);
                 const subscription = this.connection.get(path, query).map((response: any) => {
                     // Correctly handle paginated results.
                     if (_.has(response, 'results')) return response.results;
@@ -132,7 +141,7 @@ export abstract class Resource {
                 } else {
                     this._pendingQueries[serializedQuery] = [{observer, subscriptions}];
 
-                    query = _.assign(this.transformQuery(query), {observe: this.connection.sessionId()});
+                    query = _.assign(query, {observe: this.connection.sessionId()});
                     this.connection.queryObserverManager().chainAfterUnsubscribe(() => this.connection.get(path, query)).subscribe(
                         (response: QueryObserverResponse) => {
                             // Populate messages from this request.

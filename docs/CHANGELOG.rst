@@ -12,6 +12,7 @@ Unreleased
 Changed
 -------
 - Catch ``413`` Request Entity Too Large request errors
+- Warn about ``*__in=empty`` query parameters
 
 ===================
 10.0.8 - 2019-04-12
