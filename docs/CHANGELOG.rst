@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+Added
+-------
+- Added ``collection_names`` field to Data type
+
 ===================
 10.0.9 - 2019-04-19
 ===================

@@ -337,6 +337,7 @@ export interface DataBase {
     process: number;
     tags: string[];
     entity_names: string[];
+    collection_names: string[];
 }
 
 export interface Data extends DataBase {
