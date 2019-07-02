@@ -74,6 +74,14 @@ export class DataResource extends RESTResource<types.Data> implements Permission
         return this.connection.get(this.getDetailPath(primaryKey), opts);
     }
 
+    public getParents(id: number): Rx.Observable<types.Data[]> {
+        return this.connection.get(this.getDetailMethodPath(id, 'parents'));
+    }
+
+    public getChildren(id: number): Rx.Observable<types.Data[]> {
+        return this.connection.get(this.getDetailMethodPath(id, 'children'));
+    }
+
     /**
      * Get a sample by data id.
      */

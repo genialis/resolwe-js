@@ -9,6 +9,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+- Added getParents and getChildren to Data api
+
 ====================
 10.0.10 - 2019-05-14
 ====================
