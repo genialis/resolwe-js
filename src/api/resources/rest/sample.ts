@@ -139,7 +139,7 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
                      opts: { inheritCollections: boolean }): Rx.Observable<(types.Sample | types.Presample)[]> {
         return this.callListMethod<(types.Sample | types.Presample)[]>('duplicate', {
             ids: sampleIds,
-            inherit_collections: opts.inheritCollections,
+            inherit_collection: opts.inheritCollections,
         });
     }
 
