@@ -1,5 +1,4 @@
 import * as Rx from 'rx';
-import * as _ from 'lodash';
 import {RESTResource} from './rest_resource';
 import {QueryOptions} from '../../resource';
 import {Connection} from '../../connection';
@@ -48,11 +47,12 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
     public query(query: types.QueryObject & { annotation: 'annotatedAndUnannotated' }, options?: QueryOptions):
         Rx.Observable<(types.Sample | types.Presample)[]>;
     public query(query: types.Query & { annotation: string }, options?: QueryOptions): Rx.Observable<unknown> {
-        const annotationQuery = query.annotation === 'annotated' ? { descriptor_completed: true } :
-                              query.annotation === 'unannotated' ? { descriptor_completed: false }
+        const {annotation, ...remainingQuery} = query;
+        const annotationQuery = annotation === 'annotated' ? { descriptor_completed: true } :
+                              annotation === 'unannotated' ? { descriptor_completed: false }
                                                                  : {};
 
-        return super.query({ ..._.omit(query, 'annotation'), ...annotationQuery }, options);
+        return super.query({ ...remainingQuery, ...annotationQuery }, options);
     }
 
     public queryOne(query: types.QueryObjectHydrateData, options?: QueryOptions):
