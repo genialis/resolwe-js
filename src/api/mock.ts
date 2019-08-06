@@ -6,7 +6,7 @@ import {Connection, Message} from './connection';
 import {QueryObserverManager, MESSAGE_ADDED, MESSAGE_CHANGED, MESSAGE_REMOVED} from './queryobserver';
 import {GenError} from '../core/errors/error';
 import {APIError} from './errors';
-import {Query, SampleBase, CollectionBase, DataBase} from './types/rest';
+import {Query, Sample, Collection, Data} from './types/rest';
 import {ResolweApi} from './index';
 import {compose} from '../core/utils/lang';
 import * as random from '../core/utils/random';
@@ -740,7 +740,7 @@ export function orderingQuery<T>(query: Query, items: T[]): T[] {
 /**
  * Helper function for supporting filtering by descriptor_completed, which can be used as a [[MockQueryEvaluator]].
  */
-export function annotatedQuery<T extends SampleBase>(query: any, items: T[]): T[] {
+export function annotatedQuery<T extends Sample>(query: any, items: T[]): T[] {
     if (_.isUndefined(query.descriptor_completed) || _.isNull(query.descriptor_completed)) return items;
 
     return _.filter(items, (item) => item.descriptor_completed === query.descriptor_completed);
@@ -749,7 +749,7 @@ export function annotatedQuery<T extends SampleBase>(query: any, items: T[]): T[
 /**
  * Helper function for supporting filtering by slug, which can be used as a [[MockQueryEvaluator]].
  */
-export function slugQuery<T extends CollectionBase | DataBase>(query: any, items: T[]): T[] {
+export function slugQuery<T extends Collection | Data>(query: any, items: T[]): T[] {
     if (!query.slug) return items;
 
     return _.filter(items, (item) => item.slug === query.slug);

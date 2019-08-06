@@ -6,10 +6,14 @@ import {GenError} from '../../../core/errors/error';
 import {Permissionable, getPermissions, setPermissions} from '../addons/permissions';
 import * as types from '../../types/rest';
 
+export type AnnotationQuery = {
+    annotation: 'annotated' | 'unannotated' | 'annotatedAndUnannotated';
+};
+
 /**
  * Sample resource class for dealing with sample endpoint.
  */
-export class SampleResource extends RESTResource<types.Sample | types.Presample> implements Permissionable {
+export class SampleResource extends RESTResource<types.Sample> implements Permissionable {
     /**
      * Ordering by relevance constant. Apply this value to `ordering` query parameter to
      * order by relevance.
@@ -34,32 +38,16 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
     /**
      * Use this method carefully. Check to make sure you need unannotated and annotated samples.
      */
-    public query(query: types.QueryObjectHydrateData & { annotation: 'annotated' }, options?: QueryOptions):
-        Rx.Observable<types.SampleHydrateData[]>;
-    public query(query: types.QueryObjectHydrateData & { annotation: 'unannotated' }, options?: QueryOptions):
-        Rx.Observable<types.PresampleHydrateData[]>;
-    public query(query: types.QueryObjectHydrateData & { annotation: 'annotatedAndUnannotated' }, options?: QueryOptions):
-        Rx.Observable<(types.SampleHydrateData | types.PresampleHydrateData)[]>;
-    public query(query: types.QueryObject & { annotation: 'annotated' }, options?: QueryOptions):
-        Rx.Observable<types.Sample[]>;
-    public query(query: types.QueryObject & { annotation: 'unannotated' }, options?: QueryOptions):
-        Rx.Observable<types.Presample[]>;
-    public query(query: types.QueryObject & { annotation: 'annotatedAndUnannotated' }, options?: QueryOptions):
-        Rx.Observable<(types.Sample | types.Presample)[]>;
-    public query(query: types.Query & { annotation: string }, options?: QueryOptions): Rx.Observable<unknown> {
+    public query(query: types.QueryObject & AnnotationQuery, options?: QueryOptions): Rx.Observable<types.Sample[]> {
         const {annotation, ...remainingQuery} = query;
         const annotationQuery = annotation === 'annotated' ? { descriptor_completed: true } :
                               annotation === 'unannotated' ? { descriptor_completed: false }
-                                                                 : {};
+                                                           : {};
 
         return super.query({ ...remainingQuery, ...annotationQuery }, options);
     }
 
-    public queryOne(query: types.QueryObjectHydrateData, options?: QueryOptions):
-        Rx.Observable<types.SampleHydrateData | types.PresampleHydrateData>;
-    public queryOne(query?: types.QueryObject, options?: QueryOptions):
-        Rx.Observable<types.Sample | types.Presample>;
-    public queryOne(query: types.Query = {}, options?: QueryOptions): Rx.Observable<any> {
+    public queryOne(query: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Sample> {
         return super.queryOne(query, options);
     }
 
@@ -136,8 +124,8 @@ export class SampleResource extends RESTResource<types.Sample | types.Presample>
      * @return Duplicated samples.
      */
     public duplicate(sampleIds: number[],
-                     opts: { inheritCollections: boolean }): Rx.Observable<(types.Sample | types.Presample)[]> {
-        return this.callListMethod<(types.Sample | types.Presample)[]>('duplicate', {
+                     opts: { inheritCollections: boolean }): Rx.Observable<types.Sample[]> {
+        return this.callListMethod<types.Sample[]>('duplicate', {
             ids: sampleIds,
             inherit_collection: opts.inheritCollections,
         });

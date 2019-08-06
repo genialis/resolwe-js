@@ -37,11 +37,9 @@ export interface QueryObject extends Query {
     data?: "Disallow deprecated api.Sample.queryOne({ data: data.id }). Use api.Data.getSampleFromDataId(data.id) instead.";
     parents?: "Disallow deprecated api.Data.query({ parents: data.id }). Use api.Data.getChildren(data.id) instead.";
     children?: "Disallow deprecated api.Data.query({ children: data.id }). Use api.Data.getParents(data.id) instead.";
-    hydrate_data?: void;
-}
-
-export interface QueryObjectHydrateData extends Query {
-    hydrate_data: '1';
+    hydrate_data?: "Disallow deprecated hydrate_data.";
+    hydrate_collections?: "Disallow deprecated hydrate_collections.";
+    hydrate_entities?: "Disallow deprecated hydrate_entities.";
 }
 
 export function isResponsePaginated<T>(response: T | { results: T}): response is { results: T } {
@@ -166,6 +164,12 @@ export interface Process {
     run: any;
     contributor: Contributor;
     current_user_permissions: ItemPermissionsOf<ProcessPermissions>[];
+    is_active: boolean;
+    data_name: string;
+    entity_descriptor_schema: void | string;
+    entity_input: any;
+    entity_type: void | string;
+    scheduling_class: string;
 }
 
 // ------------------------------------------------------------------
@@ -180,7 +184,6 @@ export interface RelationPartition {
 
 export interface Relation {
     id: number;
-    slug: string;
     created: string;
     modified: string;
     type: string;
@@ -311,24 +314,25 @@ export const DIRTY_DATA_STATUS: DirtyDataStatus = 'DR';
 export type DataStatus = UploadingDataStatus | ResolvingDataStatus | WaitingDataStatus | ProcessingDataStatus |
     DoneDataStatus | ErrorDataStatus | DirtyDataStatus;
 
-export interface DataBase {
+export interface Data {
     id: number;
     created: string;
     modified: string;
+    scheduled: string;
     started: string;
     finished: string;
+    duplicated: void | string;
+
     checksum: string;
+    size: number;
     status: DataStatus;
     process_progress: number;
     process_rc: number;
+    process_cores: number;
+    process_memory: number;
     process_info: string[];
     process_warning: string[];
     process_error: string[];
-    process_type: string;
-    process_input_schema: any;
-    process_output_schema: any;
-    process_slug: string;
-    process_name: string;
     slug: string;
     name: string;
     input: any;
@@ -336,35 +340,14 @@ export interface DataBase {
     descriptor_schema: DescriptorSchemaBase;
     descriptor: any;
     contributor: Contributor;
-    process: number;
+    process: Omit<Process, 'current_user_permissions'>;
     tags: string[];
-    entity_names: string[];
-    collection_names: string[];
-}
 
-export interface Data extends DataBase {
+    entity: void | Omit<Sample, 'current_user_permissions'>;
+    collection: void | Omit<Collection, 'current_user_permissions'>;
     current_user_permissions: ItemPermissionsOf<DataPermissions>[];
 }
 
-export interface SingleDataObjectParams {
-    hydrate_collections?: '1' | void;
-    hydrate_entities?: '1' | void;
-}
-
-/**
- * This should never be used to lists of data objects.
- */
-export type SingleDataObject<Q extends SingleDataObjectParams> =
-    Q extends { hydrate_collections: '1', hydrate_entities: '1' } ? Data & { collections: Collection[], entities: (Sample | Presample)[] } :
-                           Q extends { hydrate_collections: '1' } ? Data & { collections: Collection[], entities: number[] } :
-                              Q extends { hydrate_entities: '1' } ? Data & { collections: number[], entities: (Sample | Presample)[] }
-                                                                  : Data & { collections: number[], entities: number[] };
-
-export function isData(object: CollectionBase | SampleBase | Data): object is Data {
-    return _.all(['checksum', 'status', 'process', 'process_name', 'process_type', 'input', 'output', 'current_user_permissions'],
-        (property) => object.hasOwnProperty(property)
-    );
-}
 
 // ------------------------------------------------------------------
 // data:differentialexpression:
@@ -543,10 +526,11 @@ export interface DataVariantTableStorage extends Storage {
 export type CollectionPermissions = ViewPermission | EditPermission | SharePermission |
     DownloadPermission | AddPermission;
 
-export interface CollectionBase {
+export interface Collection {
     id: number;
     created: string;
     modified: string;
+    duplicated: void | string;
     slug: string;
     name: string;
     description: string;
@@ -555,48 +539,21 @@ export interface CollectionBase {
     contributor: Contributor;
     current_user_permissions: ItemPermissionsOf<CollectionPermissions>[];
     tags: string[];
+    settings: any;
 }
 
-export interface Collection extends CollectionBase {
-    data: number[];
-}
-
-export function isCollection(object: CollectionBase | SampleBase | Data): object is Collection | CollectionHydrateData {
-    // CollectionBase doesn't contain `data` property in it's interface, but
-    // Collection and CollectionHydrateData do.
-    return object.hasOwnProperty('description') &&
-        object.hasOwnProperty('data') &&
-        !object.hasOwnProperty('descriptor_completed');
-}
-
-export interface CollectionHydrateData extends CollectionBase {
-    data: DataBase[];
-}
-
-export interface SampleBase extends CollectionBase {
-    collections: number[];
+export interface Sample extends Collection {
+    collection: void | Omit<Collection, 'current_user_permissions'>;
     descriptor_completed: boolean;
+    type: 'sample';
 }
 
-export function isSampleBase(object: CollectionBase | SampleBase | Data): object is SampleBase {
-    return object.hasOwnProperty('description') &&
-        object.hasOwnProperty('data') &&
-        object.hasOwnProperty('descriptor_completed');
+export interface CollectionHydrateData extends Collection {
+    data: Data[];
 }
 
-export interface Sample extends Collection, SampleBase {
-    descriptor_completed: true;
-}
-
-export interface SampleHydrateData extends CollectionHydrateData, SampleBase {
-}
-
-export interface Presample extends Collection, SampleBase {
-    descriptor_completed: false;
-}
-
-export interface PresampleHydrateData extends CollectionHydrateData, SampleBase {
-    descriptor_completed: false;
+export interface SampleHydrateData extends Sample {
+    data: Data[];
 }
 
 

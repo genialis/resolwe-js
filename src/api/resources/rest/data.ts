@@ -5,6 +5,7 @@ import {QueryOptions} from '../../resource';
 import {RESTResource} from './rest_resource';
 import {Connection} from '../../connection';
 import {Permissionable, getPermissions, setPermissions} from '../addons/permissions';
+import {uniteDeepPicks, deepPickType} from '../../types/utils';
 import * as types from '../../types/rest';
 
 /**
@@ -60,17 +61,7 @@ export class DataResource extends RESTResource<types.Data> implements Permission
         return super.queryOne(query, options);
     }
 
-    /**
-     * Explicitly re-defined with return type SingleDataObject, because this differs from `query`.
-     */
-    public create(data: Object): Rx.Observable<types.SingleDataObject<{}>> {
-        return <Rx.Observable<types.SingleDataObject<{}>>> super.create(data);
-    }
-
-    /**
-     * Explicitly re-defined with return type SingleDataObject, and extra parameters.
-     */
-    public get<Q extends types.SingleDataObjectParams>(primaryKey: number | string, opts?: Q): Rx.Observable<types.SingleDataObject<Q>> {
+    public get(primaryKey: number | string, opts?: types.Query): Rx.Observable<types.Data> {
         return this.connection.get(this.getDetailPath(primaryKey), opts);
     }
 
@@ -85,12 +76,20 @@ export class DataResource extends RESTResource<types.Data> implements Permission
     /**
      * Get a sample by data id.
      */
-    public getSampleFromDataId(id: number): Rx.Observable<types.Sample | types.Presample> {
-        return this.get(id, { hydrate_entities: '1' }).map((data) => {
-            if (_.size(data.entities) !== 1) console.error('Expected data to belong to exactly one sample', data);
+    public getSampleFromDataId(id: number): Rx.Observable<Omit<types.Sample, 'current_user_permissions'>> {
+        const LimitedData = uniteDeepPicks([
+            deepPickType(<types.Data> null, 'id'),
+            deepPickType(<types.Data> null, 'entity'),
+        ]);
+        type LimitedData = typeof LimitedData.type;
 
-            const sample = _.first(data.entities);
-            return sample;
+        return this.get(id, LimitedData.limitQuery).map((data: LimitedData) => {
+            if (!data.entity) {
+                console.error('Expected data to belong to a sample', data);
+                return null;
+            }
+
+            return data.entity;
         });
     }
 
@@ -101,8 +100,8 @@ export class DataResource extends RESTResource<types.Data> implements Permission
      * Note: Consider sorting arrays in the inputs, to prevent needlessly
      * creating the same Data objects.
      */
-    public getOrCreate(data: Object): Rx.Observable<types.SingleDataObject<{}>> {
-        return this.connection.post<types.SingleDataObject<{}>>(this.getListMethodPath('get_or_create'), data);
+    public getOrCreate(data: Object): Rx.Observable<types.Data> {
+        return this.connection.post<types.Data>(this.getListMethodPath('get_or_create'), data);
     }
 
     /**
