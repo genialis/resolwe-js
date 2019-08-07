@@ -134,6 +134,12 @@ export function uniteDeepPicks<T extends { type: any, limitField: string }>(pick
     };
 }
 
+/** Same as T[K] but ignores error if T can be void. */
+type ForceGet<T, K extends string | number> = T extends {[k in K]: any} ? T[K] : never;
+/** If first parameter can be void, return second | void */
+type InheritVoid<From, To> = From extends {} ? To : void | To;
+
+
 // tslint:disable:max-line-length
 
 /**
@@ -149,14 +155,14 @@ export function deepPickType<K1 extends string,
 
 export function deepPickType<K1 extends string, K2 extends string,
     T extends {
-        [k1 in K1]: {
+        [k1 in K1]: void | {
             [k2 in K2]: any;
         };
     },
     R extends {
-        [k1 in K1]: {
-            [k2 in K2]: T[k1][k2];
-        };
+        [k1 in K1]: InheritVoid<ForceGet<T, k1>, {
+            [k2 in K2]: ForceGet<ForceGet<T, k1>, k2>;
+        }>;
     }>(_type: T, k1: K1, k2: K2): { type: R, limitField: string };
 
 export function deepPickType<K1 extends '[*]', K2 extends string,
@@ -172,18 +178,18 @@ export function deepPickType<K1 extends '[*]', K2 extends string,
 
 export function deepPickType<K1 extends string, K2 extends string, K3 extends string,
     T extends {
-        [k1 in K1]: {
-            [k2 in K2]: {
+        [k1 in K1]: void | {
+            [k2 in K2]: void | {
                 [k3 in K3]: any;
             };
         };
     },
     R extends {
-        [k1 in K1]: {
-            [k2 in K2]: {
-                [k3 in K3]: T[k1][k2][k3];
-            };
-        };
+        [k1 in K1]: InheritVoid<ForceGet<T, k1>, {
+            [k2 in K2]: InheritVoid<ForceGet<ForceGet<T, k1>, k2>, {
+                [k3 in K3]: ForceGet<ForceGet<ForceGet<T, k1>, k2>, k3>;
+            }>;
+        }>;
     }>(_type: T, k1: K1, k2: K2, k3: K3): { type: R, limitField: string };
 
 export function deepPickType<K1 extends string, K2 extends '[*]', K3 extends string,
@@ -217,29 +223,29 @@ export function deepPickType<K1 extends '[*]', K2 extends '[*]', K3 extends stri
 
 export function deepPickType<K1 extends string, K2 extends string, K3 extends string, K4 extends string,
     T extends {
-        [k1 in K1]: {
-            [k2 in K2]: {
-                [k3 in K3]: {
+        [k1 in K1]: void | {
+            [k2 in K2]: void | {
+                [k3 in K3]: void | {
                     [k4 in K4]: any;
                 };
             };
         };
     },
     R extends {
-        [k1 in K1]: {
-            [k2 in K2]: {
-                [k3 in K3]: {
-                    [k4 in K4]: T[k1][k2][k3][k4];
-                };
-            };
-        };
+        [k1 in K1]: InheritVoid<ForceGet<T, k1>, {
+            [k2 in K2]: InheritVoid<ForceGet<ForceGet<T, k1>, k2>, {
+                [k3 in K3]: InheritVoid<ForceGet<ForceGet<ForceGet<T, k1>, k2>, k3>, {
+                    [k4 in K4]: ForceGet<ForceGet<ForceGet<ForceGet<T, k1>, k2>, k3>, k4>;
+                }>;
+            }>;
+        }>;
     }>(_type: T, k1: K1, k2: K2, k3: K3, k4: K4): { type: R, limitField: string };
 
 export function deepPickType<K1 extends string, K2 extends '[*]', K3 extends string, K4 extends string,
     T extends {
         [k1 in K1]:
             Array<{
-                [k3 in K3]: {
+                [k3 in K3]: void | {
                     [k4 in K4]: any;
                 };
             }>;
@@ -247,15 +253,15 @@ export function deepPickType<K1 extends string, K2 extends '[*]', K3 extends str
     R extends {
         [k1 in K1]:
             Array<{
-                [k3 in K3]: {
-                    [k4 in K4]: T[k1][number][k3][k4];
-                };
+                [k3 in K3]: InheritVoid<ForceGet<ForceGet<ForceGet<T, k1>, number>, k3>, {
+                    [k4 in K4]: ForceGet<ForceGet<ForceGet<ForceGet<T, k1>, number>, k3>, k4>;
+                }>;
             }>;
     }>(_type: T, k1: K1, k2: K2, k3: K3, k4: K4): { type: R, limitField: string };
 
 export function deepPickType<K1 extends string, K2 extends string, K3 extends '[*]', K4 extends string,
     T extends {
-        [k1 in K1]: {
+        [k1 in K1]: void | {
             [k2 in K2]:
                 Array<{
                     [k4 in K4]: any;
@@ -263,12 +269,12 @@ export function deepPickType<K1 extends string, K2 extends string, K3 extends '[
         };
     },
     R extends {
-        [k1 in K1]: {
+        [k1 in K1]: InheritVoid<ForceGet<T, k1>, {
             [k2 in K2]:
                 Array<{
-                    [k4 in K4]: T[k1][k2][number][k4];
+                    [k4 in K4]: ForceGet<ForceGet<ForceGet<ForceGet<T, k1>, k2>, number>, k4>;
                 }>;
-        };
+        }>;
     }>(_type: T, k1: K1, k2: K2, k3: K3, k4: K4): { type: R, limitField: string };
 
 export function deepPickType(_type: any, ...keys: any[]): { type: any, limitField: string } {

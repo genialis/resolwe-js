@@ -1,5 +1,5 @@
 import {limitFieldsQuery, shallowPickType, uniteDeepPicks, UnionToIntersection, deepPickType} from './utils';
-import {CollectionHydrateData} from './rest';
+import {CollectionHydrateData, Data} from './rest';
 
 describe('utils', () => {
     describe('shallowPickType', () => {
@@ -41,6 +41,34 @@ describe('utils', () => {
 
                 const expectKeysAtDepth1: 'id' | 'data' = <keyof A> '';
                 const expectKeysAtDepth2: 'process_progress' | 'name' = <keyof A['data'][number]> '';
+            } // tslint:enable:no-unused-variable interface-over-type-literal
+        });
+
+        it('limited type should inherit void paths', () => {
+            { // tslint:disable:no-unused-variable interface-over-type-literal
+                const LimitedData = uniteDeepPicks([
+                    deepPickType(<Data> null, 'contributor', 'first_name'),
+                    deepPickType(<Data> null, 'collection', 'name'),
+                    deepPickType(<Data> null, 'entity', 'collection', 'name'),
+                ]);
+                {
+                    type A = typeof LimitedData.type.contributor;
+                    type B = { first_name: string };
+                    const test1: A = <B> {};
+                    const test2: B = <A> {};
+                }
+                {
+                    type A = typeof LimitedData.type.collection;
+                    type B = void | { name: string };
+                    const test1: A = <B> {};
+                    const test2: B = <A> {};
+                }
+                {
+                    type A = typeof LimitedData.type.entity;
+                    type B = void | { collection: void | { name: string } };
+                    const test1: A = <B> {};
+                    const test2: B = <A> {};
+                }
             } // tslint:enable:no-unused-variable interface-over-type-literal
         });
     });
