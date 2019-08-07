@@ -139,15 +139,138 @@ export function uniteDeepPicks<T extends { type: any, limitField: string }>(pick
 /**
  * @see uniteDeepPicks
  */
-export function deepPickType<K1 extends string, T extends {[k1 in K1]: any}, R extends { [k1 in K1]: T[k1] }>(_type: T, k1: K1): { type: R, limitField: string };
-export function deepPickType<K1 extends string, K2 extends string, T extends {[k1 in K1]: {[k2 in K2]: any}}, R extends { [k1 in K1]: { [k2 in K2]: T[k1][k2] } }>(_type: T, k1: K1, k2: K2): { type: R, limitField: string };
-export function deepPickType<K1 extends '[*]', K2 extends string, T extends Array<{[k2 in K2]: any}>, R extends Array<{ [k2 in K2]: T[number][k2] }>>(_type: T, k1: K1, k2: K2): { type: R, limitField: string };
-export function deepPickType<K1 extends string, K2 extends string, K3 extends string, T extends {[k1 in K1]: {[k2 in K2]: {[k3 in K3]: any}}}, R extends { [k1 in K1]: { [k2 in K2]: { [k3 in K3]: T[k1][k2][k3] } } }>(_type: T, k1: K1, k2: K2, k3: K3): { type: R, limitField: string };
-export function deepPickType<K1 extends string, K2 extends '[*]', K3 extends string, T extends {[k1 in K1]: Array<{[k3 in K3]: any}>}, R extends { [k1 in K1]: Array<{ [k3 in K3]: T[k1][number][k3] }> }>(_type: T, k1: K1, k2: K2, k3: K3): { type: R, limitField: string };
-export function deepPickType<K1 extends '[*]', K2 extends '[*]', K3 extends string, T extends Array<Array<{[k3 in K3]: any}>>, R extends Array<Array<{ [k3 in K3]: T[number][number][k3] }>>>(_type: T, k1: K1, k2: K2, k3: K3): { type: R, limitField: string };
-export function deepPickType<K1 extends string, K2 extends string, K3 extends string, K4 extends string, T extends {[k1 in K1]: {[k2 in K2]: {[k3 in K3]: {[k4 in K4]: any}}}}, R extends { [k1 in K1]: { [k2 in K2]: { [k3 in K3]: { [k4 in K4]: T[k1][k2][k3][k4] } } } }>(_type: T, k1: K1, k2: K2, k3: K3, k4: K4): { type: R, limitField: string };
-export function deepPickType<K1 extends string, K2 extends '[*]', K3 extends string, K4 extends string, T extends {[k1 in K1]: Array<{[k3 in K3]: {[k4 in K4]: any}}>}, R extends { [k1 in K1]: Array<{ [k3 in K3]: { [k4 in K4]: T[k1][number][k3][k4] } }> }>(_type: T, k1: K1, k2: K2, k3: K3, k4: K4): { type: R, limitField: string };
-export function deepPickType<K1 extends string, K2 extends string, K3 extends '[*]', K4 extends string, T extends {[k1 in K1]: {[k2 in K2]: Array<{[k4 in K4]: any}>}}, R extends { [k1 in K1]: { [k2 in K2]: Array<{ [k4 in K4]: T[k1][k2][number][k4] }> } }>(_type: T, k1: K1, k2: K2, k3: K3, k4: K4): { type: R, limitField: string };
+export function deepPickType<K1 extends string,
+    T extends {
+        [k1 in K1]: any;
+    },
+    R extends {
+        [k1 in K1]: T[k1]
+    }>(_type: T, k1: K1): { type: R, limitField: string };
+
+export function deepPickType<K1 extends string, K2 extends string,
+    T extends {
+        [k1 in K1]: {
+            [k2 in K2]: any;
+        };
+    },
+    R extends {
+        [k1 in K1]: {
+            [k2 in K2]: T[k1][k2];
+        };
+    }>(_type: T, k1: K1, k2: K2): { type: R, limitField: string };
+
+export function deepPickType<K1 extends '[*]', K2 extends string,
+    T extends
+        Array<{
+            [k2 in K2]: any;
+        }>,
+    R extends
+        Array<{
+            [k2 in K2]: T[number][k2];
+        }>
+    >(_type: T, k1: K1, k2: K2): { type: R, limitField: string };
+
+export function deepPickType<K1 extends string, K2 extends string, K3 extends string,
+    T extends {
+        [k1 in K1]: {
+            [k2 in K2]: {
+                [k3 in K3]: any;
+            };
+        };
+    },
+    R extends {
+        [k1 in K1]: {
+            [k2 in K2]: {
+                [k3 in K3]: T[k1][k2][k3];
+            };
+        };
+    }>(_type: T, k1: K1, k2: K2, k3: K3): { type: R, limitField: string };
+
+export function deepPickType<K1 extends string, K2 extends '[*]', K3 extends string,
+    T extends {
+        [k1 in K1]:
+            Array<{
+                [k3 in K3]: any;
+            }>;
+    },
+    R extends {
+        [k1 in K1]:
+            Array<{
+                [k3 in K3]: T[k1][number][k3];
+            }>;
+    }>(_type: T, k1: K1, k2: K2, k3: K3): { type: R, limitField: string };
+
+export function deepPickType<K1 extends '[*]', K2 extends '[*]', K3 extends string,
+    T extends
+        Array<
+            Array<{
+                [k3 in K3]: any;
+            }>
+        >,
+    R extends
+        Array<
+            Array<{
+                [k3 in K3]: T[number][number][k3];
+            }>
+        >
+    >(_type: T, k1: K1, k2: K2, k3: K3): { type: R, limitField: string };
+
+export function deepPickType<K1 extends string, K2 extends string, K3 extends string, K4 extends string,
+    T extends {
+        [k1 in K1]: {
+            [k2 in K2]: {
+                [k3 in K3]: {
+                    [k4 in K4]: any;
+                };
+            };
+        };
+    },
+    R extends {
+        [k1 in K1]: {
+            [k2 in K2]: {
+                [k3 in K3]: {
+                    [k4 in K4]: T[k1][k2][k3][k4];
+                };
+            };
+        };
+    }>(_type: T, k1: K1, k2: K2, k3: K3, k4: K4): { type: R, limitField: string };
+
+export function deepPickType<K1 extends string, K2 extends '[*]', K3 extends string, K4 extends string,
+    T extends {
+        [k1 in K1]:
+            Array<{
+                [k3 in K3]: {
+                    [k4 in K4]: any;
+                };
+            }>;
+    },
+    R extends {
+        [k1 in K1]:
+            Array<{
+                [k3 in K3]: {
+                    [k4 in K4]: T[k1][number][k3][k4];
+                };
+            }>;
+    }>(_type: T, k1: K1, k2: K2, k3: K3, k4: K4): { type: R, limitField: string };
+
+export function deepPickType<K1 extends string, K2 extends string, K3 extends '[*]', K4 extends string,
+    T extends {
+        [k1 in K1]: {
+            [k2 in K2]:
+                Array<{
+                    [k4 in K4]: any;
+                }>;
+        };
+    },
+    R extends {
+        [k1 in K1]: {
+            [k2 in K2]:
+                Array<{
+                    [k4 in K4]: T[k1][k2][number][k4];
+                }>;
+        };
+    }>(_type: T, k1: K1, k2: K2, k3: K3, k4: K4): { type: R, limitField: string };
+
 export function deepPickType(_type: any, ...keys: any[]): { type: any, limitField: string } {
 
     const keysWithoutStars = _.reject(keys, (key) => key === '[*]');
