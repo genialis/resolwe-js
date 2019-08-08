@@ -87,10 +87,6 @@ export class SampleResource extends RESTResource<types.Sample> implements Permis
         throw new GenError("Replace method not supported");
     }
 
-    public delete(primaryKey: number | string, deleteContent: boolean = false): Rx.Observable<Object> {
-        return super.delete(primaryKey, {}, { delete_content: deleteContent });
-    }
-
     /**
      * Makes a copy of samples.
      *
