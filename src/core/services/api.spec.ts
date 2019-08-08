@@ -95,23 +95,16 @@ describe('mock api', () => {
         expect(subscriber.calls.mostRecent().args[0]).toEqual({});
         expect(subscriber.calls.mostRecent().args[1]).toEqual({name: 'Foo'});
 
-        mockApi.whenPost(/^\/api\/collection\/(.+?)\/add_data/, subscriber);
-        mockApi.Collection.addData(1, [1, 2, 3, 4]);
-
-        expect(subscriber).toHaveBeenCalledTimes(2);
-        expect(subscriber.calls.mostRecent().args[1]).toEqual({ids: [1, 2, 3, 4]});
-        expect(subscriber.calls.mostRecent().args[2][1]).toEqual('1');
-
         mockApi.whenGet('/api/collection/slug_exists', (parameters, data): boolean => {
             return parameters.name === 'hello';
         });
 
         mockApi.Collection.slugExists('bar').subscribe(subscriber);
-        expect(subscriber).toHaveBeenCalledTimes(3);
+        expect(subscriber).toHaveBeenCalledTimes(2);
         expect(subscriber.calls.mostRecent().args[0]).toBe(false);
 
         mockApi.Collection.slugExists('hello').subscribe(subscriber);
-        expect(subscriber).toHaveBeenCalledTimes(4);
+        expect(subscriber).toHaveBeenCalledTimes(3);
         expect(subscriber.calls.mostRecent().args[0]).toBe(true);
     });
 

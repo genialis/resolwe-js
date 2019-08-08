@@ -30,26 +30,6 @@ export class CollectionResource extends RESTResource<types.Collection> implement
         return <Rx.Observable<boolean>> this.connection.get(this.getListMethodPath('slug_exists'), { name: slug });
     }
 
-    /**
-     * Adds data objects to collection.
-     *
-     * @param collectionId Collection id
-     * @param dataIds Array of data object ids
-     */
-    public addData(collectionId: number, dataIds: number[]): Rx.Observable<void> {
-        return this.callMethod<void>(collectionId, 'add_data', { ids: dataIds });
-    }
-
-    /**
-     * Removes data objects from collection.
-     *
-     * @param collectionId Sample id
-     * @param dataIds Array of data object ids
-     */
-    public removeData(collectionId: number, dataIds: number[]): Rx.Observable<void> {
-        return this.callMethod<void>(collectionId, 'remove_data', { ids: dataIds });
-    }
-
     public query(query: types.QueryObject = {}, options?: QueryOptions): Rx.Observable<types.Collection[]> {
         return super.query(query, options);
     }

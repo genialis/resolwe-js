@@ -79,26 +79,6 @@ export class SampleResource extends RESTResource<types.Sample> implements Permis
          });
     }
 
-    /**
-     * Adds data objects to sample.
-     *
-     * @param sampleId Sample id
-     * @param dataIds Array of data object ids
-     */
-    public addData(sampleId: number, dataIds: number[]): Rx.Observable<void> {
-        return this.callMethod<void>(sampleId, 'add_data', { ids: dataIds });
-    }
-
-    /**
-     * Removes data objects from sample.
-     *
-     * @param sampleId Sample id
-     * @param dataIds Array of data object ids
-     */
-    public removeData(sampleId: number, dataIds: number[]): Rx.Observable<void> {
-        return this.callMethod<void>(sampleId, 'remove_data', { ids: dataIds });
-    }
-
     public create(data: Object): Rx.Observable<any> {
         throw new GenError("Create method not supported");
     }

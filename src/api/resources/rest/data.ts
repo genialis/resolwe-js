@@ -73,6 +73,18 @@ export class DataResource extends RESTResource<types.Data> implements Permission
         return this.connection.get(this.getDetailMethodPath(id, 'children'));
     }
 
+    public addToSample(dataIds: number[], sampleId: number): Rx.Observable<unknown> {
+        return Rx.Observable.fromArray(dataIds).concatMap((id) => {
+            return this.update(id, { sample: { id: sampleId } });
+        }).toArray();
+    }
+
+    public addToCollection(dataIds: number[], collectionId: number): Rx.Observable<unknown> {
+        return Rx.Observable.fromArray(dataIds).concatMap((id) => {
+            return this.update(id, { collection: { id: collectionId } });
+        }).toArray();
+    }
+
     /**
      * Get a sample by data id.
      */
