@@ -57,18 +57,12 @@ export class SampleResource extends RESTResource<types.Sample> implements Permis
      * @param sampleId Sample id
      * @param collectionIds Array of collection ids
      */
-    public addToCollections(sampleId: number, collectionIds: number[]): Rx.Observable<void> {
-        return this.callMethod<void>(sampleId, 'add_to_collection', { ids: collectionIds });
-    }
-
-    /**
-     * Remove sample from collections.
-     *
-     * @param sampleId Sample id
-     * @param collectionIds Array of collection ids
-     */
-    public removeFromCollections(sampleId: number, collectionIds: number[]): Rx.Observable<void> {
-        return this.callMethod<void>(sampleId, 'remove_from_collection', { ids: collectionIds });
+    public addToCollection(sampleId: number, collectionId: number): Rx.Observable<unknown> {
+        return this.update(sampleId, {
+            collection: {
+                id: collectionId,
+            },
+        });
     }
 
     /**
