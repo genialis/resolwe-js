@@ -98,10 +98,10 @@ export class SampleResource extends RESTResource<types.Sample> implements Permis
      * @return Duplicated samples.
      */
     public duplicate(sampleIds: number[],
-                     opts: { inheritCollections: boolean }): Rx.Observable<types.Sample[]> {
+                     opts: { inheritCollection: boolean }): Rx.Observable<types.Sample[]> {
         return this.callListMethod<types.Sample[]>('duplicate', {
             ids: sampleIds,
-            inherit_collection: opts.inheritCollections,
+            inherit_collection: opts.inheritCollection,
         });
     }
 
