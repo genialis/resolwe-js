@@ -7,6 +7,7 @@ module.exports = (gulp, config) => {
     const $ = require('gulp-load-plugins')();
 
     const chromiumHeadlessNoSandbox = !!minimist(process.argv.slice(3))['chromium-headless-no-sandbox'];
+    const chromeHeadlessNoSandbox = !!minimist(process.argv.slice(3))['chrome-headless-no-sandbox'];
 
     // Json summary file path.
     const jsonSummaryPath = path.join(config.coverageDirAbs, 'json', 'summary.json');
@@ -17,6 +18,7 @@ module.exports = (gulp, config) => {
             singleRun: true
         };
         if (chromiumHeadlessNoSandbox) karmaConfig.browsers = ['ChromiumHeadlessNoSandbox'];
+        if (chromeHeadlessNoSandbox) karmaConfig.browsers = ['ChromeHeadlessNoSandbox'];
 
         new Server(karmaConfig, (exitCode) => {
             // Run remap when finished.
