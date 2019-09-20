@@ -9,6 +9,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+- Added ``validate_password`` endpoint
+
 ===================
 11.0.0 - 2019-08-09
 ===================

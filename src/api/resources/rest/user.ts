@@ -52,6 +52,16 @@ export class UserResource extends RESTResource<types.User> {
     }
 
     /**
+     * Validate password.
+     *
+     * @param password Password to be validated against password validation service.
+     */
+    public validatePassword(password: string): Rx.Observable<{ validationErrors: string[] }> {
+        return this.callListMethod<{ password?: string[] }>('validate_password', { password })
+            .map((response) => ({ validationErrors: response.password ? response.password : [] }));
+    }
+
+    /**
      * Change current user password.
      *
      * @param oldPassword Old password
