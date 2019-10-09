@@ -3,6 +3,7 @@ import * as Rx from 'rx';
 
 import {Connection, QueryObserverResponse} from './connection';
 import {QueryObserverStatus} from './queryobserver';
+import {GenError} from '../core/errors/error';
 import * as types from './types/rest';
 
 /**
@@ -84,7 +85,7 @@ export abstract class Resource {
      */
     private _validateParameters(query: types.Query): void {
         const hasEmptyInArray = _.any(query, (value, key) => _.endsWith(key, '__in') && !value);
-        if (hasEmptyInArray) console.error('Invalid parameter *__in=empty in query', query);
+        if (hasEmptyInArray) throw new GenError('Invalid parameter *__in=empty in query');
     }
 
     /**
