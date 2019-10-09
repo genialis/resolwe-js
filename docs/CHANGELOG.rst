@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+===================
+12.0.0 - 2019-10-10
+===================
+
 - Removed ``descriptor_completed`` from samples
 - Updated Query type
 
