@@ -6,10 +6,6 @@ import {GenError} from '../../../core/errors/error';
 import {Permissionable, getPermissions, setPermissions} from '../addons/permissions';
 import * as types from '../../types/rest';
 
-export type AnnotationQuery = {
-    annotation: 'annotated' | 'unannotated' | 'annotatedAndUnannotated';
-};
-
 /**
  * Sample resource class for dealing with sample endpoint.
  */
@@ -35,16 +31,8 @@ export class SampleResource extends RESTResource<types.Sample> implements Permis
         return this.connection.get<boolean>(this.getListMethodPath('slug_exists'), { name: slug });
     }
 
-    /**
-     * Use this method carefully. Check to make sure you need unannotated and annotated samples.
-     */
-    public query(query: types.QueryObject & AnnotationQuery, options?: QueryOptions): Rx.Observable<types.Sample[]> {
-        const {annotation, ...remainingQuery} = query;
-        const annotationQuery = annotation === 'annotated' ? { descriptor_completed: true } :
-                              annotation === 'unannotated' ? { descriptor_completed: false }
-                                                           : {};
-
-        return super.query({ ...remainingQuery, ...annotationQuery }, options);
+    public query(query: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Sample[]> {
+        return super.query(query, options);
     }
 
     public queryOne(query: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Sample> {

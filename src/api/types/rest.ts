@@ -544,7 +544,6 @@ export interface Collection {
 
 export interface Sample extends Collection {
     collection: void | Omit<Collection, 'current_user_permissions'>;
-    descriptor_completed: boolean;
     type: 'sample';
 }
 
