@@ -31,9 +31,6 @@ export interface StrictQuery {
 
 export interface Query extends StrictQuery {
     [propertyName: string]: any;
-}
-
-export interface QueryObject extends Query {
     data?: "Disallow deprecated api.Sample.queryOne({ data: data.id }). Use api.Data.getSampleFromDataId(data.id) instead.";
     parents?: "Disallow deprecated api.Data.query({ parents: data.id }). Use api.Data.getChildren(data.id) instead.";
     children?: "Disallow deprecated api.Data.query({ children: data.id }). Use api.Data.getParents(data.id) instead.";

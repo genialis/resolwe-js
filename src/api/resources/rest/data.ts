@@ -1,7 +1,6 @@
 import * as Rx from 'rx';
 import * as _ from 'lodash';
 
-import {QueryOptions} from '../../resource';
 import {RESTResource} from './rest_resource';
 import {Connection} from '../../connection';
 import {Permissionable, getPermissions, setPermissions} from '../addons/permissions';
@@ -47,24 +46,6 @@ export class DataResource extends RESTResource<types.Data> implements Permission
         return <Rx.Observable<boolean>> this.connection.get(this.getListMethodPath('slug_exists'), { name: slug });
     }
 
-    /**
-     * Explicitly re-defined with return type Data, because this differs from `create` and `get`.
-     */
-    public query(query: types.Query = {}, options?: QueryOptions): Rx.Observable<types.Data[]> {
-        return super.query(query, options);
-    }
-
-    /**
-     * Explicitly re-defined with return type Data, because this differs from `create` and `get`.
-     */
-    public queryOne(query: types.Query = {}, options?: QueryOptions): Rx.Observable<types.Data> {
-        return super.queryOne(query, options);
-    }
-
-    public get(primaryKey: number | string, opts?: types.Query): Rx.Observable<types.Data> {
-        return this.connection.get(this.getDetailPath(primaryKey), opts);
-    }
-
     public getParents(id: number): Rx.Observable<types.Data[]> {
         return this.connection.get(this.getDetailMethodPath(id, 'parents'));
     }
@@ -95,7 +76,7 @@ export class DataResource extends RESTResource<types.Data> implements Permission
         ]);
         type LimitedData = typeof LimitedData.type;
 
-        return this.get(id, LimitedData.limitQuery).map((data: LimitedData) => {
+        return this.connection.get(this.getDetailPath(id), LimitedData.limitQuery).map((data: LimitedData) => {
             if (!data.entity) {
                 console.error('Expected data to belong to a sample', data);
                 return null;

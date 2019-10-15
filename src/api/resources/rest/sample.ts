@@ -1,6 +1,5 @@
 import * as Rx from 'rx';
 import {RESTResource} from './rest_resource';
-import {QueryOptions} from '../../resource';
 import {Connection} from '../../connection';
 import {GenError} from '../../../core/errors/error';
 import {Permissionable, getPermissions, setPermissions} from '../addons/permissions';
@@ -29,14 +28,6 @@ export class SampleResource extends RESTResource<types.Sample> implements Permis
      */
     public slugExists(slug: string): Rx.Observable<boolean> {
         return this.connection.get<boolean>(this.getListMethodPath('slug_exists'), { name: slug });
-    }
-
-    public query(query: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Sample[]> {
-        return super.query(query, options);
-    }
-
-    public queryOne(query: types.QueryObject, options?: QueryOptions): Rx.Observable<types.Sample> {
-        return super.queryOne(query, options);
     }
 
     /**

@@ -10,6 +10,7 @@ Unreleased
 ==========
 
 - Removed ``descriptor_completed`` from samples
+- Updated Query type
 
 ===================
 11.1.0 - 2019-09-20
