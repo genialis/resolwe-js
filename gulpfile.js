@@ -1,6 +1,5 @@
 const gulp = require('gulp');
 const path = require('path');
-const runSequence = require('run-sequence');
 
 const config = {
     projectDir: __dirname,
@@ -18,46 +17,41 @@ config.coverageDirAbs = path.join(config.reportsDirAbs, coverageDir);
 
 // Cleanup.
 gulp.task('clean:build', require('./tasks/clean')(gulp, config.buildDir));
-gulp.task('clean', ['clean:build']);
+gulp.task('clean', gulp.series('clean:build'));
 
 // TypeScript compilation.
-gulp.task('compile', ['clean'], require('./tasks/compile')(gulp, config));
+gulp.task('compile', gulp.series('clean', require('./tasks/compile')(gulp, config)));
 
 // AngularJS postprocessing.
-gulp.task('ng:directives', ['compile'], require('./tasks/ngdirectives')(gulp, config));
-gulp.task('ng:annotate', ['ng:directives'], require('./tasks/ngannotate')(gulp, config));
+gulp.task('ng:directives', gulp.series('compile', require('./tasks/ngdirectives')(gulp, config)));
+gulp.task('ng:annotate', gulp.series('ng:directives', require('./tasks/ngannotate')(gulp, config)));
 
 // Meta task.
-gulp.task('prepare', ['ng:annotate']);
-gulp.task('prepare:production', (callback) => {
-    // Enable production compilation.
-    // TODO: Rename to RESOLWE_PRODUCTION.
-    process.env['GENJS_PRODUCTION'] = '1';
-
-    runSequence('prepare', callback);
-});
+gulp.task('prepare', gulp.series('ng:annotate'));
+gulp.task('prepare:production', gulp.series(
+    (callback) => {
+        // Enable production compilation.
+        process.env['RESOLWE_PRODUCTION'] = '1';
+        callback();
+    },
+    'prepare'
+));
 
 // TypeScript lint.
-gulp.task('tslint', [], require('./tasks/tslint')(gulp, config));
+gulp.task('tslint', require('./tasks/tslint')(gulp, config));
 
 // API typecheck.
-gulp.task('api-typecheck', [], require('./tasks/api_typecheck')(gulp, config));
+gulp.task('api-typecheck', require('./tasks/api_typecheck')(gulp, config));
 
 // All source code checks.
-gulp.task('check', ['tslint', 'api-typecheck']);
+gulp.task('check', gulp.parallel('tslint', 'api-typecheck'));
 
 // TypeScript documentation.
-gulp.task('typedoc', [], require('./tasks/typedoc')(gulp, config));
+gulp.task('typedoc', require('./tasks/typedoc')(gulp, config));
 
 // Unit tests.
 gulp.task('test:bare', require('./tasks/test')(gulp, config));
-gulp.task('test', (callback) => {
-    runSequence(
-        'prepare',
-        'test:bare',
-        callback
-    );
-});
+gulp.task('test', gulp.series('prepare', 'test:bare'));
 
 // Helper task when writing unit tests.
 // Serves karma server so unit tests and app can be run at the same time.
@@ -65,10 +59,10 @@ gulp.task('test', (callback) => {
 // Task has to be restarted when adding new *.ts files.
 gulp.task('test-serve', require('./tasks/test_serve')(gulp, config));
 
-gulp.task('sanity', ['check', 'test']);
+gulp.task('sanity', gulp.parallel('check', 'test'));
 
 // Build production version.
-gulp.task('build', ['prepare:production'])
+gulp.task('build', gulp.series('prepare:production'))
 
 // Exports.
 module.exports = {

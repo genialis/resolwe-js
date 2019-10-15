@@ -9,6 +9,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+- Upgraded to gulp4
+
 ===================
 12.0.0 - 2019-10-10
 ===================
