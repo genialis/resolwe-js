@@ -27,17 +27,17 @@ describeComponent('base component', [], (tester) => {
     }
 
     it('should reactively update on shallow component changes', () => {
-        const component = tester.createComponent<DummyComponent>(
+        const dummyComponent = tester.createComponent<DummyComponent>(
             DummyComponent.asView().template
         );
 
         // Test this.str
         const strSpy = jasmine.createSpy('strSpy');
-        component.ctrl.strObservable
+        dummyComponent.ctrl.strObservable
             .distinctUntilChanged()
             .subscribe((value) => strSpy(_.cloneDeep(value)));
 
-        component.ctrl.str = 'some value';
+        dummyComponent.ctrl.str = 'some value';
         tester.digest();
 
         expect(strSpy.calls.count()).toBe(2);
@@ -46,19 +46,19 @@ describeComponent('base component', [], (tester) => {
     });
 
     it('should reactively update on deep component changes', () => {
-        const component = tester.createComponent<DummyComponent>(
+        const dummyComponent = tester.createComponent<DummyComponent>(
             DummyComponent.asView().template
         );
 
         // Test this.array
         const arraySpy = jasmine.createSpy('arraySpy');
-        component.ctrl.arrayObservable
+        dummyComponent.ctrl.arrayObservable
             .filter((value) => !_.isEmpty(value))
             .subscribe((value) => arraySpy(_.cloneDeep(value)));
 
-        component.ctrl.array.push('some value');
+        dummyComponent.ctrl.array.push('some value');
         tester.digest();
-        component.ctrl.array.push('some other value');
+        dummyComponent.ctrl.array.push('some other value');
         tester.digest();
 
         expect(arraySpy.calls.all()[0].args[0]).toEqual(['some value']);
@@ -66,14 +66,14 @@ describeComponent('base component', [], (tester) => {
     });
 
     it('should support watch', () => {
-        const component = tester.createComponent<DummyComponent>(
+        const dummyComponent = tester.createComponent<DummyComponent>(
             DummyComponent.asView().template
         );
 
         // No watch should be created if computation is immediately unsubscribed.
         let expression = 0;
         let executed = 0;
-        let watchComputation = component.ctrl.watch(() => expression, (computation) => {
+        let watchComputation = dummyComponent.ctrl.watch(() => expression, (computation) => {
             executed++;
             expect(computation.isDone()).toBeFalsy();
             computation.unsubscribe();
@@ -87,7 +87,7 @@ describeComponent('base component', [], (tester) => {
         // Check that watching works correctly.
         expression = 0;
         executed = 0;
-        watchComputation = component.ctrl.watch(() => expression, (computation) => {
+        watchComputation = dummyComponent.ctrl.watch(() => expression, (computation) => {
             executed++;
             if (executed > 2) computation.unsubscribe();
         });

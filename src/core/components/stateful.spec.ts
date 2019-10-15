@@ -105,7 +105,7 @@ describeComponent('stateful component', [
             <div class="text-a">Hello {{ctrl.foo.value()}}</div>
         `,
     })
-    class SharedStateAComponent extends StatefulComponentBase {
+    class SharedStateAComponent extends StatefulComponentBase { // tslint:disable-line:no-unused-variable
         @sharedState() public foo: SimpleSharedStore<string>;
     }
 
@@ -160,18 +160,18 @@ describeComponent('stateful component', [
     }));
 
     it('sets correct state id and parent', () => {
-        const component = tester.createComponent<DummyStatefulComponent>(
+        const dummyComponent = tester.createComponent<DummyStatefulComponent>(
             DummyStatefulComponent.asView().template
         );
 
-        expect(component.ctrl.stateId).toBe('gen-dummy-stateful-component');
-        expect(component.ctrl.globalStateId).toBe('gen-dummy-stateful-component');
-        expect(component.ctrl.foo).toBe('hello world');
-        expect(component.ctrl.bar).toBe(42);
-        expect(component.ctrl.parentComponent()).toBeNull();
+        expect(dummyComponent.ctrl.stateId).toBe('gen-dummy-stateful-component');
+        expect(dummyComponent.ctrl.globalStateId).toBe('gen-dummy-stateful-component');
+        expect(dummyComponent.ctrl.foo).toBe('hello world');
+        expect(dummyComponent.ctrl.bar).toBe(42);
+        expect(dummyComponent.ctrl.parentComponent()).toBeNull();
 
-        const state = component.ctrl.saveState();
-        expect(state['gen-dummy-stateful-component']).toEqual({foo: 'hello world', bar: 42});
+        const savedState = dummyComponent.ctrl.saveState();
+        expect(savedState['gen-dummy-stateful-component']).toEqual({foo: 'hello world', bar: 42});
 
         // Test that creating a second component with a different stateId works.
         const component2 = tester.createComponent<DummyStatefulComponent>(
@@ -182,24 +182,24 @@ describeComponent('stateful component', [
     });
 
     it('sets up correct hierarchy', () => {
-        const component = tester.createComponent<ParentStatefulComponent>(
+        const parentComponent = tester.createComponent<ParentStatefulComponent>(
             ParentStatefulComponent.asView().template
         );
 
-        expect(component.ctrl.stateId).toBe('gen-parent-stateful-component');
-        expect(component.ctrl.childComponents().length).toBe(3);
-        expect(component.ctrl.childComponents()[0].stateId).toBe('dummy-1');
-        expect(component.ctrl.childComponents()[1].stateId).toBe('dummy-2');
-        expect(component.ctrl.childComponents()[2].stateId).toBe('dummy-3');
-        expect(component.ctrl.childComponents()[0].globalStateId).toBe('gen-parent-stateful-component-dummy-1');
-        expect(component.ctrl.childComponents()[1].globalStateId).toBe('gen-parent-stateful-component-dummy-2');
-        expect(component.ctrl.childComponents()[2].globalStateId).toBe('gen-parent-stateful-component-dummy-3');
+        expect(parentComponent.ctrl.stateId).toBe('gen-parent-stateful-component');
+        expect(parentComponent.ctrl.childComponents().length).toBe(3);
+        expect(parentComponent.ctrl.childComponents()[0].stateId).toBe('dummy-1');
+        expect(parentComponent.ctrl.childComponents()[1].stateId).toBe('dummy-2');
+        expect(parentComponent.ctrl.childComponents()[2].stateId).toBe('dummy-3');
+        expect(parentComponent.ctrl.childComponents()[0].globalStateId).toBe('gen-parent-stateful-component-dummy-1');
+        expect(parentComponent.ctrl.childComponents()[1].globalStateId).toBe('gen-parent-stateful-component-dummy-2');
+        expect(parentComponent.ctrl.childComponents()[2].globalStateId).toBe('gen-parent-stateful-component-dummy-3');
 
-        const state = component.ctrl.saveState();
-        expect(state['gen-parent-stateful-component']).toEqual({});
-        expect(state['gen-parent-stateful-component-dummy-1']).toEqual({foo: 'hello world', bar: 42});
-        expect(state['gen-parent-stateful-component-dummy-2']).toEqual({foo: 'hello world', bar: 42});
-        expect(state['gen-parent-stateful-component-dummy-3']).toEqual({foo: 'hello world', bar: 42});
+        const savedState = parentComponent.ctrl.saveState();
+        expect(savedState['gen-parent-stateful-component']).toEqual({});
+        expect(savedState['gen-parent-stateful-component-dummy-1']).toEqual({foo: 'hello world', bar: 42});
+        expect(savedState['gen-parent-stateful-component-dummy-2']).toEqual({foo: 'hello world', bar: 42});
+        expect(savedState['gen-parent-stateful-component-dummy-3']).toEqual({foo: 'hello world', bar: 42});
     });
 
     it('handles multiple top-level components', () => {
@@ -212,40 +212,40 @@ describeComponent('stateful component', [
         expect(topLevel[0].stateId).toBe('top-1');
         expect(topLevel[1].stateId).toBe('top-2');
 
-        const state = stateManager.save();
-        expect(state['top-1']).toEqual({});
-        expect(state['top-1-dummy-1']).toEqual({foo: 'hello world', bar: 42});
-        expect(state['top-1-dummy-2']).toEqual({foo: 'hello world', bar: 42});
-        expect(state['top-1-dummy-3']).toEqual({foo: 'hello world', bar: 42});
-        expect(state['top-2']).toEqual({});
-        expect(state['top-2-dummy-1']).toEqual({foo: 'hello world', bar: 42});
-        expect(state['top-2-dummy-2']).toEqual({foo: 'hello world', bar: 42});
-        expect(state['top-2-dummy-3']).toEqual({foo: 'hello world', bar: 42});
+        const savedState = stateManager.save();
+        expect(savedState['top-1']).toEqual({});
+        expect(savedState['top-1-dummy-1']).toEqual({foo: 'hello world', bar: 42});
+        expect(savedState['top-1-dummy-2']).toEqual({foo: 'hello world', bar: 42});
+        expect(savedState['top-1-dummy-3']).toEqual({foo: 'hello world', bar: 42});
+        expect(savedState['top-2']).toEqual({});
+        expect(savedState['top-2-dummy-1']).toEqual({foo: 'hello world', bar: 42});
+        expect(savedState['top-2-dummy-2']).toEqual({foo: 'hello world', bar: 42});
+        expect(savedState['top-2-dummy-3']).toEqual({foo: 'hello world', bar: 42});
     });
 
     it('loads state', () => {
-        const component = tester.createComponent<ParentStatefulComponent>(
+        const dummyComponent = tester.createComponent<ParentStatefulComponent>(
             ParentStatefulComponent.asView().template
         );
 
         // Update the state for second dummy component.
-        const state = component.ctrl.saveState();
-        state['gen-parent-stateful-component-dummy-2'] = {foo: 'hey world', bar: 21};
-        component.ctrl.loadState(state);
+        const savedState = dummyComponent.ctrl.saveState();
+        savedState['gen-parent-stateful-component-dummy-2'] = {foo: 'hey world', bar: 21};
+        dummyComponent.ctrl.loadState(savedState);
 
-        expect((<DummyStatefulComponent> component.ctrl.childComponents()[0]).foo).toBe('hello world');
-        expect((<DummyStatefulComponent> component.ctrl.childComponents()[0]).bar).toBe(42);
-        expect((<DummyStatefulComponent> component.ctrl.childComponents()[1]).foo).toBe('hey world');
-        expect((<DummyStatefulComponent> component.ctrl.childComponents()[1]).bar).toBe(21);
-        expect((<DummyStatefulComponent> component.ctrl.childComponents()[2]).foo).toBe('hello world');
-        expect((<DummyStatefulComponent> component.ctrl.childComponents()[2]).bar).toBe(42);
+        expect((<DummyStatefulComponent> dummyComponent.ctrl.childComponents()[0]).foo).toBe('hello world');
+        expect((<DummyStatefulComponent> dummyComponent.ctrl.childComponents()[0]).bar).toBe(42);
+        expect((<DummyStatefulComponent> dummyComponent.ctrl.childComponents()[1]).foo).toBe('hey world');
+        expect((<DummyStatefulComponent> dummyComponent.ctrl.childComponents()[1]).bar).toBe(21);
+        expect((<DummyStatefulComponent> dummyComponent.ctrl.childComponents()[2]).foo).toBe('hello world');
+        expect((<DummyStatefulComponent> dummyComponent.ctrl.childComponents()[2]).bar).toBe(42);
     });
 
     it('allows loading state after introducing new stateful components', () => {
-        const component = tester.createComponent<ParentStatefulComponent>(
+        const parentComponent = tester.createComponent<ParentStatefulComponent>(
             ParentStatefulComponent.asView().template
         );
-        const stateV1 = component.ctrl.saveState();
+        const stateV1 = parentComponent.ctrl.saveState();
 
         const componentV2 = tester.createComponent<ParentStatefulComponentV2>(
             ParentStatefulComponentV2.asView().template
@@ -254,82 +254,82 @@ describeComponent('stateful component', [
     });
 
     it('isPropertyNotLoadedFromStateOrIsUndefined prevents defaults from overriding state', () => {
-        let component = tester.createComponent<DummyDefaultsComponent>(
+        let dummyComponent = tester.createComponent<DummyDefaultsComponent>(
             DummyDefaultsComponent.asView().template
         );
         function reload() {
             // Replace component with new value.
-            component.element.remove();
-            component.ctrl.destroy();
-            component = tester.createComponent<DummyDefaultsComponent>(
+            dummyComponent.element.remove();
+            dummyComponent.ctrl.destroy();
+            dummyComponent = tester.createComponent<DummyDefaultsComponent>(
                 DummyDefaultsComponent.asView().template
             );
         }
 
         // Without isPropertyNotLoadedFromStateOrIsUndefined
-        component.ctrl.foo = 'Foo';
+        dummyComponent.ctrl.foo = 'Foo';
         reload();
-        expect(component.ctrl.foo).toBe('hello world');
+        expect(dummyComponent.ctrl.foo).toBe('hello world');
 
         // With isPropertyNotLoadedFromStateOrIsUndefined
-        expect(component.ctrl.fooPreferStateOverDefault).toBe('hello world');
+        expect(dummyComponent.ctrl.fooPreferStateOverDefault).toBe('hello world');
         reload();
-        expect(component.ctrl.fooPreferStateOverDefault).toBe('hello world');
+        expect(dummyComponent.ctrl.fooPreferStateOverDefault).toBe('hello world');
 
-        component.ctrl.fooPreferStateOverDefault = '';
+        dummyComponent.ctrl.fooPreferStateOverDefault = '';
         reload();
-        expect(component.ctrl.fooPreferStateOverDefault).toBe('');
+        expect(dummyComponent.ctrl.fooPreferStateOverDefault).toBe('');
 
-        component.ctrl.fooPreferStateOverDefault = 'Foo';
+        dummyComponent.ctrl.fooPreferStateOverDefault = 'Foo';
         reload();
-        expect(component.ctrl.fooPreferStateOverDefault).toBe('Foo');
+        expect(dummyComponent.ctrl.fooPreferStateOverDefault).toBe('Foo');
 
-        component.ctrl.fooPreferStateOverDefault = undefined;
+        dummyComponent.ctrl.fooPreferStateOverDefault = undefined;
         reload();
-        expect(component.ctrl.fooPreferStateOverDefault).toBe('hello world'); // Default overrides undefined too.
+        expect(dummyComponent.ctrl.fooPreferStateOverDefault).toBe('hello world'); // Default overrides undefined too.
 
-        component.ctrl.fooPreferStateOverDefault = null;
+        dummyComponent.ctrl.fooPreferStateOverDefault = null;
         reload();
-        expect(component.ctrl.fooPreferStateOverDefault).toBeNull();
+        expect(dummyComponent.ctrl.fooPreferStateOverDefault).toBeNull();
     });
 
     it('serializes and loads undefined, NaN, and Infinity values', () => {
-        let component = tester.createComponent<DummyStatefulComponent>(
+        let dummyComponent = tester.createComponent<DummyStatefulComponent>(
             DummyStatefulComponent.asView().template
         );
         function saveAndReload() {
-            const state = JSON.stringify(stateManager.saveSerializableState());
+            const savedState = JSON.stringify(stateManager.saveSerializableState());
 
             // Replace component with new value.
-            component.element.remove();
-            component.ctrl.destroy();
-            component = tester.createComponent<DummyStatefulComponent>(
+            dummyComponent.element.remove();
+            dummyComponent.ctrl.destroy();
+            dummyComponent = tester.createComponent<DummyStatefulComponent>(
                 DummyStatefulComponent.asView().template
             );
 
             // Expect to be initialized with default values (they override loaded pending state).
-            expect(component.ctrl.bar).toBe(42);
-            stateManager.loadSerializableState(JSON.parse(state)); // Explicitly load saved state.
-            return state;
+            expect(dummyComponent.ctrl.bar).toBe(42);
+            stateManager.loadSerializableState(JSON.parse(savedState)); // Explicitly load saved state.
+            return savedState;
         }
 
-        component.ctrl.foo = undefined;
-        component.ctrl.bar = 1 / 0; // Infinity
+        dummyComponent.ctrl.foo = undefined;
+        dummyComponent.ctrl.bar = 1 / 0; // Infinity
         saveAndReload();
-        expect(component.ctrl.foo).toBeUndefined();
-        expect(component.ctrl.bar).toBe(Infinity);
+        expect(dummyComponent.ctrl.foo).toBeUndefined();
+        expect(dummyComponent.ctrl.bar).toBe(Infinity);
 
-        component.ctrl.foo = null;
-        component.ctrl.bar = -1 / 0; // -Infinity
+        dummyComponent.ctrl.foo = null;
+        dummyComponent.ctrl.bar = -1 / 0; // -Infinity
         saveAndReload();
-        expect(component.ctrl.foo).toBeNull();
-        expect(component.ctrl.bar).toBe(-Infinity);
+        expect(dummyComponent.ctrl.foo).toBeNull();
+        expect(dummyComponent.ctrl.bar).toBe(-Infinity);
 
-        component.ctrl.foo = '';
-        component.ctrl.bar = <any> 'a' / 0; // NaN
+        dummyComponent.ctrl.foo = '';
+        dummyComponent.ctrl.bar = <any> 'a' / 0; // NaN
         saveAndReload();
-        expect(component.ctrl.foo).toBe('');
-        expect(component.ctrl.bar).toBeNaN();
+        expect(dummyComponent.ctrl.foo).toBe('');
+        expect(dummyComponent.ctrl.bar).toBeNaN();
     });
 
     it('throws error if the state is not serializable', () => {
@@ -364,32 +364,32 @@ describeComponent('stateful component', [
     });
 
     it('handles shared state', () => {
-        const component = tester.createComponent<SharedStateContainer>(
+        const stateComponent = tester.createComponent<SharedStateContainer>(
             SharedStateContainer.asView().template
         );
 
         // Components should display 'Hello world'.
-        expect(component.element.find('.text-a').text()).toBe('Hello world');
-        expect(component.element.find('.text-b').text()).toBe('Hello world');
+        expect(stateComponent.element.find('.text-a').text()).toBe('Hello world');
+        expect(stateComponent.element.find('.text-b').text()).toBe('Hello world');
 
-        (<SharedStateBComponent> component.ctrl.childComponents()[1]).testPublish();
+        (<SharedStateBComponent> stateComponent.ctrl.childComponents()[1]).testPublish();
         tester.digest();
 
         // Components should now display 'Hello shared store value'.
-        expect(component.element.find('.text-a').text()).toBe('Hello shared store value');
-        expect(component.element.find('.text-b').text()).toBe('Hello shared store value');
+        expect(stateComponent.element.find('.text-a').text()).toBe('Hello shared store value');
+        expect(stateComponent.element.find('.text-b').text()).toBe('Hello shared store value');
 
         // Save component state, change the used store and load it back.
-        const state = component.ctrl.saveState();
-        expect(state['gen-shared-state-container-gen-shared-state-a'].foo).toBe('test-shared');
-        expect(state['gen-shared-state-container-gen-shared-state-b'].bar).toBe('test-shared');
-        state['gen-shared-state-container-gen-shared-state-a'].foo = 'test-another';
-        component.ctrl.loadState(state);
+        const savedState = stateComponent.ctrl.saveState();
+        expect(savedState['gen-shared-state-container-gen-shared-state-a'].foo).toBe('test-shared');
+        expect(savedState['gen-shared-state-container-gen-shared-state-b'].bar).toBe('test-shared');
+        savedState['gen-shared-state-container-gen-shared-state-a'].foo = 'test-another';
+        stateComponent.ctrl.loadState(savedState);
         tester.digest();
 
         // See if components have loaded correct state.
-        expect(component.element.find('.text-a').text()).toBe('Hello universe');
-        expect(component.element.find('.text-b').text()).toBe('Hello shared store value');
+        expect(stateComponent.element.find('.text-a').text()).toBe('Hello universe');
+        expect(stateComponent.element.find('.text-b').text()).toBe('Hello shared store value');
     });
 
     describe('with mutable data', () => {
@@ -430,7 +430,7 @@ describeComponent('stateful component', [
             directive: 'gen-shared-state-mutable-b',
             template: ``,
         })
-        class SharedStateMutableBComponent extends StatefulComponentBase {
+        class SharedStateMutableBComponent extends StatefulComponentBase { // tslint:disable-line:no-unused-variable
             public updates: number = 0;
             @sharedState() public foo: SimpleSharedStore<string[]>;
 
@@ -457,12 +457,12 @@ describeComponent('stateful component', [
         }
 
         it('handles shared state', () => {
-            const component = tester.createComponent<SharedStateMutatableContainer>(
+            const stateComponent = tester.createComponent<SharedStateMutatableContainer>(
                 SharedStateMutatableContainer.asView().template
             );
 
-            const component1 = <SharedStateMutableAComponent> component.ctrl.childComponents()[0];
-            const component2 = <SharedStateMutableAComponent> component.ctrl.childComponents()[1];
+            const component1 = <SharedStateMutableAComponent> stateComponent.ctrl.childComponents()[0];
+            const component2 = <SharedStateMutableAComponent> stateComponent.ctrl.childComponents()[1];
 
             expect(component1.updates).toBe(1);
             expect(component2.updates).toBe(1);

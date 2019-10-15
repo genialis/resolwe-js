@@ -126,7 +126,7 @@ export function ngCompose(mixins: AngularConstructor[]) {
                 // Construct
                 mixin.apply(this, argsPart);
             });
-        };
+        }
     };
 
     ctor.$inject = <string[]> _.flatten(_.map(mixins, (mixin) => getInjects(mixin)));

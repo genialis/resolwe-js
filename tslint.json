@@ -56,7 +56,6 @@
         "jsdoc-format": true,
         "eofline": true,
         "no-shadowed-variable": true,
-        "no-trailing-whitespace": true,
         "max-line-length": [
             true,
             140
@@ -66,8 +65,6 @@
             true,
             "check-accessor"
         ],
-        "no-duplicate-key": true,
-        "no-unreachable": true,
         "no-conditional-assignment": true,
         "no-empty": true,
         "use-isnan": true,
@@ -79,7 +76,14 @@
         "trailing-comma": [
             true,
             {
-                "multiline": "always",
+                "multiline": {
+                    "arrays": "always",
+                    "exports": "always",
+                    "functions": "ignore",
+                    "imports": "always",
+                    "objects": "always",
+                    "typeLiterals": "always"
+                },
                 "singleline": "never"
             }
         ]

@@ -328,7 +328,7 @@ export abstract class StatefulComponentBase extends ComponentBase {
         this.onComponentStatePreSave();
 
         let result = {};
-        let state = result[this.globalStateId] = {};
+        let state = result[this.globalStateId] = {}; // tslint:disable-line:no-shadowed-variable
         _.forOwn(this.__stateMetadata, (metadata, key) => {
             let value = this[metadata.propertyName];
 
@@ -356,6 +356,7 @@ export abstract class StatefulComponentBase extends ComponentBase {
      * @param {any} globalState Global state
      */
     public loadState(globalState: any, loadChildren: boolean = true): void {
+        // tslint:disable-next-line:no-shadowed-variable
         const state = globalState[this.globalStateId];
         let sharedStateChanged = false;
         _.forOwn(this.__stateMetadata, (metadata, key) => {

@@ -7,7 +7,7 @@ import {GenError} from '../errors/error';
 
 enum DirectiveType {
     COMPONENT,
-    ATTRIBUTE
+    ATTRIBUTE,
 }
 
 /**
@@ -30,10 +30,6 @@ export interface ComponentViewOptions {
     parent?: ComponentBase;
     attributes?: Object;
     extendWith?: Object;
-}
-
-interface SubscriptionMap {
-    [key: string]: Rx.Disposable;
 }
 
 export interface ComputationFunction {
@@ -89,7 +85,7 @@ export class Computation {
      * @param component Owning component
      * @param content Computation content
      */
-    constructor(public component: ComponentBase, public content: ComputationFunction) {
+    constructor(public component: ComponentBase, public content: ComputationFunction) { // tslint:disable-line:no-shadowed-variable
         this._subscriptions = [];
         this._pendingSubscriptions = [];
         this._dispose = () => { /* Do nothing by default. */ };
@@ -393,16 +389,16 @@ export abstract class ComponentBase {
             const unwatch = this.$scope.$watchGroup(expressions, computation.compute.bind(computation));
             computation.setDisposeCallback(unwatch);
             return computation;
-        }
+        } else {
+            let watchedExpression: WatchExpression = () => _.map(expressions, fn => fn());
+            if (expressions.length === 1) { // optimize
+                watchedExpression = expressions[0];
+            }
 
-        let watchedExpression: WatchExpression = () => _.map(expressions, fn => fn());
-        if (expressions.length === 1) { // optimize
-            watchedExpression = expressions[0];
+            const unwatch = this.$scope.$watch(watchedExpression, computation.compute.bind(computation), true);
+            computation.setDisposeCallback(unwatch);
+            return computation;
         }
-
-        const unwatch = this.$scope.$watch(watchedExpression, computation.compute.bind(computation), true);
-        computation.setDisposeCallback(unwatch);
-        return computation;
     }
 
     /**

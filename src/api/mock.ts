@@ -263,9 +263,9 @@ export class MockConnection implements Connection, MockBase {
     }
 
     private _handleMockResponse(method: string, responsePath: string, parameters: any, data: any): Rx.Observable<any> {
-        const matchingHandlers = _.filter(this._mockResponses[method], ({path}) => {
-            if (path instanceof RegExp) return path.test(responsePath);
-            return path === responsePath;
+        const matchingHandlers = _.filter(this._mockResponses[method], (match) => {
+            if (match.path instanceof RegExp) return match.path.test(responsePath);
+            return match.path === responsePath;
         });
 
         if (_.isEmpty(matchingHandlers)) {

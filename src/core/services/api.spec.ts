@@ -142,13 +142,13 @@ describeComponent('angular mock api', [], (tester) => {
         tester.api().createResource('collection');
         tester.api().addItem('collection', {id: 1, name: 'Hello world'});
 
-        const component = tester.createComponent<TestComponent>(
+        const testComponent = tester.createComponent<TestComponent>(
             TestComponent.asView().template
         );
 
-        expect(component.ctrl.collection.id).toBe(1);
-        expect(component.ctrl.collection.name).toBe('Hello world');
-        expect(component.element.find('.text-name').text()).toBe('Collection name is Hello world');
+        expect(testComponent.ctrl.collection.id).toBe(1);
+        expect(testComponent.ctrl.collection.name).toBe('Hello world');
+        expect(testComponent.element.find('.text-name').text()).toBe('Collection name is Hello world');
     });
 
     it('mocks uploads', (done) => {
@@ -197,7 +197,7 @@ describe('resource', () => {
             const resultSubscriber = jasmine.createSpy('resultSubscriber');
             const querySubscriber = jasmine.createSpy('querySubscriber');
 
-            mockApi.createResource('data', 'id', (query, items) => {
+            mockApi.createResource('data', 'id', (query, items) => { // tslint:disable-line:no-shadowed-variable
                 querySubscriber(query);
                 return items;
             });

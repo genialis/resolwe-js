@@ -15,9 +15,11 @@ export interface Action {
     [propertyName: string]: any;
 }
 
+// tslint:disable:no-shadowed-variable
 type MethodReturns<Actions> = Actions extends { [key in keyof Actions]: (() => infer Return) | infer Else } ? Return : never;
 type FilterActions<Return> = Return extends { type: infer R } ? Return : never;
 export type GetActions<Actions> = FilterActions<MethodReturns<Actions>> | { type: '...' };
+// tslint:enable:no-shadowed-variable
 
 /**
  * A thunk is a function, which mediates the dispatch of an action. It may
@@ -255,10 +257,6 @@ export class Dispatcher extends Rx.Subject<Action> {
             this.onNext(action);
         }
     }
-}
-
-interface SharedStoreMap {
-    [index: string]: SharedStore<any, any>;
 }
 
 export interface SharedStoreFactory<T, U> {

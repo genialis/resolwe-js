@@ -19,7 +19,7 @@ export enum QueryObserverStatus {
     INITIALIZING,
     INITIALIZED,
     REINITIALIZING,
-    STOPPED
+    STOPPED,
 }
 
 export interface ReinitializeHandler {
