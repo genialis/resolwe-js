@@ -9,6 +9,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+- **BACKWARD INCOMPATIBLE:** Remove ``download`` and ``add`` permissions
 - Upgraded to gulp4
 
 ===================

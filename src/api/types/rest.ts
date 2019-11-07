@@ -59,20 +59,15 @@ export type OwnerPermission = 'owner';
 export type SharePermission = 'share';
 export type EditPermission = 'edit';
 export type DeletePermission = 'edit'; // not a typo (API doesn't support delete permission)
-export type AddPermission = 'add';
-export type DownloadPermission = 'download';
 export type ViewPermission = 'view';
 
 export const OWNER_PERMISSION: OwnerPermission = 'owner';
 export const SHARE_PERMISSION: SharePermission = 'share';
 export const EDIT_PERMISSION: EditPermission = 'edit';
 export const DELETE_PERMISSION: DeletePermission = 'edit';
-export const ADD_PERMISSION: AddPermission = 'add';
-export const DOWNLOAD_PERMISSION: DownloadPermission = 'download';
 export const VIEW_PERMISSION: ViewPermission = 'view';
 
-export type Permission = OwnerPermission | SharePermission | EditPermission | DeletePermission | AddPermission |
-    DownloadPermission | ViewPermission;
+export type Permission = OwnerPermission | SharePermission | EditPermission | DeletePermission | ViewPermission;
 
 
 export type PublicPermissionType = 'public';
@@ -290,7 +285,7 @@ export namespace ScatterPlotJson {
 // ------------------------------------------------------------------
 // Data
 
-export type DataPermissions = ViewPermission | EditPermission | SharePermission | DownloadPermission;
+export type DataPermissions = ViewPermission | EditPermission | SharePermission;
 
 export type UploadingDataStatus = 'UP';
 export type ResolvingDataStatus = 'RE';
@@ -520,8 +515,7 @@ export interface DataVariantTableStorage extends Storage {
 // ------------------------------------------------------------------
 // Collection
 
-export type CollectionPermissions = ViewPermission | EditPermission | SharePermission |
-    DownloadPermission | AddPermission;
+export type CollectionPermissions = ViewPermission | EditPermission | SharePermission;
 
 export interface Collection {
     id: number;
