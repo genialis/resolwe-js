@@ -15,7 +15,7 @@ Unreleased
 12.0.0 - 2019-10-10
 ===================
 
-- Removed ``descriptor_completed`` from samples
+- **BACKWARD INCOMPATIBLE:** Removed ``descriptor_completed`` from samples
 - Updated Query type
 
 ===================
@@ -28,7 +28,7 @@ Unreleased
 11.0.0 - 2019-08-09
 ===================
 
-- Migrate to new API
+- **BACKWARD INCOMPATIBLE:** Migrate to new API
 
 ====================
 10.0.12 - 2019-08-02
