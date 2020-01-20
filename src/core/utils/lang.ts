@@ -98,9 +98,9 @@ export function compose(mixins: any[], separateArguments: boolean = false) {
 
 interface AngularConstructor {
     new (...args: any[]): void;
-    $inject?: ReadonlyArray<string>;
+    $inject?: readonly string[];
 }
-function getInjects(mixin: AngularConstructor): ReadonlyArray<string> {
+function getInjects(mixin: AngularConstructor): readonly string[] {
     const numArguments = mixin.length;
     // If no arguments and no inject, pretend that inject is [].
     if (numArguments === 0 && !mixin.$inject) return [];
@@ -129,7 +129,7 @@ export function ngCompose(mixins: AngularConstructor[]) {
         }
     };
 
-    ctor.$inject = <string[]> _.flatten(_.map(mixins, (mixin) => getInjects(mixin)));
+    ctor.$inject = <string[]> _.flatten(_.map(mixins, (mixin) => <string[]> getInjects(mixin)));
 
     // Add all mixins properties and methods to the constructor prototype for all
     // created objects to have them.
