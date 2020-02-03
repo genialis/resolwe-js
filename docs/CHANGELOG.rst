@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+===================
+13.0.2 - 2020-02-03
+===================
+
 - Fixed ``addToSample`` function on the Data resource
 
 ===================
