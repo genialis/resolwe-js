@@ -56,7 +56,7 @@ export class DataResource extends RESTResource<types.Data> implements Permission
 
     public addToSample(dataIds: number[], sampleId: number): Rx.Observable<unknown> {
         return Rx.Observable.fromArray(dataIds).concatMap((id) => {
-            return this.update(id, { sample: { id: sampleId } });
+            return this.update(id, { entity: { id: sampleId } });
         }).toArray();
     }
 
