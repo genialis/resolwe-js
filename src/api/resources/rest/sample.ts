@@ -36,7 +36,7 @@ export class SampleResource extends RESTResource<types.Sample> implements Permis
      * @param sampleId Sample id
      * @param collectionIds Array of collection ids
      */
-    public addToCollection(sampleId: number, collectionId: number): Rx.Observable<unknown> {
+    public addToCollection(sampleId: number, collectionId: number): Rx.Observable<types.Sample> {
         return this.update(sampleId, {
             collection: {
                 id: collectionId,

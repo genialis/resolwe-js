@@ -54,13 +54,13 @@ export class DataResource extends RESTResource<types.Data> implements Permission
         return this.connection.get(this.getDetailMethodPath(id, 'children'));
     }
 
-    public addToSample(dataIds: number[], sampleId: number): Rx.Observable<unknown> {
+    public addToSample(dataIds: number[], sampleId: number): Rx.Observable<types.Data[]> {
         return Rx.Observable.fromArray(dataIds).concatMap((id) => {
             return this.update(id, { entity: { id: sampleId } });
         }).toArray();
     }
 
-    public addToCollection(dataIds: number[], collectionId: number): Rx.Observable<unknown> {
+    public addToCollection(dataIds: number[], collectionId: number): Rx.Observable<types.Data[]> {
         return Rx.Observable.fromArray(dataIds).concatMap((id) => {
             return this.update(id, { collection: { id: collectionId } });
         }).toArray();
