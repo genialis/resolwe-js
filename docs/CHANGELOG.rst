@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+===================
+13.1.0 - 2020-02-21
+===================
+
 - Added order by relevance constant on Data resource
 
 ===================
