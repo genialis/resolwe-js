@@ -531,6 +531,8 @@ export interface Collection {
     current_user_permissions: ItemPermissionsOf<CollectionPermissions>[];
     tags: string[];
     settings: any;
+    data_count: number;
+    status: DataStatus | null;
 }
 
 export interface Sample extends Collection {

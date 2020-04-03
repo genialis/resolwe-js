@@ -9,6 +9,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+- Updated collection type
+
 ===================
 13.1.0 - 2020-02-21
 ===================
