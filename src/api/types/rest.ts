@@ -517,7 +517,7 @@ export interface DataVariantTableStorage extends Storage {
 
 export type CollectionPermissions = ViewPermission | EditPermission | SharePermission;
 
-export interface Collection {
+interface BaseCollection {
     id: number;
     created: string;
     modified: string;
@@ -535,7 +535,11 @@ export interface Collection {
     status: DataStatus | null;
 }
 
-export interface Sample extends Collection {
+export interface Collection extends BaseCollection {
+    entity_count: number;
+}
+
+export interface Sample extends BaseCollection {
     collection: void | Omit<Collection, 'current_user_permissions'>;
     type: 'sample';
 }
