@@ -9,6 +9,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+- Added "preparing" data status type
+
 ===================
 13.1.2 - 2020-04-15
 ===================

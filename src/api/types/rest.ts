@@ -290,6 +290,7 @@ export type DataPermissions = ViewPermission | EditPermission | SharePermission;
 export type UploadingDataStatus = 'UP';
 export type ResolvingDataStatus = 'RE';
 export type WaitingDataStatus = 'WT';
+export type PreparingDataStatus = 'PP';
 export type ProcessingDataStatus = 'PR';
 export type DoneDataStatus = 'OK';
 export type ErrorDataStatus = 'ER';
@@ -298,13 +299,14 @@ export type DirtyDataStatus = 'DR';
 export const UPLOADING_DATA_STATUS: UploadingDataStatus = 'UP';
 export const RESOLVING_DATA_STATUS: ResolvingDataStatus = 'RE';
 export const WAITING_DATA_STATUS: WaitingDataStatus = 'WT';
+export const PREPARING_DATA_STATUS: PreparingDataStatus = 'PP';
 export const PROCESSING_DATA_STATUS: ProcessingDataStatus = 'PR';
 export const DONE_DATA_STATUS: DoneDataStatus = 'OK';
 export const ERROR_DATA_STATUS: ErrorDataStatus = 'ER';
 export const DIRTY_DATA_STATUS: DirtyDataStatus = 'DR';
 
-export type DataStatus = UploadingDataStatus | ResolvingDataStatus | WaitingDataStatus | ProcessingDataStatus |
-    DoneDataStatus | ErrorDataStatus | DirtyDataStatus;
+export type DataStatus = UploadingDataStatus | ResolvingDataStatus | WaitingDataStatus | PreparingDataStatus |
+    ProcessingDataStatus | DoneDataStatus | ErrorDataStatus | DirtyDataStatus;
 
 export interface Data {
     id: number;
