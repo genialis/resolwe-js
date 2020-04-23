@@ -9,6 +9,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+- Updated process type
+
 ===================
 13.1.3 - 2020-04-17
 ===================

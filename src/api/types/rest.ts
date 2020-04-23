@@ -159,9 +159,10 @@ export interface Process {
     is_active: boolean;
     data_name: string;
     entity_descriptor_schema: void | string;
-    entity_input: any;
+    entity_input: string;
     entity_type: void | string;
     scheduling_class: string;
+    entity_always_create: boolean;
 }
 
 // ------------------------------------------------------------------
