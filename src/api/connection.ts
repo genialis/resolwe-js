@@ -56,6 +56,15 @@ export interface Connection {
     get<T>(path: string, parameters?: {}): Rx.Observable<T>;
 
     /**
+     * Performs a REST API GET request to receive raw binary data buffer.
+     *
+     * @param path Request path
+     * @param parameters Request parameters
+     * @return An observable that emits the response
+     */
+    getBinary(path: string, parameters?: {}): Rx.Observable<ArrayBuffer>;
+
+    /**
      * Performs a REST API POST request against the genesis platform backend.
      *
      * @param path Request path
@@ -316,6 +325,36 @@ export class SimpleConnection implements Connection {
 
             return jQueryXHR;
         }));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public getBinary(path: string, parameters: {} = {}): Rx.Observable<ArrayBuffer> {
+        return Rx.Observable.create((observer) => {
+            const url = this.createUriFromPath(path, parameters);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+            xhr.responseType = "arraybuffer";
+
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        observer.onNext(xhr.response);
+                        observer.onCompleted();
+                    } else {
+                        observer.onError(xhr.response);
+                    }
+                }
+            };
+
+            xhr.send(null);
+
+            return () => {
+                xhr.abort();
+            };
+        });
     }
 
     /**

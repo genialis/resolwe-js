@@ -1,5 +1,6 @@
 import * as Rx from 'rx';
 import * as jQuery from 'jquery';
+import {inflate} from 'pako';
 
 import {RESTResource} from './rest_resource';
 import {Connection} from '../../connection';
@@ -19,12 +20,17 @@ export class FileResource extends RESTResource<string> {
      * @return {Rx.Observable<{ data: string }>}
      */
     public download(id: number, filename: string): Rx.Observable<types.Download> {
-        return (<Rx.Observable<string>> this.connection.get(this.getUngzippedUrl(id, filename)))
-            .map((data) => {
-                return {
-                    data: data,
-                };
-            });
+        const isCompressed = /\.gz$/.test(filename);
+        if (isCompressed) {
+            return this.connection.getBinary(this._getFileUrl(id, filename))
+                .map((arrayBuffer) => {
+                    const data = inflate(new Uint8Array(arrayBuffer), { to: 'string' });
+                    return { data };
+                });
+        }
+
+        return this.connection.get<string>(this._getFileUrl(id, filename))
+            .map((data) => ({ data }));
     }
 
     private _getFileUrl(id: number, filename: string): string {
@@ -37,12 +43,6 @@ export class FileResource extends RESTResource<string> {
 
     public getViewUrl(id: number, filename: string): string {
         return this._getFileUrl(id, filename);
-    }
-
-    public getUngzippedUrl(id: number, filename: string): string {
-        const isCompressed = /\.gz$/.test(filename);
-        if (!isCompressed) return this._getFileUrl(id, filename);
-        return `/datagzip/${id}/${filename}`;
     }
 
     public create(data: Object): Rx.Observable<any> {

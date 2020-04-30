@@ -26,6 +26,7 @@
     "@types/lodash": "^3.10.0",
     "@types/ng-file-upload": "11.1.33",
     "@types/node": "^13.1.8",
+    "@types/pako": "^1.0.1",
     "browser-sync": "^2.12.5",
     "connect-history-api-fallback": "^1.2.0",
     "del": "^2.2.0",
@@ -74,6 +75,7 @@
     "jquery.cookie": "1.4.1",
     "lodash": "3.10.1",
     "ng-file-upload": "12.2.13",
+    "pako": "^1.0.11",
     "rx": "4.1.0"
   },
   "jspm": {

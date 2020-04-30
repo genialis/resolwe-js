@@ -346,6 +346,10 @@ export class MockConnection implements Connection, MockBase {
         return this._simulateDelay ? observable.delay(100) : observable;
     }
 
+    public getBinary(path: string, parameters?: Object): Rx.Observable<ArrayBuffer> {
+        throw new GenError("Method not implemented");
+    }
+
     /**
      * @inheritdoc
      */

@@ -9,6 +9,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+- Download compressed files and Use pako to decompress them on the client side
+
 ===================
 13.1.4 - 2020-04-23
 ===================

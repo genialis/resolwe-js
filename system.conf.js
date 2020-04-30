@@ -19,5 +19,6 @@ System.config({
         'angular': 'node_modules/angular/index.js',
         'angular-mocks': 'node_modules/angular-mocks/angular-mocks.js',
         'ng-file-upload': 'node_modules/ng-file-upload/index.js',
+        'pako': 'node_modules/pako/index.js',
     }
 });
