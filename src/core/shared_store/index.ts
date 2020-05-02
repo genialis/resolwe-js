@@ -16,7 +16,7 @@ export interface Action {
 }
 
 // tslint:disable:no-shadowed-variable
-type MethodReturns<Actions> = Actions extends { [key in keyof Actions]: (() => infer Return) | infer Else } ? Return : never;
+type MethodReturns<Actions> = Actions extends { [key in keyof Actions]: ((...args: any[]) => infer Return) | infer Else } ? Return : never;
 type FilterActions<Return> = Return extends { type: infer R } ? Return : never;
 export type GetActions<Actions> = FilterActions<MethodReturns<Actions>> | { type: '...' };
 // tslint:enable:no-shadowed-variable
