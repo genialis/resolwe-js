@@ -35,7 +35,7 @@ export interface SharedStoreQuery<T, U> {
 
 export class Actions {
     /// Internal action for setting this store to a specific value.
-    public static SET = <'@@internal/SET'> '@@internal/SET';
+    public static SET = <const> '@@internal/SET';
     public set(value: any) {
         return { type: Actions.SET, value };
     }

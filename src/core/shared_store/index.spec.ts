@@ -8,12 +8,12 @@ class ComplexActions {
         return 'not an action';
     }
 
-    public static ADD_ITEM = <'add_item'> 'add_item';
+    public static ADD_ITEM = <const> 'add_item';
     public addItem(newItem: string) {
         return { type: ComplexActions.ADD_ITEM, newItem };
     }
 
-    public static REMOVE_ITEM = <'remove_item'> 'remove_item';
+    public static REMOVE_ITEM = <const> 'remove_item';
     public removeItem(item: string) {
         return { type: ComplexActions.REMOVE_ITEM, item };
     }
