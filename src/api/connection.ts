@@ -310,9 +310,6 @@ export class SimpleConnection implements Connection {
                 type: 'get',
                 url: url,
                 contentType: 'application/json',
-                xhrFields: {
-                    withCredentials: true,
-                },
             });
 
             this._interceptErrors(url, jQueryXHR);
@@ -367,9 +364,6 @@ export class SimpleConnection implements Connection {
                 url: url,
                 data: JSON.stringify(data),
                 contentType: 'application/json',
-                xhrFields: {
-                    withCredentials: true,
-                },
                 beforeSend: (xhr, settings) => {
                     xhr.setRequestHeader('X-CSRFToken', this.csrfCookie());
                 },
