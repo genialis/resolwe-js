@@ -65,7 +65,7 @@
     "tslint": "^5.20.0",
     "tslint-eslint-rules": "^5.4.0",
     "typedoc": "^0.11.1",
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "angular": "^1.6.6",
