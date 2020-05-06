@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import * as jQuery from 'jquery';
 import * as Rx from 'rx';
 
-import {Connection, Message} from './connection';
+import {createConnection, Connection, Message} from './connection';
 import {QueryObserverManager, MESSAGE_ADDED, MESSAGE_CHANGED, MESSAGE_REMOVED} from './queryobserver';
 import {GenError} from '../core/errors/error';
 import {APIError} from './errors';
@@ -218,12 +218,14 @@ export class MockConnection implements Connection, MockBase {
     private _queryObserverManager: QueryObserverManager;
     private _errors: Rx.Subject<APIError>;
     private _simulateDelay: boolean = false;
+    private _withCredentials: boolean;
 
-    constructor() {
+    constructor(parameters: { withCredentials: boolean }) {
         this._messages = new Rx.Subject<Message>();
         this._isConnected = new Rx.BehaviorSubject(false);
         this._errors = new Rx.Subject<APIError>();
         this._queryObserverManager = new MockQueryObserverManager(this, this._errors);
+        this._withCredentials = parameters.withCredentials;
     }
 
     /**
@@ -391,6 +393,13 @@ export class MockConnection implements Connection, MockBase {
      */
     public csrfCookie(): string {
         return 'cookie';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public withCredentials(): boolean {
+        return this._withCredentials;
     }
 
     /**
@@ -716,7 +725,7 @@ export let MockApiBase: MockApiBase = <MockApiBase> compose([ResolweApi, MockApi
 export class MockApi extends MockApiBase {
     // @ngInject
     constructor() {
-        super(new MockConnection(), null, null);
+        super(createConnection(MockConnection, { withCredentials: true }), null, null);
     }
 }
 

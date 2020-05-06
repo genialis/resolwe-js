@@ -26,6 +26,25 @@ export interface QueryObserverResponse {
     items: any[];
 }
 
+/**
+ * Connection constructor interface.
+ */
+interface ConnectionConstructor {
+    new (parameters: { withCredentials: boolean }): Connection;
+}
+
+/**
+ * Helper function to instantiate a connection.
+ *
+ * Use this function instead of doing `new Connection()`.
+ *
+ * @param ctor Connection constructor
+ * @param parameters Connection parameters
+ */
+export function createConnection(ctor: ConnectionConstructor, parameters: { withCredentials: boolean }): Connection {
+    return new ctor(parameters);
+}
+
 export interface Connection {
     /**
      * Establishes a connection with the genesis platform server.
@@ -119,6 +138,11 @@ export interface Connection {
     csrfCookie(): string;
 
     /**
+     * Returns true if withCredentials flag should be turned on when making XHR requests.
+     */
+    withCredentials(): boolean;
+
+    /**
      * A stream of incoming WebSocket messages.
      */
     messages(): Rx.Observable<Message>;
@@ -163,17 +187,19 @@ export class SimpleConnection implements Connection {
     private _isConnected: boolean;
     private _isConnectedSubject: Rx.Subject<boolean>;
     private _errors: Rx.Subject<APIError>;
+    private _withCredentials: boolean;
 
     /**
      * Constructs a new connection.
      */
-    constructor() {
+    constructor(parameters: { withCredentials: boolean }) {
         this._sessionId = random.randomUuid();
         this._observable = null;
         this._requestQueue = [];
         this._isConnectedSubject = new Rx.Subject<boolean>();
         this._errors = new Rx.Subject<APIError>();
         this._queryObserverManager = new QueryObserverManager(this, this._errors);
+        this._withCredentials = parameters.withCredentials;
     }
 
     /**
@@ -188,6 +214,13 @@ export class SimpleConnection implements Connection {
      */
     public csrfCookie(): string {
         return jQuery.cookie('csrftoken');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public withCredentials(): boolean {
+        return this._withCredentials;
     }
 
     /**
@@ -319,6 +352,9 @@ export class SimpleConnection implements Connection {
                 type: 'get',
                 url: url,
                 contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: this.withCredentials(),
+                },
             });
 
             this._interceptErrors(url, jQueryXHR);
@@ -403,6 +439,9 @@ export class SimpleConnection implements Connection {
                 url: url,
                 data: JSON.stringify(data),
                 contentType: 'application/json',
+                xhrFields: {
+                    withCredentials: this.withCredentials(),
+                },
                 beforeSend: (xhr, settings) => {
                     xhr.setRequestHeader('X-CSRFToken', this.csrfCookie());
                 },

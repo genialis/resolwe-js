@@ -4,6 +4,7 @@ import * as angular from 'angular';
 
 import {APIServiceBase, UploadEventType} from './api';
 import {ResolweApi} from '../../api/index';
+import {createConnection} from '../../api/connection';
 import {MockApi, MockConnection} from '../../api/mock';
 import {FileUploadResponse} from '../../api/types/modules';
 import {limitFieldsQuery} from '../../api/types/utils';
@@ -250,7 +251,7 @@ describe('upload', () => {
         $exceptionHandler = _$exceptionHandler_;
 
         api = new APIServiceBase(Upload, $q, $http);
-        api.connection = new MockConnection();
+        api.connection = createConnection(MockConnection, { withCredentials: true });
         api.RETRY_DELAY_INCREMENT = 10;
     }));
 

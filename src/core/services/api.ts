@@ -97,9 +97,11 @@ export class APIServiceBase {
                 url: url,
                 method: 'POST',
                 headers: headers,
+                withCredentials: this.connection.withCredentials(),
                 resumeSize: () => {
                     const resumeSizePromise = this._http.get(url, {
                         headers: headers,
+                        withCredentials: this.connection.withCredentials(),
                     }).then((response) => {
                         return (<any> response.data).resume_offset;
                     }, (error) => {
