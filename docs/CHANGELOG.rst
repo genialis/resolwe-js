@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+===================
+14.0.0 - 2020-05-06
+===================
+
 - Add ``withCredentials`` flag to connection
 - Add ``createConnection`` helper function to instantiate connection
 
