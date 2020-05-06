@@ -9,7 +9,7 @@ import * as _ from 'lodash';
  * @return {T} The same object that was passed as an argument
  */
 export function makeImmutable<T>(object: T): T {
-    // @ifndef GENJS_PRODUCTION
+    // @ifndef RESOLWE_PRODUCTION
     if (_.isObject(object)) {
         _.each(object, (property) => makeImmutable(property));
         return Object.freeze(object);

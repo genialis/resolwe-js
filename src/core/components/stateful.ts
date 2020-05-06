@@ -288,7 +288,7 @@ export abstract class StatefulComponentBase extends ComponentBase {
         const subscriber = () => {
             const store: SharedStore<any, any> = this[storeMetadata.propertyName];
             if (!store) {
-                // @ifndef GENJS_PRODUCTION
+                // @ifndef RESOLWE_PRODUCTION
                     throw new GenError(`Ignored missing store: ${storeMetadata.propertyName} ${this.globalStateId}`);
                 // @endif
             }

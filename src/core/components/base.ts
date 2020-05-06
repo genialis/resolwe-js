@@ -170,7 +170,7 @@ export class Computation {
             // Error handler.
             (exception) => {
                 if (options.onError) {
-                    // @ifndef GENJS_PRODUCTION
+                    // @ifndef RESOLWE_PRODUCTION
                         console.log('Handled error in ' + this.component.getConfig().directive, exception);
                     // @endif
                     safeCallbackApply(this.component.$scope, () => { options.onError(exception); });
@@ -529,7 +529,7 @@ export abstract class ComponentBase {
         // Setup input bindings.
         if (!_.isEmpty(options.inputs)) {
             _.forOwn(options.inputs, (input, key) => {
-                // @ifndef GENJS_PRODUCTION
+                // @ifndef RESOLWE_PRODUCTION
                 if (!this.hasBinding(key)) {
                     throw new GenError(`Input '${key}' is not defined on component.`);
                 }
