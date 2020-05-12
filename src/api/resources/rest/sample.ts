@@ -47,8 +47,9 @@ export class SampleResource extends RESTResource<types.Sample> implements Permis
     /**
      * Move samples to collection.
      *
-     * @param sampleId Sample id
-     * @param collectionIds Array of collection ids
+     * @param sampleIds Sample IDs
+     * @param sourceCollectionId Source collection id
+     * @param destinationCollectionId Destination collection id
      */
     public moveToCollection(sampleIds: number[], sourceCollectionId: number, destinationCollectionId: number): Rx.Observable<void> {
         return this.callListMethod<void>('move_to_collection', {
