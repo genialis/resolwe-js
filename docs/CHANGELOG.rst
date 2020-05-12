@@ -9,6 +9,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+- Add ``moveToCollection`` method to ``Data`` resource
+
 ===================
 14.0.0 - 2020-05-06
 ===================

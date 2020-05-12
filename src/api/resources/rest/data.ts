@@ -113,6 +113,19 @@ export class DataResource extends RESTResource<types.Data> implements Permission
         return this.connection.post<types.Data[]>(this.getListMethodPath('duplicate'), { ids: dataIds });
     }
 
+    /**
+     * Move data to collection.
+     *
+     * @param dataIds Data object IDs
+     * @param destinationCollectionId Destination collection ID
+     */
+    public moveToCollection(dataIds: number[], destinationCollectionId: number): Rx.Observable<void> {
+        return this.callListMethod<void>('move_to_collection', {
+            ids: dataIds,
+            destination_collection: destinationCollectionId,
+         });
+    }
+
     public getPermissions(id: number): Rx.Observable<types.ItemPermissions[]> {
         return getPermissions(this, id);
     }
