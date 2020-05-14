@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+===================
+14.1.0 - 2020-05-14
+===================
+
 - Add ``moveToCollection`` method to ``Data`` resource
 - Add options parameter to duplicate method of the Data resource
 
