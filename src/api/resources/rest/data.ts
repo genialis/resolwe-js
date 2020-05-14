@@ -109,8 +109,11 @@ export class DataResource extends RESTResource<types.Data> implements Permission
      * @param dataIds A list of data object ids to duplicate
      * @return Duplicated data objects.
      */
-    public duplicate(dataIds: number[]): Rx.Observable<types.Data[]> {
-        return this.connection.post<types.Data[]>(this.getListMethodPath('duplicate'), { ids: dataIds });
+    public duplicate(dataIds: number[], opts: { inheritCollection: boolean }): Rx.Observable<types.Data[]> {
+        return this.connection.post<types.Data[]>(this.getListMethodPath('duplicate'), {
+            ids: dataIds,
+            inherit_collection: opts.inheritCollection,
+        });
     }
 
     /**

@@ -10,6 +10,7 @@ Unreleased
 ==========
 
 - Add ``moveToCollection`` method to ``Data`` resource
+- Add options parameter to duplicate method of the Data resource
 
 ===================
 14.0.0 - 2020-05-06
