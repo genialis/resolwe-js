@@ -214,6 +214,10 @@ export interface FieldSchema {
     label: string;
     group?: Schema;
     range?: [number, number]; // Min, max
+    relation?: {
+        type?: string;
+        npartitions?: number | 'none' | 'any';
+    };
 }
 
 export type Schema = FieldSchema[];
