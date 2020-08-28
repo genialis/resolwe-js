@@ -29,7 +29,7 @@ export interface FeaturesQuery {
 }
 
 export interface FeatureSearchQuery extends Query {
-    query: string | string[];
+    query: string;
     source?: string;
     species?: string;
 }
