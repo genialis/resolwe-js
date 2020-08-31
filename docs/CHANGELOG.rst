@@ -5,9 +5,12 @@ Change Log
 All notable changes to this project are documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-==========
-Unreleased
-==========
+===================
+14.3.2 - 2020-08-31
+===================
+
+- Update FeatureSearchQuery query type to string (not array anymore)
+- Update Relation type property -> collection from number to Collection
 
 ===================
 14.2.0 - 2020-07-22
