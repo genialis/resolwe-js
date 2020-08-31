@@ -180,7 +180,7 @@ export interface Relation {
     created: string;
     modified: string;
     type: string;
-    collection: number;
+    collection: Collection;
     partitions: RelationPartition[];
     category: string;
     unit: 's' | 'min' | 'hr' | 'd' | 'wk' | null;
