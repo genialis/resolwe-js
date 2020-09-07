@@ -23,7 +23,7 @@ export interface FeatureQuery {
 }
 
 export interface FeaturesQuery {
-    feature_id: string[];
+    feature_id: string;
     source: string;
     species: string;
 }
