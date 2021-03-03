@@ -30,7 +30,8 @@ export type UploadEvent<T> = { progress: ProgressEvent, type: UploadEventType.PR
  * actual API class.
  */
 export class APIServiceBase {
-    public CHUNK_SIZE = 1 * 1024 * 1024; // 1MB
+    public MAX_CHUNKS = 10_000; // Max 10_000 chunks due to S3 multipart upload limit
+    public MIN_CHUNK_SIZE = 8 * 1024 * 1024; // 8MB
 
     /**
      * Max consecutive autoretry attempts are configurable in provider. An autoretry attempt is not
@@ -112,7 +113,7 @@ export class APIServiceBase {
                     rejectableResumeSizePromise.resolve(resumeSizePromise);
                     return rejectableResumeSizePromise.promise;
                 },
-                resumeChunkSize: this.CHUNK_SIZE,
+                resumeChunkSize: Math.max(this.MIN_CHUNK_SIZE, Math.floor(data.file.size / this.MAX_CHUNKS) + 1),
                 data: data,
             });
 

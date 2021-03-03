@@ -287,7 +287,7 @@ describe('upload', () => {
         $httpBackend.expectPOST('/upload/').respond(200, {});
         $httpBackend.expectPOST('/upload/').respond(200, { /* result */ });
 
-        const largeContent = _.range(3 * api.CHUNK_SIZE - 1).map(() => 'a').join('');
+        const largeContent = _.range(3 * api.MIN_CHUNK_SIZE - 1).map(() => 'a').join('');
         api.uploadString('a.txt', largeContent).toArray().subscribe(([response1, response2, response3]) => {
             expect(response1.type).toEqual(UploadEventType.PROGRESS);
             expect(response2.type).toEqual(UploadEventType.PROGRESS);
@@ -301,11 +301,11 @@ describe('upload', () => {
     });
 
     it('should resume for existing files', (done) => {
-        $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.CHUNK_SIZE });
+        $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.MIN_CHUNK_SIZE });
         $httpBackend.expectPOST('/upload/').respond(200, {});
         $httpBackend.expectPOST('/upload/').respond(200, { /* result */ });
 
-        const largeContent = _.range(3 * api.CHUNK_SIZE - 1).map(() => 'a').join('');
+        const largeContent = _.range(3 * api.MIN_CHUNK_SIZE - 1).map(() => 'a').join('');
         api.uploadString('a.txt', largeContent).toArray().subscribe(([response1, response2]) => {
             expect(response1.type).toEqual(UploadEventType.PROGRESS);
             expect(response2.type).toEqual(UploadEventType.RESULT);
@@ -327,7 +327,7 @@ describe('upload', () => {
 
         $httpBackend.expectGET('/upload/').respond(503, {});
 
-        const largeContent = _.range(3 * api.CHUNK_SIZE - 1).map(() => 'a').join('');
+        const largeContent = _.range(3 * api.MIN_CHUNK_SIZE - 1).map(() => 'a').join('');
         api.uploadString('a.txt', largeContent).toArray().subscribe((responses) => {
             expect(responses[0].type).toEqual(UploadEventType.RETRYING);
             expect(responses[1].type).toEqual(UploadEventType.RETRYING);
@@ -344,18 +344,18 @@ describe('upload', () => {
         });
         $httpBackend.flush();
 
-        $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.CHUNK_SIZE });
+        $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.MIN_CHUNK_SIZE });
         $httpBackend.expectPOST('/upload/').respond(503, {});
         setTimeout(() => {
             $httpBackend.flush();
 
-            $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.CHUNK_SIZE });
+            $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.MIN_CHUNK_SIZE });
             $httpBackend.expectPOST('/upload/').respond(200, {});
             $httpBackend.expectPOST('/upload/').respond(503, {});
             setTimeout(() => {
                 $httpBackend.flush();
 
-                $httpBackend.expectGET('/upload/').respond(200, { resume_offset: 2 * api.CHUNK_SIZE });
+                $httpBackend.expectGET('/upload/').respond(200, { resume_offset: 2 * api.MIN_CHUNK_SIZE });
                 $httpBackend.expectPOST('/upload/').respond(200, { /* result */ });
                 setTimeout(() => {
                     $httpBackend.flush();
@@ -374,7 +374,7 @@ describe('upload', () => {
 
         $httpBackend.expectGET('/upload/').respond(503, {});
 
-        const largeContent = _.range(3 * api.CHUNK_SIZE - 1).map(() => 'a').join('');
+        const largeContent = _.range(3 * api.MIN_CHUNK_SIZE - 1).map(() => 'a').join('');
         api.uploadString('a.txt', largeContent).toArray().subscribe((responses) => {
             done.fail('Expected upload to fail, not succeed');
         }, (error) => {
@@ -394,7 +394,7 @@ describe('upload', () => {
         setTimeout(() => {
             $httpBackend.flush();
 
-            $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.CHUNK_SIZE });
+            $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.MIN_CHUNK_SIZE });
             $httpBackend.expectPOST('/upload/').respond(503, {});
             setTimeout(() => {
                 $httpBackend.flush();
@@ -403,12 +403,12 @@ describe('upload', () => {
                 setTimeout(() => {
                     $httpBackend.flush();
 
-                    $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.CHUNK_SIZE });
+                    $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.MIN_CHUNK_SIZE });
                     $httpBackend.expectPOST('/upload/').respond(503, {});
                     setTimeout(() => {
                         $httpBackend.flush();
 
-                        $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.CHUNK_SIZE });
+                        $httpBackend.expectGET('/upload/').respond(200, { resume_offset: api.MIN_CHUNK_SIZE });
                         $httpBackend.expectPOST('/upload/').respond(503, {});
                         setTimeout(() => {
                             $httpBackend.flush();
