@@ -5,9 +5,11 @@ Change Log
 All notable changes to this project are documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-==========
-Unreleased
-==========
+===================
+15.1.0 - 2021-03-16
+===================
+
+- Compute chunk size based on upload file size and maximum chunks
 
 ===================
 15.0.0 - 2020-09-14
