@@ -9,6 +9,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+- Change SetPermissionsRequest type.
+
 ===================
 15.1.0 - 2021-03-16
 ===================

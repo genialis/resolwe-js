@@ -90,19 +90,9 @@ export interface ItemPermissionsOf<T> {
 export type ItemPermissions = ItemPermissionsOf<Permission>;
 
 export interface SetPermissionsRequest {
-    public?: {
-        add?: Permission[],
-        remove?: Permission[],
-    };
-    groups?: {
-        add?: NumericDictionary<Permission[]> | Dictionary<Permission[]>,
-        remove?: NumericDictionary<Permission[]> | Dictionary<Permission[]>,
-    };
-    users?: {
-        add?: NumericDictionary<Permission[]> | Dictionary<Permission[]>,
-        remove?: NumericDictionary<Permission[]> | Dictionary<Permission[]>,
-    };
-    share_content?: '0' | '1';
+    public?: Permission[];
+    groups?: NumericDictionary<Permission[]> | Dictionary<Permission[]>;
+    users?: NumericDictionary<Permission[]> | Dictionary<Permission[]>;
 }
 
 
