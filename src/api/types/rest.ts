@@ -60,14 +60,16 @@ export type SharePermission = 'share';
 export type EditPermission = 'edit';
 export type DeletePermission = 'edit'; // not a typo (API doesn't support delete permission)
 export type ViewPermission = 'view';
+export type NonePermission = 'none';
 
 export const OWNER_PERMISSION: OwnerPermission = 'owner';
 export const SHARE_PERMISSION: SharePermission = 'share';
 export const EDIT_PERMISSION: EditPermission = 'edit';
 export const DELETE_PERMISSION: DeletePermission = 'edit';
 export const VIEW_PERMISSION: ViewPermission = 'view';
+export const NONE_PERMISSION: NonePermission = 'none';
 
-export type Permission = OwnerPermission | SharePermission | EditPermission | DeletePermission | ViewPermission;
+export type Permission = OwnerPermission | SharePermission | EditPermission | DeletePermission | ViewPermission | NonePermission;
 
 
 export type PublicPermissionType = 'public';
@@ -90,9 +92,9 @@ export interface ItemPermissionsOf<T> {
 export type ItemPermissions = ItemPermissionsOf<Permission>;
 
 export interface SetPermissionsRequest {
-    public?: Permission[];
-    groups?: NumericDictionary<Permission[]> | Dictionary<Permission[]>;
-    users?: NumericDictionary<Permission[]> | Dictionary<Permission[]>;
+    public?: Permission;
+    groups?: NumericDictionary<Permission> | Dictionary<Permission>;
+    users?: NumericDictionary<Permission> | Dictionary<Permission>;
 }
 
 
