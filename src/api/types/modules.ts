@@ -18,14 +18,14 @@ export interface Feature {
 
 export interface FeatureQuery {
     feature_id: string;
-    source: string;
-    species: string;
+    source?: string;
+    species?: string;
 }
 
 export interface FeaturesQuery {
     feature_id: string;
-    source: string;
-    species: string;
+    source?: string;
+    species?: string;
 }
 
 export interface FeatureSearchQuery extends Query {
