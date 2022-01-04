@@ -52,7 +52,7 @@ export class FeatureResource extends KnowledgeBaseResource {
      * @throws `NoFeatureFoundError` is thrown if feature not found
      */
     public getFeature(query: types.FeatureQuery): Rx.Observable<types.Feature> {
-        const path = this.getModuleMethodPath('search');
+        const path = this.getModulePath();
 
         return this.connection.get<types.Feature[]>(path, query).map((features) => {
             if (features.length > 1) {
@@ -72,8 +72,8 @@ export class FeatureResource extends KnowledgeBaseResource {
         });
     }
 
-    public getFeatures(query: types.FeaturesQuery): Rx.Observable<types.Feature[]> {
-        const path = this.getModuleMethodPath('search');
+    public getFeatures(query: types.FeatureQuery): Rx.Observable<types.Feature[]> {
+        const path = this.getModulePath();
         const features = this.connection.post<types.Feature[]>(path, query);
         return transformFeatures(features);
     }
@@ -83,17 +83,10 @@ export class FeatureResource extends KnowledgeBaseResource {
      *
      * @param query Feature search query
      */
-    public search(query: types.FeatureSearchQuery): Rx.Observable<types.Feature[]> {
-        const path = this.getModuleMethodPath('search');
-        let results: Rx.Observable<types.Feature[]>;
-
-        if (_.isArray(query.query)) {
-            results = this.connection.post<types.Feature[]>(path, query);
-        } else {
-            results = this.connection.get<types.Feature[]>(path, query);
-        }
-
-        return transformFeatures(results);
+    public paste(query: types.FeaturePasteQuery): Rx.Observable<types.Feature[]> {
+        const path = this.getModuleMethodPath('paste');
+        const features = this.connection.post<types.Feature[]>(path, query);
+        return transformFeatures(features);
     }
 
     /**
@@ -101,11 +94,11 @@ export class FeatureResource extends KnowledgeBaseResource {
      *
      * @param query Feature autocomplete query
      */
-    public autocomplete(query: types.FeatureAutocompleteQuery & { limit: number }): Rx.Observable<PaginatedResponse<types.Feature>>;
-    public autocomplete(query: types.FeatureAutocompleteQuery): Rx.Observable<types.Feature[]>;
-    public autocomplete(query: types.FeatureAutocompleteQuery): Rx.Observable<types.Feature[] | PaginatedResponse<types.Feature>> {
-        const path = this.getModuleMethodPath('autocomplete');
-        const observable = this.connection.post<types.Feature[] | PaginatedResponse<types.Feature>>(path, query);
+    public autocomplete(query: types.FeatureQuery & { limit: number }): Rx.Observable<PaginatedResponse<types.Feature>>;
+    public autocomplete(query: types.FeatureQuery): Rx.Observable<types.Feature[]>;
+    public autocomplete(query: types.FeatureQuery): Rx.Observable<types.Feature[] | PaginatedResponse<types.Feature>> {
+        const path = this.getModulePath();
+        const observable = this.connection.get<types.Feature[] | PaginatedResponse<types.Feature>>(path, query);
         const isPaginated = _.has(query, 'limit');
         return isPaginated
             ? transformFeaturesPaginated(<Rx.Observable<PaginatedResponse<types.Feature>>> observable)

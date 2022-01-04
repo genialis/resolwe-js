@@ -10,6 +10,8 @@ Unreleased
 ==========
 
 - Make FeatureQuery and FeaturesQuery source, species parameters optional.
+- Unify kb/feature/autocomplete and kb/feature/search endpoints.
+- Add kb/feature/paste endpoint to support pasting genes.
 
 ===================
 16.0.0 - 2021-11-16
