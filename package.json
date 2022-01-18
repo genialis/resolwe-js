@@ -1,7 +1,7 @@
 {
   "name": "@genialis/resolwe",
   "author": "Genialis Inc.",
-  "version": "17.0.0-beta.2",
+  "version": "17.0.0",
   "description": "Resolwe frontend libraries",
   "license": "Apache-2.0",
   "repository": {

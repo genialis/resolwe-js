@@ -9,6 +9,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+===================
+17.0.0 - 2022-01-18
+===================
+
 - Make FeatureQuery and FeaturesQuery source, species parameters optional.
 - Unify kb/feature/autocomplete and kb/feature/search endpoints.
 - Add kb/feature/paste endpoint to support pasting genes.
