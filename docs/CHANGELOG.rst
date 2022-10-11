@@ -9,6 +9,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Unreleased
 ==========
 
+- Add descriptor properties to Relation type.
+
 ===================
 17.0.0 - 2022-01-18
 ===================

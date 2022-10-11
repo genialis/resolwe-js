@@ -177,6 +177,8 @@ export interface Relation {
     category: string;
     unit: 's' | 'min' | 'hr' | 'd' | 'wk' | null;
     contributor: Contributor;
+    descriptor_schema: DescriptorSchemaBase;
+    descriptor: Record<string, unknown>;
 }
 
 // ------------------------------------------------------------------
