@@ -169,6 +169,7 @@ export interface RelationPartition {
 
 export interface Relation {
     id: number;
+    slug: string;
     created: string;
     modified: string;
     type: string;
